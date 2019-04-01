@@ -1,0 +1,23 @@
+(library
+  (name routes)
+  (flags (-w -40 -w +26))
+  (libraries
+    lwt
+    logs
+    
+    h2
+    h2-lwt
+
+    uri
+    yojson
+    str
+    containers
+    nocrypto
+    jwt
+
+    console.lib
+  ))
+
+(env
+  (dev (flags (:standard -g)))
+  (docker (flags (:standard -ccopt -static))))

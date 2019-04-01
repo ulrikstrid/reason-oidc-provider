@@ -1,0 +1,62 @@
+{
+  "name": "reason-oidc-provider",
+  "version": "0.1.0",
+  "description": "Example Reason Esy Project",
+  "license": "MIT",
+  "esy": {
+    "build": "refmterr dune build -p #{self.name}"
+  },
+  "scripts": {
+    "run": "esy x main.exe",
+    "format": "esy dune build --watch @fmt -p #{self.name}",
+    "watch": "esy dune build --watch -p #{self.name}"
+  },
+  "dependencies": {
+    "@esy-ocaml/reason": "*",
+    "@opam/containers": "*",
+    "@opam/dune": "*",
+    "@opam/fmt": "*",
+    "@opam/httpaf-lwt": "*",
+    "@opam/httpaf": "*",
+    "@opam/hpack": "*",
+    "@opam/h2": "*",
+    "@opam/h2-lwt": "*",
+    "@opam/h2-lwt-unix": "*",
+    "@opam/httpkit": "*",
+    "@opam/httpkit-lwt": "*",
+    "@opam/jwt": "*",
+    "@opam/lambda-term": "*",
+    "@opam/logs": "*",
+    "@opam/lwt": "*",
+    "@opam/yojson": "*",
+    "@reason-native/console": "*",
+    "@opam/uri": "*",
+    "ocaml": "~4.6.0",
+    "refmterr": "*",
+    "@opam/tls": "*",
+    "@opam/ppx_deriving": "*",
+    "@opam/ppx_sexp_conv": "*",
+    "@opam/x509": "0.6.1",
+    "@opam/base64": "< 3.0.0",
+    "@opam/cstruct-lwt": "*"
+  },
+  "resolutions": {
+    "@opam/menhir": "20171013",
+    "@opam/re": "1.8.0",
+    "@opam/httpkit": "ostera/httpkit:httpkit.opam#ac84e6d",
+    "@opam/httpkit-lwt": "ostera/httpkit:httpkit-lwt.opam#ac84e6d",
+    "@opam/hpack": "anmonteiro/ocaml-h2:hpack.opam#661ab21",
+    "@opam/h2": "anmonteiro/ocaml-h2:h2.opam#661ab21",
+    "@opam/h2-lwt": "anmonteiro/ocaml-h2:h2-lwt.opam#661ab21",
+    "@opam/h2-lwt-unix": "anmonteiro/ocaml-h2:h2-lwt-unix.opam#661ab21",
+    "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#57e9dd2",
+    "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#57e9dd2",
+    "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#4e11c45",
+    "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*",
+    "@reason-native/rely": "*",
+    "ocaml": "~4.6.0"
+  }
+}

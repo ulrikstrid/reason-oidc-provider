@@ -1,0 +1,34 @@
+(executable
+  (name ReasonOidcProvider)
+  (public_name main.exe)
+  (package reason-oidc-provider)
+  (ocamlopt_flags -O3)
+  (libraries
+    logs.fmt
+    fmt.tty
+    lwt
+    logs
+
+    h2
+    h2-lwt-unix
+    httpaf
+    httpaf-lwt
+
+    yojson
+    str
+    containers
+    jwt
+    uri
+
+    oidc
+    routes
+  ))
+
+(install
+  (section bin)
+  (package reason-oidc-provider)
+  (files localhost.crt localhost.key))
+
+(env
+  (dev (flags (:standard -g)))
+  (docker (flags (:standard -ccopt -static))))

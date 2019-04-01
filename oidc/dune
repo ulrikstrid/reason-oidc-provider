@@ -1,0 +1,23 @@
+(library
+  (name oidc)
+  (flags (-w -40 -w +26))
+  (libraries
+    lwt
+    logs
+    
+    h2
+    h2-lwt
+
+    httpkit
+    httpkit-lwt
+
+    yojson
+    str
+    containers
+    nocrypto
+    jwt
+  ))
+
+(env
+  (dev (flags (:standard -g)))
+  (docker (flags (:standard -ccopt -static))))
