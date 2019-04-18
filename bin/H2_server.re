@@ -35,48 +35,6 @@ let http1_handler =
     ~error_handler,
   );
 
-/*
- let mk_connection_handler = (~tls_server, mk_context: 'a => OidcRoutes.ctx) => {
-   open H2;
-   let connection_handler /*: (Unix.sockaddr, Lwt_unix.file_descr) => Lwt.t(unit) */ = {
-     let request_handler: (Unix.sockaddr, Reqd.t) => unit =
-       (_client_address, request_descriptor) =>
-         Lwt.async(() =>
-           Http1Routes.makeCallback(request_descriptor, mk_context)
-         );
-
-     let error_handler:
-       (
-         Unix.sockaddr,
-         ~request: H2.Request.t=?,
-         _,
-         Headers.t => Body.t([ | `write])
-       ) =>
-       unit =
-       (_client_address, ~request as _=?, error, start_response) => {
-         let response_body = start_response(Headers.empty);
-
-         switch (error) {
-         | `Exn(exn) =>
-           Body.write_string(response_body, Printexc.to_string(exn));
-           Body.write_string(response_body, "\n");
-
-         | #Status.standard as error =>
-           Body.write_string(
-             response_body,
-             Status.default_reason_phrase(error),
-           )
-         };
-
-         Body.close_writer(response_body);
-       };
-
-     h2_handler(~request_handler, ~error_handler, tls_server);
-   };
-   connection_handler;
- };
- */
-
 let startHttpServer = (~port=8080, ~mk_context, ()) => {
   open Lwt.Infix;
 

@@ -1,24 +1,5 @@
 type ctx = unit;
-/*
- module type HttpImpl = {
-   module Status: {type t;};
 
-   module Headers: {type t;};
-   module Request: {type t;};
-   //module Version: {type t;};
-
-   module Response: {
-     type t;
-     let create: (~reason: string=?, ~headers: Headers.t=?, Status.t) => t;
-   };
-
-   module Reqd: {
-     type t;
-     let respond_with_string: (t, Response.t, string) => unit;
-     let request: t => Request.t;
-   };
- };
- */
 let makeCallback =
     (
       ~target,
