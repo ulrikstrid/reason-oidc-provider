@@ -1,14 +1,13 @@
-open H2;
-
-let make = (reqd, message) => {
-  Reqd.respond_with_string(
+let make =
+    (~respond_with_string, ~create_response, ~headers_of_list, reqd, message) => {
+  respond_with_string(
     reqd,
-    Response.create(
-      `Code(401),
+    create_response(
       ~headers=
-        Headers.of_list([
+        headers_of_list([
           ("content-length", String.length(message) |> string_of_int),
         ]),
+      `Code(401),
     ),
     message,
   );

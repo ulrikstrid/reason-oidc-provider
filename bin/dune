@@ -24,11 +24,6 @@
     routes
   ))
 
-(install
-  (section bin)
-  (package reason-oidc-provider)
-  (files localhost.crt localhost.key))
-
 (env
   (dev (flags (:standard -g)))
   (docker (flags (:standard -ccopt -static))))

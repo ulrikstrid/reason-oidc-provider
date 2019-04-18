@@ -1,15 +1,9 @@
-open H2;
-
-let make = reqd => {
-  Reqd.respond_with_string(
+let make = (~respond_with_string, ~create_response, ~headers_of_list, reqd) => {
+  respond_with_string(
     reqd,
-    Response.create(
+    create_response(
+      ~headers=headers_of_list([("content-length", "2")]),
       `OK,
-      ~headers=
-        Headers.of_list([
-          ("content-type", "application/text"),
-          ("content-length", "2"),
-        ]),
     ),
     "ok",
   );

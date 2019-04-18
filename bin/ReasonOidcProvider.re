@@ -5,8 +5,7 @@ Logs.set_reporter(Logs_fmt.reporter());
 
 let main = () =>
   H2_server.start(
-    ~port=3000,
-    ~cert="./localhost.crt",
+    ~cert="./localhost.pem",
     ~priv_key="./localhost.key",
     ~ctx=_req => (),
     (),

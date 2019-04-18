@@ -8,7 +8,8 @@
   },
   "scripts": {
     "run": "esy x main.exe",
-    "format": "esy dune build --watch @fmt -p #{self.name}",
+    "format": "esy dune build @fmt -p #{self.name}",
+    "format:watch": "esy dune build --watch @fmt -p #{self.name}",
     "watch": "esy dune build --watch -p #{self.name}"
   },
   "dependencies": {
@@ -22,8 +23,6 @@
     "@opam/h2": "*",
     "@opam/h2-lwt": "*",
     "@opam/h2-lwt-unix": "*",
-    "@opam/httpkit": "*",
-    "@opam/httpkit-lwt": "*",
     "@opam/jwt": "*",
     "@opam/lambda-term": "*",
     "@opam/logs": "*",
@@ -43,14 +42,9 @@
   "resolutions": {
     "@opam/menhir": "20171013",
     "@opam/re": "1.8.0",
-    "@opam/httpkit": "ostera/httpkit:httpkit.opam#ac84e6d",
-    "@opam/httpkit-lwt": "ostera/httpkit:httpkit-lwt.opam#ac84e6d",
-    "@opam/hpack": "anmonteiro/ocaml-h2:hpack.opam#661ab21",
-    "@opam/h2": "anmonteiro/ocaml-h2:h2.opam#661ab21",
-    "@opam/h2-lwt": "anmonteiro/ocaml-h2:h2-lwt.opam#661ab21",
-    "@opam/h2-lwt-unix": "anmonteiro/ocaml-h2:h2-lwt-unix.opam#661ab21",
-    "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#57e9dd2",
-    "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#57e9dd2",
+    "@opam/h2-lwt-unix": "anmonteiro/ocaml-h2:h2-lwt-unix.opam#cd5c59b",
+    "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#53042e5",
+    "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#25149c6",
     "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#4e11c45",
     "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f"
   },

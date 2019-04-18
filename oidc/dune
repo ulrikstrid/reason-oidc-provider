@@ -8,9 +8,6 @@
     h2
     h2-lwt
 
-    httpkit
-    httpkit-lwt
-
     yojson
     str
     containers

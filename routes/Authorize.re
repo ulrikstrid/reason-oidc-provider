@@ -1,5 +1,3 @@
-open H2;
-
 /*
 
  curl --http2-prior-knowledge http://localhost:3000/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb&scope=openid%20profile&state=af0ifjsldkj&nonce=n-0S6_WzA2Mj
@@ -48,15 +46,36 @@ let parseQuery = uri => {
   };
 };
 
-let makeRoute = (target, headers, reqd) => {
+let makeRoute =
+    (
+      ~respond_with_string,
+      ~create_response,
+      ~headers_of_list,
+      ~getHeader,
+      target,
+      reqd,
+    ) => {
   let _parameters = Uri.of_string(target) |> parseQuery |> Console.log;
 
-  Headers.get(headers, "Authorization")
+  getHeader("Authorization")
   |> (
     authHeader =>
       switch (authHeader) {
-      | Some(auth) => OkResponse.make(reqd)
-      | None => UnauthorizedResponse.make(reqd, "No Authorization header")
+      | Some(auth) =>
+        OkResponse.make(
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          reqd,
+        )
+      | None =>
+        UnauthorizedResponse.make(
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          reqd,
+          "No Authorization header",
+        )
       }
   );
 
