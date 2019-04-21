@@ -30,9 +30,16 @@ let route_handler: ('a => OidcRoutes.ctx, Unix.sockaddr, Reqd.t) => unit =
       let {Request.target, meth, headers} as request =
         Reqd.request(request_descriptor);
 
-      let req_uri = target |> Uri.of_string;
-      let req_path = Uri.path(req_uri);
-      let path_parts = Str.(split(regexp("/"), req_path));
+      let content_length =
+        Headers.get(headers, "content-length")
+        |> CCOpt.map_or(~default=128, int_of_string);
+
+      let read_body =
+        HttpBody.read(
+          ~content_length,
+          ~get_request_body=Reqd.request_body,
+          ~schedule_read=Body.schedule_read,
+        );
 
       let create_response = (~headers, status) =>
         Response.create(~headers, status);
@@ -44,6 +51,7 @@ let route_handler: ('a => OidcRoutes.ctx, Unix.sockaddr, Reqd.t) => unit =
         ~create_response,
         ~headers_of_list=Headers.of_list,
         ~respond_with_string=Reqd.respond_with_string,
+        ~read_body,
         ~headers,
         request_descriptor,
         mk_context,

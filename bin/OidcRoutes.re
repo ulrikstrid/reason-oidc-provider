@@ -8,6 +8,7 @@ let makeCallback =
       ~create_response,
       ~respond_with_string,
       ~headers_of_list,
+      ~read_body,
       ~headers,
       reqd,
       mk_context,
@@ -40,6 +41,7 @@ let makeCallback =
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
+      ~read_body,
       reqd,
     )
   | _ =>
