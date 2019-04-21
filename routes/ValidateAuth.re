@@ -1,11 +1,15 @@
 open H2;
 
-let makeRoute = reqd => {
+let makeRoute =
+    (~respond_with_string, ~create_response, ~headers_of_list, reqd) => {
   // Read body
   // Validate credentials
   // switch on OK credentials
   RedirectResponse.make(
-    ~targetPath="http://localhost:4000",
+    ~respond_with_string,
+    ~create_response,
+    ~headers_of_list,
+    ~targetPath="http://localhost:8080",
     reqd,
   );
 

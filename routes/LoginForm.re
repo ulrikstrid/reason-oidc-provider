@@ -1,7 +1,7 @@
 let markup = {|<html>
 <head></head>
 <body>
-  <form target="/interaction">
+  <form action="/interaction" method="post">
     <input name="username" type="email">
     <input name="password" type="password">
     <input type="submit" value="Login">
@@ -9,8 +9,15 @@ let markup = {|<html>
 </body>
 </html>|};
 
-let makeRoute = reqd => {
-  HtmlResponse.make(~markup, reqd);
+let makeRoute =
+    (~respond_with_string, ~create_response, ~headers_of_list, reqd) => {
+  HtmlResponse.make(
+    ~respond_with_string,
+    ~create_response,
+    ~headers_of_list,
+    ~markup,
+    reqd,
+  );
 
   Lwt.return_unit;
 };

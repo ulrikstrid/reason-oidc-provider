@@ -28,8 +28,20 @@ let makeCallback =
       target,
       reqd,
     )
-  // | (`GET, ["interaction"]) => Routes.LoginForm.makeRoute(reqd)
-  // | (`POST, ["interaction"]) => Routes.ValidateAuth.makeRoute(create_response, reqd)
+  | (`GET, ["interaction"]) =>
+    Routes.LoginForm.makeRoute(
+      ~respond_with_string,
+      ~create_response,
+      ~headers_of_list,
+      reqd,
+    )
+  | (`POST, ["interaction"]) =>
+    Routes.ValidateAuth.makeRoute(
+      ~respond_with_string,
+      ~create_response,
+      ~headers_of_list,
+      reqd,
+    )
   | _ =>
     Routes.OkResponse.make(
       ~respond_with_string,
