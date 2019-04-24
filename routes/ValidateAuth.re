@@ -1,5 +1,3 @@
-open H2;
-
 let makeRoute =
     (
       ~respond_with_string,
@@ -9,6 +7,7 @@ let makeRoute =
       reqd,
     ) => {
   open Lwt.Infix;
+
   // Validate credentials
   // switch on OK credentials
   RedirectResponse.make(

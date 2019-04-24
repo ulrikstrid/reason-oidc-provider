@@ -11,4 +11,5 @@ let make =
     ),
     message,
   );
+  ();
 };

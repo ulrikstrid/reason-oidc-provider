@@ -35,7 +35,7 @@ let http1_handler =
     ~error_handler,
   );
 
-let startHttpServer = (~port=8080, ~mk_context, ()) => {
+let startHttpServer = (~port=8080, ~context, ()) => {
   open Lwt.Infix;
 
   let listen_address = Unix.(ADDR_INET(inet_addr_loopback, port));
@@ -44,7 +44,7 @@ let startHttpServer = (~port=8080, ~mk_context, ()) => {
     let handler =
       Httpaf_lwt.Server.create_connection_handler(
         ~config=?None,
-        ~request_handler=Http1_handler.route_handler(mk_context),
+        ~request_handler=Http1_handler.route_handler(context),
         ~error_handler=Http1_handler.error_handler,
       );
 
@@ -56,7 +56,7 @@ let startHttpServer = (~port=8080, ~mk_context, ()) => {
   forever;
 };
 
-let startHttpsServer = (~port=9443, ~cert, ~priv_key, ~mk_context, ()) => {
+let startHttpsServer = (~port=9443, ~cert, ~priv_key, ~context, ()) => {
   open Lwt.Infix;
 
   let listen_address = Unix.(ADDR_INET(inet_addr_loopback, port));
@@ -92,15 +92,14 @@ let startHttpsServer = (~port=9443, ~cert, ~priv_key, ~mk_context, ()) => {
                     | None => Lwt.return_unit // Unable to nogitiate a protocol
                     | Some("http/1.1") =>
                       http1_handler(
-                        ~request_handler=
-                          Http1_handler.route_handler(mk_context),
+                        ~request_handler=Http1_handler.route_handler(context),
                         tls_server,
                         client_addr,
                         fd,
                       )
                     | Some("h2") =>
                       h2_handler(
-                        ~request_handler=H2_handler.route_handler(mk_context),
+                        ~request_handler=H2_handler.route_handler(context),
                         tls_server,
                         client_addr,
                         fd,
@@ -124,12 +123,12 @@ let startHttpsServer = (~port=9443, ~cert, ~priv_key, ~mk_context, ()) => {
   forever;
 };
 
-let start = (~port=8080, ~ctx: 'a => OidcRoutes.ctx, ~cert, ~priv_key, ()) => {
+let start = (~port=8080, ~context: Context.t, ~cert, ~priv_key, ()) => {
   Sys.(set_signal(sigpipe, Signal_ignore));
   Lwt_main.run(
     Lwt.join([
-      startHttpServer(~port, ~mk_context=ctx, ()),
-      startHttpsServer(~cert, ~priv_key, ~mk_context=ctx, ()),
+      startHttpServer(~port, ~context, ()),
+      startHttpsServer(~cert, ~priv_key, ~context, ()),
     ]),
   );
 };

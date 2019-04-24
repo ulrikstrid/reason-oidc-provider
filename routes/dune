@@ -4,9 +4,6 @@
   (libraries
     lwt
     logs
-    
-    h2
-    h2-lwt
 
     uri
     yojson
@@ -14,6 +11,8 @@
     containers
     nocrypto
     jwt
+
+    oidc
 
     console.lib
   ))

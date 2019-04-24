@@ -5,8 +5,7 @@
     lwt
     logs
     
-    h2
-    h2-lwt
+    uri
 
     yojson
     str

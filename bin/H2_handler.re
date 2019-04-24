@@ -22,8 +22,8 @@ let error_handler = (_client_address, ~request=?, _error, start_response) => {
   Body.close_writer(response_body);
 };
 
-let route_handler: ('a => OidcRoutes.ctx, Unix.sockaddr, Reqd.t) => unit =
-  (mk_context, _client_address, request_descriptor) => {
+let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
+  (context, _client_address, request_descriptor) => {
     Lwt.async(() => {
       open H2;
 
@@ -53,8 +53,8 @@ let route_handler: ('a => OidcRoutes.ctx, Unix.sockaddr, Reqd.t) => unit =
         ~respond_with_string=Reqd.respond_with_string,
         ~read_body,
         ~headers,
+        ~context,
         request_descriptor,
-        mk_context,
       );
     });
   };
