@@ -59,12 +59,12 @@ let makeCallback = (
     );
     Lwt.return_unit;
   | (`GET, [".well-known", "openid-configuration"]) =>
-    let json = {j|{
-  "issuer": ctx.host,
-  "authorization_endpoint": ctx.host ++ "/authorize",
-  "token_endpoint": ctx.host ++ "/token",
-  "userinfo_endpoint": ctx.host ++ "/userinfo",
-  "jwks_uri": ctx.host ++ "/.well-known/jwks.json",
+    let json = Printf.sprintf({|{
+  "issuer": "%s",
+  "authorization_endpoint": "%s/authorize",
+  "token_endpoint": "%s/token",
+  "userinfo_endpoint": "%s/userinfo",
+  "jwks_uri": "%s/.well-known/jwks.json",
   "scopes_supported": [
     "user"
   ],
@@ -74,7 +74,7 @@ let makeCallback = (
   "token_endpoint_auth_methods_supported": [
     "client_secret_basic"
   ]
-}|j};
+}|},context.host, context.host, context.host, context.host, context.host);
 
     Http.Response.Json.make(
       ~respond_with_string,
