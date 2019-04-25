@@ -11,7 +11,7 @@ let markup = {|<html>
 
 let makeRoute =
     (~respond_with_string, ~create_response, ~headers_of_list, reqd) => {
-  HtmlResponse.make(
+  Http.Response.Html.make(
     ~respond_with_string,
     ~create_response,
     ~headers_of_list,

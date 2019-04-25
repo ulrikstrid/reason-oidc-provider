@@ -35,7 +35,7 @@ let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
         |> CCOpt.map_or(~default=128, int_of_string);
 
       let read_body =
-        HttpBody.read(
+        Http.Body.read(
           ~content_length,
           ~get_request_body=Reqd.request_body,
           ~schedule_read=Body.schedule_read,

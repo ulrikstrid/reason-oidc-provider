@@ -22,6 +22,7 @@
     uri
 
     oidc
+    http
     routes
   ))
 

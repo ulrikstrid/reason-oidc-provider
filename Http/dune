@@ -1,5 +1,5 @@
 (library
-  (name routes)
+  (name http)
   (flags (-w -40 -w +26))
   (libraries
     lwt
@@ -9,12 +9,11 @@
     yojson
     str
     containers
-    nocrypto
-    jwt
-    uuidm
 
-    http
-    oidc
+    h2
+    h2-lwt-unix
+    httpaf
+    httpaf-lwt
 
     console.lib
   ))

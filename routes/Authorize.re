@@ -9,6 +9,7 @@ let makeRoute =
       reqd,
     ) => {
   open Lwt.Infix;
+  open Http;
 
   let parameters = Uri.of_string(target) |> Oidc.Parameters.parseQuery;
 
@@ -22,28 +23,26 @@ let makeRoute =
         state,
         nonce,
       } =>
-      let cookie_key = "abcdef";
+      let cookie_key =
+        Uuidm.v4_gen(Random.State.make_self_init(), ()) |> Uuidm.to_string;
       let cookie_name = "session";
-
       let cookie_value =
         String.concat("", [cookie_name, "=", cookie_key, " ;Max-Age=300"]);
-
-      Console.debug(cookie_value);
 
       set_session(~kind=cookie_name, ~key=cookie_key, target)
       >|= (
         () =>
-          OkResponse.make(
+          Http.Response.Redirect.make(
             ~respond_with_string,
             ~create_response,
             ~headers_of_list,
             ~extra_headers=[("set-cookie", cookie_value)],
+            ~targetPath="http://localhost:8080/interaction",
             reqd,
           )
       );
-
     | _ =>
-      UnauthorizedResponse.make(
+      Http.Response.Unauthorized.make(
         ~respond_with_string,
         ~create_response,
         ~headers_of_list,

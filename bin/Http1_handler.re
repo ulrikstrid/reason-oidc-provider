@@ -1,25 +1,5 @@
 open Httpaf;
 
-let redirect_handler: (Unix.sockaddr, Reqd.t) => unit =
-  (_client_address, request_descriptior) => {
-    let response =
-      Response.create(
-        ~headers=
-          Headers.of_list([
-            ("Location", "https://localhost:9443"),
-            ("Connection", "close"),
-          ]),
-        `Moved_permanently,
-      );
-    Reqd.respond_with_string(request_descriptior, response, "");
-  };
-
-let redirect_error_handler =
-    (_client_address, ~request=?, _error, start_response) => {
-  let response_body = start_response(Headers.empty);
-  Body.close_writer(response_body);
-};
-
 let request_handler: (Unix.sockaddr, Reqd.t) => unit =
   (_client_address, request_descriptior) => {
     let request = Reqd.request(request_descriptior);
@@ -62,7 +42,7 @@ let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
         |> CCOpt.map_or(~default=128, int_of_string);
 
       let read_body =
-        HttpBody.read(
+        Http.Body.read(
           ~content_length,
           ~get_request_body=Reqd.request_body,
           ~schedule_read=Body.schedule_read,

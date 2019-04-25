@@ -10,7 +10,7 @@ let makeRoute =
 
   // Validate credentials
   // switch on OK credentials
-  RedirectResponse.make(
+  Http.Response.Redirect.make(
     ~respond_with_string,
     ~create_response,
     ~headers_of_list,

@@ -1,16 +1,15 @@
-let makeCallback =
-    (
-      ~target,
-      ~method,
-      ~getHeader,
-      ~create_response,
-      ~respond_with_string,
-      ~headers_of_list,
-      ~read_body,
-      ~headers,
-      ~context: Context.t,
-      reqd,
-    ) => {
+let makeCallback = (
+  ~target,
+  ~method,
+  ~getHeader,
+  ~create_response,
+  ~respond_with_string: ('a, 'b, string) => unit,
+  ~headers_of_list,
+  ~read_body,
+  ~headers,
+  ~context: Context.t,
+  reqd,
+) => {
   open Lwt.Infix;
 
   let req_uri = target |> Uri.of_string;
@@ -31,10 +30,7 @@ let makeCallback =
           target,
           reqd,
         )
-        >>= (() => session_store.get(~kind="session", "abcdef"))
     )
-    >|= Console.log
-    
   | (`GET, ["interaction"]) =>
     Routes.LoginForm.makeRoute(
       ~respond_with_string,
@@ -53,7 +49,7 @@ let makeCallback =
 
   | (`GET, [".well-known", "jwks.json"]) =>
     let json = {j|{}|j};
-    Routes.JsonResponse.make(
+    Http.Response.Json.make(
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
@@ -79,7 +75,7 @@ let makeCallback =
   ]
 }|j};
 
-    Routes.JsonResponse.make(
+    Http.Response.Json.make(
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
@@ -88,7 +84,7 @@ let makeCallback =
     );
     Lwt.return_unit;
   | _ =>
-    Routes.OkResponse.make(
+    Http.Response.Ok.make(
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,

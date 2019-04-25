@@ -38,7 +38,8 @@
     "@opam/x509": "0.6.1",
     "@opam/base64": "< 3.0.0",
     "@opam/cstruct-lwt": "*",
-    "@opam/irmin-mem": "*"
+    "@opam/irmin-mem": "*",
+    "@opam/uuidm": "*"
   },
   "resolutions": {
     "@opam/menhir": "20171013",
