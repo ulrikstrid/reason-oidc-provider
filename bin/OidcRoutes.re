@@ -27,6 +27,7 @@ let makeCallback = (
           ~create_response,
           ~headers_of_list,
           ~getHeader,
+          ~redirectPath=context.host ++ "/interaction",
           target,
           reqd,
         )

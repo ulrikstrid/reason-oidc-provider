@@ -5,6 +5,7 @@ let makeRoute =
       ~create_response,
       ~headers_of_list,
       ~getHeader,
+      ~redirectPath,
       target,
       reqd,
     ) => {
@@ -37,7 +38,7 @@ let makeRoute =
             ~create_response,
             ~headers_of_list,
             ~extra_headers=[("set-cookie", cookie_value)],
-            ~targetPath="http://localhost:8080/interaction",
+            ~targetPath=redirectPath,
             reqd,
           )
       );
