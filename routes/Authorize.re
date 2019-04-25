@@ -20,7 +20,7 @@ let makeRoute =
         response_type: ["code"],
         client_id: "client_id",
         redirect_uri: "http://localhost:5500/auth/cb",
-        scope,
+        scope: ["openid", ...rest],
         state,
         nonce,
       } =>
