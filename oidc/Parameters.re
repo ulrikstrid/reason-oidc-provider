@@ -11,7 +11,7 @@
   &nonce=n-0S6_WzA2Mj
   */
 
-type parameters = {
+type t = {
   response_type: list(string),
   client_id: string,
   redirect_uri: string,

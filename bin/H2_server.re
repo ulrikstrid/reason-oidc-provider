@@ -123,11 +123,11 @@ let startHttpsServer = (~port=9443, ~cert, ~priv_key, ~context, ()) => {
   forever;
 };
 
-let start = (~port=8080, ~context: Context.t, ~cert, ~priv_key, ()) => {
+let start = (~http1_port=8080, ~context, ~cert, ~priv_key, ()) => {
   Sys.(set_signal(sigpipe, Signal_ignore));
   Lwt_main.run(
     Lwt.join([
-      startHttpServer(~port, ~context, ()),
+      startHttpServer(~port=http1_port, ~context, ()),
       startHttpsServer(~cert, ~priv_key, ~context, ()),
     ]),
   );

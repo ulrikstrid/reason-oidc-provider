@@ -1,16 +1,21 @@
-let makeCallback = (
-  ~target,
-  ~method,
-  ~getHeader,
-  ~create_response,
-  ~respond_with_string: ('a, 'b, string) => unit,
-  ~headers_of_list,
-  ~read_body,
-  ~headers,
-  ~context: Context.t,
-  reqd,
-) => {
+let makeCallback =
+    (
+      ~target,
+      ~method,
+      ~getHeader,
+      ~create_response,
+      ~respond_with_string: ('a, 'b, string) => unit,
+      ~headers_of_list,
+      ~read_body,
+      ~headers,
+      ~context: Context.t,
+      reqd,
+    ) => {
   open Lwt.Infix;
+
+  Logs.info(m =>
+    m("%s request to %s", Http.Method.to_string(method), target)
+  );
 
   let req_uri = target |> Uri.of_string;
   let req_path = Uri.path(req_uri);
@@ -40,14 +45,48 @@ let makeCallback = (
       reqd,
     )
   | (`POST, ["interaction"]) =>
-    Routes.ValidateAuth.makeRoute(
-      ~respond_with_string,
-      ~create_response,
-      ~headers_of_list,
-      ~read_body,
-      reqd,
-    )
+    H2.Headers.to_list;
 
+    let session_id =
+      getHeader("Cookie")
+      |> CCOpt.get_or(~default="")
+      |> Http.Cookie.get_cookie(~key="session");
+
+    switch (session_id) {
+    | Some(session) =>
+      Console.log(session);
+      let cookie_value = session.value;
+      context.session_store
+      >>= (
+        (session_store: SessionStorage.t) =>
+          session_store.get(~kind="session", cookie_value)
+          >|= (
+            session_string =>
+              session_string |> Uri.of_string |> Oidc.Parameters.parseQuery
+          )
+          >>= (
+            (parameters: Oidc.Parameters.t) => {
+              Routes.ValidateAuth.makeRoute(
+                ~oidc_state=CCOpt.get_or(~default="", parameters.state),
+                ~respond_with_string,
+                ~create_response,
+                ~headers_of_list,
+                ~read_body,
+                reqd,
+              );
+            }
+          )
+      );
+    | None =>
+      Http.Response.Unauthorized.make(
+        ~respond_with_string,
+        ~create_response,
+        ~headers_of_list,
+        reqd,
+        "No session found",
+      )
+      |> Lwt.return
+    };
   | (`GET, [".well-known", "jwks.json"]) =>
     let json = {j|{}|j};
     Http.Response.Json.make(
@@ -59,7 +98,9 @@ let makeCallback = (
     );
     Lwt.return_unit;
   | (`GET, [".well-known", "openid-configuration"]) =>
-    let json = Printf.sprintf({|{
+    let json =
+      Printf.sprintf(
+        {|{
   "issuer": "%s",
   "authorization_endpoint": "%s/authorize",
   "token_endpoint": "%s/token",
@@ -74,7 +115,13 @@ let makeCallback = (
   "token_endpoint_auth_methods_supported": [
     "client_secret_basic"
   ]
-}|},context.host, context.host, context.host, context.host, context.host);
+}|},
+        context.host,
+        context.host,
+        context.host,
+        context.host,
+        context.host,
+      );
 
     Http.Response.Json.make(
       ~respond_with_string,
@@ -84,6 +131,19 @@ let makeCallback = (
       reqd,
     );
     Lwt.return_unit;
+  | (`POST, ["token"]) =>
+    read_body(reqd)
+    >|= (body => Logs.info(m => m("Body for token is %s", body)))
+    >|= (
+      () =>
+        Http.Response.Json.make(
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          ~json="{}",
+          reqd,
+        )
+    )
   | _ =>
     Http.Response.Ok.make(
       ~respond_with_string,
