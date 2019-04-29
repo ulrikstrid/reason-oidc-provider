@@ -14,11 +14,14 @@ let makeRoute =
 
   let parameters = Uri.of_string(target) |> Oidc.Parameters.parseQuery;
 
+  Console.log(parameters.response_type);
+  Console.log(parameters);
+
   Oidc.Parameters.(
     switch (parameters) {
     | {
         response_type: ["code"],
-        client_id: "client_id",
+        client_id: "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175",
         redirect_uri: "http://localhost:5500/auth/cb",
         scope: ["openid", ...rest],
         state,

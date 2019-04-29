@@ -45,8 +45,6 @@ let makeCallback =
       reqd,
     )
   | (`POST, ["interaction"]) =>
-    H2.Headers.to_list;
-
     let session_id =
       getHeader("Cookie")
       |> CCOpt.get_or(~default="")
@@ -88,7 +86,9 @@ let makeCallback =
       |> Lwt.return
     };
   | (`GET, [".well-known", "jwks.json"]) =>
-    let json = {j|{}|j};
+    let jwk_string = context.jwk |> Oidc.Jwk.to_json |> Yojson.to_string;
+    let json = Printf.sprintf({j|{"keys": [%s]}|j}, jwk_string);
+
     Http.Response.Json.make(
       ~respond_with_string,
       ~create_response,
@@ -132,17 +132,14 @@ let makeCallback =
     );
     Lwt.return_unit;
   | (`POST, ["token"]) =>
-    read_body(reqd)
-    >|= (body => Logs.info(m => m("Body for token is %s", body)))
-    >|= (
-      () =>
-        Http.Response.Json.make(
-          ~respond_with_string,
-          ~create_response,
-          ~headers_of_list,
-          ~json="{}",
-          reqd,
-        )
+    Routes.Token.make(
+      ~read_body,
+      ~respond_with_string,
+      ~create_response,
+      ~headers_of_list,
+      ~priv_key=context.rsa_priv,
+      ~host=context.host,
+      reqd,
     )
   | _ =>
     Http.Response.Ok.make(

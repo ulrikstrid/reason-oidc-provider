@@ -11,7 +11,11 @@
     str
     containers
     nocrypto
+    x509
     jwt
+    base64
+
+    zarith
   ))
 
 (env

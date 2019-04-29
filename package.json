@@ -39,7 +39,9 @@
     "@opam/base64": "< 3.0.0",
     "@opam/cstruct-lwt": "*",
     "@opam/irmin-mem": "*",
-    "@opam/uuidm": "*"
+    "@opam/uuidm": "*",
+    "@opam/nocrypto": "*",
+    "@opam/zarith": "*"
   },
   "resolutions": {
     "@opam/menhir": "20171013",
@@ -47,7 +49,7 @@
     "@opam/h2-lwt-unix": "anmonteiro/ocaml-h2:h2-lwt-unix.opam#cd5c59b",
     "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#53042e5",
     "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#25149c6",
-    "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#4e11c45",
+    "@opam/jwt": "link:../ocaml-jwt/jwt.opam",
     "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f"
   },
   "devDependencies": {

@@ -9,7 +9,7 @@ type t = {
   issuer: string,
 };
 
-let parseJwks = json =>
+let t_of_json = json =>
   Yojson.Basic.Util.{
     kty: json |> member("kty") |> to_string,
     use: json |> member("use") |> to_string,
@@ -21,37 +21,43 @@ let parseJwks = json =>
     issuer: json |> member("issuer") |> to_string,
   };
 
+/*
+ let json_of_t => t => {
+
+   }
+ */
+
 let fromResponse = body =>
   Yojson.Basic.from_string(body)
   |> Yojson.Basic.Util.member("keys")
   |> Yojson.Basic.Util.to_list
-  |> List.map(parseJwks);
+  |> List.map(t_of_json);
 
 /*
-let makeRequest = (discoverData: Discover.t) => {
-  open Lwt_result.Infix;
+ let makeRequest = (discoverData: Discover.t) => {
+   open Lwt_result.Infix;
 
-  Logs.app(m => m("Starting jwks request"));
+   Logs.app(m => m("Starting jwks request"));
 
-  let https_url = discoverData.jwks_uri;
-  Logs.app(m => m("Requesting: %s", https_url));
+   let https_url = discoverData.jwks_uri;
+   Logs.app(m => m("Requesting: %s", https_url));
 
-  let req =
-    Httpkit.Client.Request.create(
-      ~headers=[("User-Agent", "reason-oidc-provider")],
-      `GET,
-      https_url |> Uri.of_string,
-    );
-
-  Httpkit_lwt.Client.(Https.send(req) >>= Response.body)
-  |> Lwt.map(res =>
-       switch (res) {
-       | Ok(body) => Ok(fromResponse(body))
-       | Error(_) => Error("Could not get JWKS")
-       }
+   let req =
+     Httpkit.Client.Request.create(
+       ~headers=[("User-Agent", "reason-oidc-provider")],
+       `GET,
+       https_url |> Uri.of_string,
      );
-};
-*/
+
+   Httpkit_lwt.Client.(Https.send(req) >>= Response.body)
+   |> Lwt.map(res =>
+        switch (res) {
+        | Ok(body) => Ok(fromResponse(body))
+        | Error(_) => Error("Could not get JWKS")
+        }
+      );
+ };
+ */
 
 let validate = (jwks: list(t), token: Jwt.t) => {
   // TODO: Build the cert from x5c and do real validation
