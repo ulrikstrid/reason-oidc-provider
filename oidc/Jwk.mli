@@ -5,9 +5,9 @@ type t = {
   n: string;
   e: string;
   kid: string;
-  (*x5t: string;*)
+  x5t: string;
 }
 
 val make : Nocrypto.Rsa.pub -> t 
 
-val to_json : t -> Yojson.t
+val to_json : t -> Yojson.Basic.t
