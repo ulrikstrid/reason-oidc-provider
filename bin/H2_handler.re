@@ -17,7 +17,7 @@ let request_handler: (Unix.sockaddr, Reqd.t) => unit =
     Reqd.respond_with_string(request_descriptior, response, response_body);
   };
 
-let error_handler = (_client_address, ~request=?, _error, start_response) => {
+let error_handler = (_client_address, ~request as _=?, _error, start_response) => {
   let response_body = start_response(Headers.empty);
   Body.close_writer(response_body);
 };
@@ -25,9 +25,7 @@ let error_handler = (_client_address, ~request=?, _error, start_response) => {
 let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
   (context, _client_address, request_descriptor) => {
     Lwt.async(() => {
-      open H2;
-
-      let {Request.target, meth, headers} as request =
+      let {Request.target, meth, headers, scheme: _} as _request =
         Reqd.request(request_descriptor);
 
       let content_length =
@@ -47,12 +45,11 @@ let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
       OidcRoutes.makeCallback(
         ~target,
         ~method=meth,
-        ~getHeader=Headers.get(headers),
+        ~get_header=Headers.get(headers),
         ~create_response,
-        ~headers_of_list=Headers.of_list,
         ~respond_with_string=Reqd.respond_with_string,
+        ~headers_of_list=Headers.of_list,
         ~read_body,
-        ~headers,
         ~context,
         request_descriptor,
       );

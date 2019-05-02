@@ -4,7 +4,7 @@
   "description": "Example Reason Esy Project",
   "license": "MIT",
   "esy": {
-    "build": "refmterr dune build -p #{self.name}"
+    "build": "refmterr dune build"
   },
   "scripts": {
     "run": "esy x main.exe",
@@ -41,7 +41,8 @@
     "@opam/irmin-mem": "*",
     "@opam/uuidm": "*",
     "@opam/nocrypto": "*",
-    "@opam/zarith": "*"
+    "@opam/zarith": "*",
+    "@reason-native/rely": "*"
   },
   "resolutions": {
     "@opam/menhir": "20171013",
@@ -54,7 +55,6 @@
   },
   "devDependencies": {
     "@opam/merlin": "*",
-    "@reason-native/rely": "*",
     "ocaml": "~4.6.0"
   }
 }

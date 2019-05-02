@@ -1,5 +1,3 @@
-open Lwt.Infix;
-
 let json_err =
   fun
   | Ok(_) as ok => ok

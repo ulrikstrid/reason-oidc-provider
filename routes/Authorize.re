@@ -4,7 +4,7 @@ let makeRoute =
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
-      ~getHeader,
+      ~get_header,
       ~redirectPath,
       target,
       reqd,

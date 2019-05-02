@@ -2,12 +2,11 @@ let makeCallback =
     (
       ~target,
       ~method,
-      ~getHeader,
+      ~get_header,
       ~create_response,
       ~respond_with_string: ('a, 'b, string) => unit,
       ~headers_of_list,
       ~read_body,
-      ~headers,
       ~context: Context.t,
       reqd,
     ) => {
@@ -31,7 +30,7 @@ let makeCallback =
           ~respond_with_string,
           ~create_response,
           ~headers_of_list,
-          ~getHeader,
+          ~get_header,
           ~redirectPath=context.host ++ "/interaction",
           target,
           reqd,
@@ -46,7 +45,7 @@ let makeCallback =
     )
   | (`POST, ["interaction"]) =>
     let session_id =
-      getHeader("Cookie")
+      get_header("Cookie")
       |> CCOpt.get_or(~default="")
       |> Http.Cookie.get_cookie(~key="session");
 
