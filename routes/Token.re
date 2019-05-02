@@ -6,15 +6,20 @@ let make =
       ~headers_of_list,
       ~priv_key,
       ~host,
+      ~jwk: Oidc.Jwk.t,
       reqd,
     ) => {
-  let jwt_header =
-    Jwt.header_of_algorithm_and_typ(Jwt.RS256(Some(priv_key)), None);
+  let jwt_header: Jwt.header =
+    Jwt.make_header(
+      ~alg=Jwt.RS256(Some(priv_key)),
+      ~typ="JWT",
+      ~kid=jwk.kid,
+      (),
+    );
 
-  let int_string_of_float = f =>
-    string_of_float(f) |> CCString.filter(c => c != '.');
+  let int_string_of_float = f => f |> int_of_float |> string_of_int;
 
-  let id_token =
+  let jwt =
     Jwt.(
       empty_payload
       |> add_claim(iss, host)
@@ -23,8 +28,15 @@ let make =
       |> add_claim(iat, Unix.time() |> int_string_of_float)
       |> add_claim(exp, Unix.time() +. 3600. |> int_string_of_float)
       |> t_of_header_and_payload(jwt_header)
-      |> token_of_t
     );
+
+  let id_token = jwt |> Jwt.token_of_t;
+
+  // Verify that everything is fine, this should ve a test
+  let verified =
+    Jwt.verify(~alg="RS256", ~jwks=`List([Oidc.Jwk.to_json(jwk)]), jwt);
+  Console.log(verified);
+
   Logs.debug(m => m("JWT: %s", id_token));
   Lwt.Infix.(
     read_body(reqd)
@@ -38,10 +50,10 @@ let make =
           ~json=
             Printf.sprintf(
               {|{
-              "id_token": "%s",
-              "expires_in": 3600,
-              "token_type": "Bearer"
-          }|},
+                "id_token": "%s",
+                "expires_in": 3600,
+                "token_type": "Bearer"
+              }|},
               id_token,
             ),
           reqd,

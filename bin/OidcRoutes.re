@@ -86,7 +86,7 @@ let makeCallback =
       |> Lwt.return
     };
   | (`GET, [".well-known", "jwks.json"]) =>
-    let jwk_string = context.jwk |> Oidc.Jwk.to_json |> Yojson.to_string;
+    let jwk_string = context.jwk |> Oidc.Jwk.to_json |> Yojson.Basic.to_string;
     let json = Printf.sprintf({j|{"keys": [%s]}|j}, jwk_string);
 
     Http.Response.Json.make(
@@ -139,6 +139,7 @@ let makeCallback =
       ~headers_of_list,
       ~priv_key=context.rsa_priv,
       ~host=context.host,
+      ~jwk=context.jwk,
       reqd,
     )
   | _ =>
