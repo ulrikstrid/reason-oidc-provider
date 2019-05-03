@@ -20,9 +20,9 @@ jobs:
       ESY__CACHE_SOURCE_TARBALL_PATH: ${{ parameters.ESY__CACHE_SOURCE_TARBALL_PATH }}
 
     steps:
-      - template: utils/use-node.yml
-      - template: utils/use-esy.yml
-      - template: utils/restore-build-cache.yml
+      - template: ./utils/use-node.yml
+      - template: ./utils/use-esy.yml
+      - template: ./utils/restore-build-cache.yml
       - script: "esy install"
         displayName: "esy install"
       - script: "esy build"
@@ -31,7 +31,7 @@ jobs:
         displayName: "Test command"
       - script: "esy release"
         displayName: "esy release"
-      - template: utils/publish-build-cache.yml
+      - template: ./utils/publish-build-cache.yml
       - task: PublishBuildArtifacts@1
         displayName: "Publish Artifact: ${{ parameters.platform }}"
         inputs:
