@@ -9,7 +9,7 @@ let make =
       ~jwk: Oidc.Jwk.t,
       reqd,
     ) => {
-  let jwt_header: Jwt.header = Oidc.Jwk.make_jwt_header(priv_key, jwk);
+  let jwt_header = Oidc.Jwk.make_jwt_header(priv_key, jwk);
 
   let int_string_of_float = f => f |> int_of_float |> string_of_int;
 

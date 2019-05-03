@@ -7,6 +7,7 @@
     "build": "refmterr dune build"
   },
   "scripts": {
+    "test": "esy dune runtest",
     "run": "esy x main.exe",
     "format": "esy dune build @fmt -p #{self.name}",
     "format:watch": "esy dune build --watch @fmt -p #{self.name}",
@@ -52,7 +53,7 @@
     "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#25149c6",
     "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
     "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
-    "@opam/conf-gmp": "briskml/gmp#04c42f8",
+    "gmp": "briskml/gmp#04c42f8",
     "@opam/zarith": "briskml/zarith#a9e0455"
   },
   "devDependencies": {

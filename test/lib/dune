@@ -19,12 +19,12 @@
    )
    (modules (:standard \ RunTests))
 )
-(executable
+(test
   ; the for the library is automatically detected because of the name, but we
   ; need to explicitly specify the package here
   (package oidc-provider-test)
   (name RunTests)
-  (public_name RunTests.exe)
+  ; (public_name RunTests.exe)
   (libraries
     oidc-provider-test.lib
   )
