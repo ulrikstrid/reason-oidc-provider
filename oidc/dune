@@ -1,5 +1,6 @@
 (library
   (name oidc)
+  (public_name oidc)
   (flags (-w -40 -w +26))
   (libraries
     lwt

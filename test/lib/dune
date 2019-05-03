@@ -7,7 +7,16 @@
    (ocamlopt_flags -linkall -g)
    ; you will want to depend on the library you are testing as well, however for
    ; the purposes of this example we are only depending on the test runner itself
-   (libraries rely.lib )
+   (libraries
+    rely.lib
+    nocrypto
+    nocrypto.unix
+    jwt
+    containers
+
+    oidc
+    http
+   )
    (modules (:standard \ RunTests))
 )
 (executable
@@ -15,7 +24,7 @@
   ; need to explicitly specify the package here
   (package oidc-provider-test)
   (name RunTests)
-  (public_name RunTests)
+  (public_name RunTests.exe)
   (libraries
     oidc-provider-test.lib
   )

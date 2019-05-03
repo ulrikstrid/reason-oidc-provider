@@ -9,13 +9,7 @@ let make =
       ~jwk: Oidc.Jwk.t,
       reqd,
     ) => {
-  let jwt_header: Jwt.header =
-    Jwt.make_header(
-      ~alg=Jwt.RS256(Some(priv_key)),
-      ~typ="JWT",
-      ~kid=jwk.kid,
-      (),
-    );
+  let jwt_header: Jwt.header = Oidc.Jwk.make_jwt_header(priv_key, jwk);
 
   let int_string_of_float = f => f |> int_of_float |> string_of_int;
 
@@ -31,11 +25,6 @@ let make =
     );
 
   let id_token = jwt |> Jwt.token_of_t;
-
-  // Verify that everything is fine, this should ve a test
-  let verified =
-    Jwt.verify(~alg="RS256", ~jwks=`List([Oidc.Jwk.to_json(jwk)]), jwt);
-  Console.log(verified);
 
   Logs.debug(m => m("JWT: %s", id_token));
   Lwt.Infix.(

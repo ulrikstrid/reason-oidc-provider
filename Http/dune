@@ -1,5 +1,6 @@
 (library
   (name http)
+  (public_name http)
   (flags (-w -40 -w +26))
   (libraries
     lwt

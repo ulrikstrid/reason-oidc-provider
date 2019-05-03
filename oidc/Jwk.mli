@@ -11,3 +11,5 @@ type t = {
 val make : Nocrypto.Rsa.pub -> t 
 
 val to_json : t -> Yojson.Basic.t
+
+val make_jwt_header : Nocrypto.Rsa.priv -> t -> Jwt.header
