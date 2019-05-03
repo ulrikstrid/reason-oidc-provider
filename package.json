@@ -53,7 +53,30 @@
     "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#25149c6",
     "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
     "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
-    "gmp": "briskml/gmp#04c42f8",
+    "gmp": {
+      "source": "archive:https://gmplib.org/download/gmp/gmp-6.1.2.tar.xz#9dc6981197a7d92f339192eea974f5eca48fcffe",
+      "override": {
+        "buildsInSource": true,
+        "build": [
+          "#{os == 'windows' ? 'find ./ -exec touch -t 200905010101 {} +' : ''}",
+          "./configure --prefix=#{self.install} #{os == 'windows' ? '--host x86_64-w64-mingw32' : ''} CFLAGS=-fPIC",
+          "make"
+        ],
+        "install": [
+          "make install"
+        ],
+        "exportedEnv": {
+          "CFLAGS": {
+            "scope": "global",
+            "val": "-I#{self.install / 'include'} $CFLAGS"
+          },
+          "LDFLAGS": {
+            "scope": "global",
+            "val": "-L#{self.lib} $LDFLAGS"
+          }
+        }
+      }
+    },
     "@opam/zarith": "briskml/zarith#a9e0455"
   },
   "devDependencies": {
