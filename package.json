@@ -73,6 +73,18 @@
           "LDFLAGS": {
             "scope": "global",
             "val": "-L#{self.lib} $LDFLAGS"
+          },
+          "LD_LIBRARY_PATH": {
+            "scope": "global",
+            "val": "#{self.lib}:$LD_LIBRARY_PATH"
+          },
+          "LIBRARY_PATH": {
+            "scope": "global",
+            "val": "#{self.lib}:$LIBRARY_PATH"
+          },
+          "CPATH": {
+            "scope": "global",
+            "val": "{self.include}:$CPATH"
           }
         }
       }
