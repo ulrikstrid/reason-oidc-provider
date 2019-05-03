@@ -51,7 +51,8 @@
     "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#53042e5",
     "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#25149c6",
     "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
-    "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f"
+    "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
+    "@opam/conf-gmp": "briskml/gmp#04c42f8"
   },
   "devDependencies": {
     "@opam/merlin": "*",
