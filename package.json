@@ -56,8 +56,11 @@
     "pgk-conf": "esy-ocaml/yarn-pkg-config#cca65f9",
     "pgk-config": "esy-ocaml/yarn-pkg-config#cca65f9",
     "@opam/conf-gmp": {
-      "dependencies": {
-        "gmp": "*"
+      "source": "no-source:",
+      "override": {
+        "dependencies": {
+          "gmp": "*"
+        }
       }
     },
     "gmp": {
