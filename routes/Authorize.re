@@ -6,6 +6,7 @@ let makeRoute =
       ~headers_of_list,
       ~get_header,
       ~redirectPath,
+      ~clients,
       target,
       reqd,
     ) => {
@@ -13,17 +14,21 @@ let makeRoute =
   open Http;
 
   let parameters = Uri.of_string(target) |> Oidc.Parameters.parseQuery;
+  let client = Oidc.Parameters.get_client(~clients, parameters);
 
   Oidc.Parameters.(
-    switch (parameters) {
-    | {
-        response_type: ["code"],
-        client_id: "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175",
-        redirect_uri: "http://localhost:5500/auth/cb",
-        scope: ["openid", ...rest],
-        state,
-        nonce,
-      } =>
+    switch (parameters, client) {
+    | (
+        {
+          response_type: ["code"],
+          client_id: _,
+          redirect_uri: _,
+          scope: ["openid", ...rest],
+          state,
+          nonce,
+        },
+        Some(client),
+      ) =>
       let cookie_key =
         Uuidm.v4_gen(Random.State.make_self_init(), ()) |> Uuidm.to_string;
       let cookie_name = "session";
@@ -48,7 +53,7 @@ let makeRoute =
         ~create_response,
         ~headers_of_list,
         reqd,
-        "No Authorization header",
+        "Bad request",
       );
 
       Lwt.return_unit;

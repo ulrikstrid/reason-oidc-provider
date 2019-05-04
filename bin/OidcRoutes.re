@@ -32,6 +32,7 @@ let makeCallback =
           ~headers_of_list,
           ~get_header,
           ~redirectPath=context.host ++ "/interaction",
+          ~clients=context.clients,
           target,
           reqd,
         )

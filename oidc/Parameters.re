@@ -32,3 +32,11 @@ let parseQuery = uri => {
     raise(Not_found);
   };
 };
+
+let get_client = (~clients, t) => {
+  CCList.find_opt(
+    (client: Client.t) =>
+      client.id == t.client_id && client.redirect_uri == t.redirect_uri,
+    clients,
+  );
+};
