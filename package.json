@@ -55,6 +55,11 @@
     "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
     "pgk-conf": "esy-ocaml/yarn-pkg-config#cca65f9",
     "pgk-config": "esy-ocaml/yarn-pkg-config#cca65f9",
+    "@opam/conf-gmp": {
+      "dependencies": {
+        "gmp": "*"
+      }
+    },
     "gmp": {
       "source": "archive:https://gmplib.org/download/gmp/gmp-6.1.2.tar.xz#9dc6981197a7d92f339192eea974f5eca48fcffe",
       "override": {
