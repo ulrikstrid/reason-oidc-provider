@@ -64,7 +64,7 @@ let makeCallback =
           >>= (
             (parameters: Oidc.Parameters.t) => {
               Routes.ValidateAuth.makeRoute(
-                ~oidc_state=CCOpt.get_or(~default="", parameters.state),
+                ~parameters,
                 ~respond_with_string,
                 ~create_response,
                 ~headers_of_list,
@@ -85,51 +85,21 @@ let makeCallback =
       |> Lwt.return
     };
   | (`GET, [".well-known", "jwks.json"]) =>
-    let jwk_string = context.jwk |> Oidc.Jwk.to_json |> Yojson.Basic.to_string;
-    let json = Printf.sprintf({j|{"keys": [%s]}|j}, jwk_string);
-
-    Http.Response.Json.make(
+    Routes.Jwks.make(
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
-      ~json,
+      ~jwk=context.jwk,
       reqd,
-    );
-    Lwt.return_unit;
+    )
   | (`GET, [".well-known", "openid-configuration"]) =>
-    let json =
-      Printf.sprintf(
-        {|{
-  "issuer": "%s",
-  "authorization_endpoint": "%s/authorize",
-  "token_endpoint": "%s/token",
-  "userinfo_endpoint": "%s/userinfo",
-  "jwks_uri": "%s/.well-known/jwks.json",
-  "scopes_supported": [
-    "user"
-  ],
-  "response_types_supported": [
-    "code"
-  ],
-  "token_endpoint_auth_methods_supported": [
-    "client_secret_basic"
-  ]
-}|},
-        context.host,
-        context.host,
-        context.host,
-        context.host,
-        context.host,
-      );
-
-    Http.Response.Json.make(
+    Routes.Discovery.make(
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
-      ~json,
+      ~host=context.host,
       reqd,
-    );
-    Lwt.return_unit;
+    )
   | (`POST, ["token"]) =>
     Routes.Token.make(
       ~read_body,

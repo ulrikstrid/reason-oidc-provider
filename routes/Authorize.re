@@ -14,9 +14,6 @@ let makeRoute =
 
   let parameters = Uri.of_string(target) |> Oidc.Parameters.parseQuery;
 
-  Console.log(parameters.response_type);
-  Console.log(parameters);
-
   Oidc.Parameters.(
     switch (parameters) {
     | {

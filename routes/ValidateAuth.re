@@ -4,7 +4,7 @@ let makeRoute =
       ~create_response,
       ~headers_of_list,
       ~read_body,
-      ~oidc_state,
+      ~parameters: Oidc.Parameters.t,
       reqd,
     ) => {
   Lwt.Infix.
@@ -20,8 +20,9 @@ let makeRoute =
             ~create_response,
             ~headers_of_list,
             ~targetPath=
-              "http://localhost:5500/auth/cb?code=SplxlOBeZQQYbYS6WxSbIA&state="
-              ++ oidc_state,
+              parameters.redirect_uri
+              ++ "?code=SplxlOBeZQQYbYS6WxSbIA&state="
+              ++ CCOpt.get_or(~default="", parameters.state),
             reqd,
           );
         }

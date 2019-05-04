@@ -1,16 +1,3 @@
-/*
-
- curl --http2-prior-knowledge http://localhost:3000/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb&scope=openid%20profile&state=af0ifjsldkj&nonce=n-0S6_WzA2Mj
-
- http://localhost:3000/authorize?
-   response_type=code
-  &client_id=s6BhdRkqt3
-  &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
-  &scope=openid%20profile
-  &state=af0ifjsldkj
-  &nonce=n-0S6_WzA2Mj
-  */
-
 type t = {
   response_type: list(string),
   client_id: string,
