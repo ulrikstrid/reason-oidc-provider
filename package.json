@@ -53,6 +53,7 @@
     "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#25149c6",
     "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
     "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
+    "pgk-conf": "esy-ocaml/yarn-pkg-config#cca65f9",
     "gmp": {
       "source": "archive:https://gmplib.org/download/gmp/gmp-6.1.2.tar.xz#9dc6981197a7d92f339192eea974f5eca48fcffe",
       "override": {
