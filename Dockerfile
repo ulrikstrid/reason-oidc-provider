@@ -18,18 +18,18 @@ RUN apk add --no-cache glibc-2.28-r0.apk
 
 RUN npm install -g esy@next --unsafe-perm
 
-COPY package.json /reason-oidc-provider/esy.json
+COPY esy.json /reason-oidc-provider/esy.json
 COPY esy.lock /reason-oidc-provider/esy.lock
 
 RUN esy install
-RUN esy b dune build
+RUN esy build
 
 COPY . /reason-oidc-provider
 
 RUN esy install
 RUN esy dune build --profile=docker
 
-RUN mv $(esy command-env --json | jq --raw-output .cur__target_dir)/default/bin/reason-oidc-provider.exe /reason-oidc-provider/main.exe
+RUN esy mv '#{self.target_dir}/default/bin/main.exe' /reason-oidc-provider/main.exe
 
 RUN strip main.exe
 
