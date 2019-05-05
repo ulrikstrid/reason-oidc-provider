@@ -72,9 +72,7 @@
           "./configure --prefix=#{self.install} #{os == 'windows' ? '--host x86_64-w64-mingw32' : ''} CFLAGS=-fPIC",
           "make"
         ],
-        "install": [
-          "make install"
-        ],
+        "install": ["make install"],
         "exportedEnv": {
           "CFLAGS": {
             "scope": "global",
