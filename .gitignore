@@ -10,6 +10,5 @@ _release
 trash
 .env.development
 
-esy.lock
 localhost.key
 localhost.crt
