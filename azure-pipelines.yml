@@ -30,3 +30,11 @@ jobs:
       STAGING_DIRECTORY_UNIX: /C/Users/VssAdministrator/STAGING
       ESY__CACHE_INSTALL_PATH: /C/Users/VssAdministrator/.esy/3_/i
       ESY__CACHE_SOURCE_TARBALL_PATH: /C/Users/VssAdministrator/.esy/source/i
+
+  - job: Docker
+    pool:
+      vmImage: ubuntu-16.04
+
+    steps:
+      - script: docker build --rm -f "Dockerfile" -t reason-oidc-provider:latest .
+        displayName: "Build docker image"
