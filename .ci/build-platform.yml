@@ -12,8 +12,8 @@ jobs:
       vmImage: ${{ parameters.vmImage }}
       demands: node.js
     timeoutInMinutes: 120 # This is mostly for Windows
+    continueOnError: eq(${{ parameters.platform }}, Windows)
     variables:
-
       STAGING_DIRECTORY: ${{ parameters.STAGING_DIRECTORY }}
       STAGING_DIRECTORY_UNIX: ${{ parameters.STAGING_DIRECTORY_UNIX }}
       ESY__CACHE_INSTALL_PATH: ${{ parameters.ESY__CACHE_INSTALL_PATH }}
