@@ -27,10 +27,10 @@ RUN esy @docker build
 
 COPY . /reason-oidc-provider
 
-RUN esy @docker  install
-RUN esy @docker  dune build --profile=docker
+RUN esy @docker install
+RUN esy @docker dune build --profile=docker
 
-RUN esy mv '#{self.target_dir}/default/bin/ReasonOidcProvider.exe' /reason-oidc-provider/main.exe
+RUN esy @docker mv '#{self.target_dir}/default/bin/ReasonOidcProvider.exe' /reason-oidc-provider/main.exe
 
 RUN strip main.exe
 
