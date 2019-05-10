@@ -9,7 +9,7 @@ RUN apk add --no-cache \
   libev libev-dev jq \
   ca-certificates wget \
   bash curl perl-utils \
-  git patch gcc g++ musl-dev \
+  git patch gcc g++ \
   make m4 util-linux zlib-dev gmp-dev
 
 RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
@@ -19,15 +19,16 @@ RUN apk add --no-cache glibc-2.28-r0.apk
 RUN npm install -g esy@next --unsafe-perm
 
 COPY esy.json /reason-oidc-provider/esy.json
-COPY esy.lock /reason-oidc-provider/esy.lock
+COPY docker.json /reason-oidc-provider/docker.json
+COPY docker.esy.lock /reason-oidc-provider/docker.esy.lock
 
-RUN esy install
-RUN esy build
+RUN esy @docker install
+RUN esy @docker build
 
 COPY . /reason-oidc-provider
 
-RUN esy install
-RUN esy dune build --profile=docker
+RUN esy @docker  install
+RUN esy @docker  dune build --profile=docker
 
 RUN esy mv '#{self.target_dir}/default/bin/ReasonOidcProvider.exe' /reason-oidc-provider/main.exe
 

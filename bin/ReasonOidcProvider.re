@@ -8,7 +8,7 @@ let main = () => {
     Oidc.Client.[
       {
         id: "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175",
-        redirect_uri: "http://localhost:5500/auth/cb",
+        redirect_uri: "https://op.certification.openid.net:60907/authz_cb" //"http://localhost:5500/auth/cb",
       },
     ];
   let rsa_priv = Nocrypto.Rsa.generate(4048);

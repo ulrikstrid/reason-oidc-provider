@@ -46,15 +46,10 @@
     "@reason-native/rely": "*"
   },
   "resolutions": {
-    "@opam/menhir": "20171013",
-    "@opam/re": "1.8.0",
-    "@opam/h2-lwt-unix": "anmonteiro/ocaml-h2:h2-lwt-unix.opam#cd5c59b",
     "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#53042e5",
     "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#25149c6",
     "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
     "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
-    "pgk-conf": "esy-ocaml/yarn-pkg-config#cca65f9",
-    "pgk-config": "esy-ocaml/yarn-pkg-config#cca65f9",
     "@opam/conf-gmp": {
       "source": "no-source:",
       "override": {
