@@ -1,6 +1,7 @@
 parameters:
   platform: "macOS"
   vmImage: "macOS-latest"
+  esyProject: esy
   STAGING_DIRECTORY: /Users/vsts/STAGING
   STAGING_DIRECTORY_UNIX: /Users/vsts/STAGING
   ESY__CACHE_INSTALL_PATH: /Users/vsts/.esy/3____________________________________________________________________/i
@@ -23,11 +24,11 @@ jobs:
       - template: ./utils/use-node.yml
       - template: ./utils/use-esy.yml
       - template: ./utils/restore-build-cache.yml
-      - script: "esy install"
+      - script: "esy install --project ${{ parameters.esyProject }}"
         displayName: "esy install"
-      - script: "esy build"
+      - script: "esy build --project ${{ parameters.esyProject }}"
         displayName: "esy build"
-      - script: "esy test"
+      - script: "esy test --project ${{ parameters.esyProject }}"
         displayName: "Test command"
       - template: ./utils/publish-build-cache.yml
           

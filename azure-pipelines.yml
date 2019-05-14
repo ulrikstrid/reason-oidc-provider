@@ -8,6 +8,7 @@ jobs:
     parameters:
       platform: Linux
       vmImage: ubuntu-16.04
+      esyProject: esy
       STAGING_DIRECTORY: /home/vsts/STAGING
       STAGING_DIRECTORY_UNIX: /home/vsts/STAGING
       ESY__CACHE_INSTALL_PATH: /home/vsts/.esy/3_____________________________________________________________________/i
@@ -17,6 +18,7 @@ jobs:
     parameters:
       platform: macOS
       vmImage: macOS-latest
+      esyProject: esy
       STAGING_DIRECTORY: /Users/vsts/STAGING
       STAGING_DIRECTORY_UNIX: /Users/vsts/STAGING
       ESY__CACHE_INSTALL_PATH: /Users/vsts/.esy/3____________________________________________________________________/i
@@ -26,6 +28,7 @@ jobs:
     parameters:
       platform: Windows
       vmImage: vs2017-win2016
+      esyProject: windows
       STAGING_DIRECTORY: C:\Users\VssAdministrator\STAGING
       STAGING_DIRECTORY_UNIX: /C/Users/VssAdministrator/STAGING
       ESY__CACHE_INSTALL_PATH: /C/Users/VssAdministrator/.esy/3_/i
