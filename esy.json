@@ -58,7 +58,7 @@
         }
       }
     },
-    "esy-gmp": "ulrikstrid/esy-gmp#6c321b7"
+    "esy-gmp": "ulrikstrid/esy-gmp#5772cc6"
   },
   "devDependencies": {
     "@opam/merlin": "*",
