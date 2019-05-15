@@ -39,4 +39,6 @@ WORKDIR /reason-oidc-provider
 
 COPY --from=base /reason-oidc-provider/main.exe main.exe
 
+EXPOSE 8080 9443
+
 ENTRYPOINT ["/reason-oidc-provider/main.exe"]
