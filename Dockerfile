@@ -37,6 +37,7 @@ FROM scratch
 
 WORKDIR /reason-oidc-provider
 
+COPY --from=base /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=base /reason-oidc-provider/main.exe main.exe
 
 EXPOSE 8080 9443
