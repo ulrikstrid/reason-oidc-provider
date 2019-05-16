@@ -5,7 +5,18 @@
       "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#53042e5",
       "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#25149c6",
       "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
-      "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
+      "esy-endian": "ulrikstrid/esy-endian#0fcf4c2",
+      "@opam/nocrypto": {
+          "source": "ulrikstrid/ocaml-nocrypto:nocrypto.opam#17ccc48",
+          "override": {
+            "dependencies": {
+              "esy-endian": "*"
+            },
+            "buildEnv": { "CFLAGS": "-I#{esy-endian.install / 'include'}" }
+          }
+      },
+      "@opam/cstruct": "mirage/ocaml-cstruct:cstruct.opam#cba860b",
+      "@opam/x509": "dune-universe/ocaml-x509:x509.opam#449eeab",
       "@opam/conf-gmp": {
         "source": "no-source:",
         "override": {
@@ -14,7 +25,8 @@
           }
         }
       },
-      "esy-gmp": "ulrikstrid/esy-gmp#6c321b7"
+      "esy-gmp": "ulrikstrid/esy-gmp#5772cc6",
+      "yarn-pkg-config": "esy-ocaml/yarn-pkg-config#cca65f9"
     }
   }
 }
