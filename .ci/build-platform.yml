@@ -28,7 +28,7 @@ jobs:
         displayName: "esy install"
       - script: "esy build --project ${{ parameters.esyProject }}"
         displayName: "esy build"
-      - script: "esy test --project ${{ parameters.esyProject }}"
+      - script: "esy --project ${{ parameters.esyProject }} test"
         displayName: "Test command"
       - template: ./utils/publish-build-cache.yml
           

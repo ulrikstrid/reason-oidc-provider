@@ -36,7 +36,7 @@ let http1_handler =
 let startHttpServer = (~port=8080, ~context, ()) => {
   open Lwt.Infix;
 
-  let listen_address = Unix.(ADDR_INET(inet_addr_loopback, port));
+  let listen_address = Unix.(ADDR_INET(inet_addr_any, port));
 
   Lwt.async(() => {
     let handler =
