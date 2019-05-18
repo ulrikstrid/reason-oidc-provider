@@ -12,9 +12,11 @@
     h2
     h2-lwt-unix
     httpaf
-    httpaf-lwt
+    httpaf-lwt-unix
     irmin-mem
     x509
+    tls
+    tls-lwt
 
     yojson
     str

@@ -24,7 +24,7 @@ let http1_handler =
       ~error_handler=Http1_handler.error_handler,
       tls_server,
     ) =>
-  Httpaf_lwt.Server.TLS.create_connection_handler(
+  Httpaf_lwt_unix.Server.TLS.create_connection_handler(
     ~certfile=?None,
     ~keyfile=?None,
     ~config=?None,
@@ -40,7 +40,7 @@ let startHttpServer = (~port=8080, ~context, ()) => {
 
   Lwt.async(() => {
     let handler =
-      Httpaf_lwt.Server.create_connection_handler(
+      Httpaf_lwt_unix.Server.create_connection_handler(
         ~config=?None,
         ~request_handler=Http1_handler.route_handler(context),
         ~error_handler=Http1_handler.error_handler,
