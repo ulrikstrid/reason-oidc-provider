@@ -36,7 +36,7 @@
     "@opam/tls": "*",
     "@opam/ppx_deriving": "*",
     "@opam/ppx_sexp_conv": "*",
-    "@opam/x509": "0.6.1",
+    "@opam/x509": "0.6.3",
     "@opam/base64": "< 3.0.0",
     "@opam/cstruct-lwt": "*",
     "@opam/irmin-mem": "*",
