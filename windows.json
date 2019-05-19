@@ -5,11 +5,9 @@
       "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#6d2c80e",
       "@opam/httpaf-lwt-unix": "anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e",
       "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
-      "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:nocrypto.opam#5404b7a7b73ee25d402dd081477b76d89054ea91",
-      "@opam/tls": "dune-universe/ocaml-tls:tls.opam#9994a19",
-      "@opam/tls-lwt": "dune-universe/ocaml-tls:tls-lwt.opam#9994a19",
       "esy-gmp": "esy-packages/esy-gmp#a945c56",
-      "esy-zlib": "esy-packages/esy-zlib#404929f"
+      "esy-zlib": "esy-packages/esy-zlib#404929f",
+      "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#e872d98"
     }
   }
 }
