@@ -16,7 +16,6 @@
     irmin-mem
     x509
     tls
-    tls-lwt
 
     yojson
     str

@@ -1,5 +1,5 @@
 {
-  "checksum": "909f94451e5ca8430699e01e0762d87b",
+  "checksum": "7d16aaf107f51842a8682b43aa2a1b59",
   "root": "reason-oidc-provider@link-dev:./esy.json",
   "node": {
     "yarn-pkg-config@github:esy-ocaml/yarn-pkg-config#d488cd9321cd5036bd36ec96744ce78c5d45fc49@d41d8cd9": {
@@ -55,8 +55,8 @@
         "@opam/lambda-term@opam:1.13@40726c0a",
         "@opam/jwt@github:AestheticIntegration/ocaml-jwt:jwt.opam#1517838@d41d8cd9",
         "@opam/irmin-mem@opam:1.3.0@5744e38e",
-        "@opam/httpaf-lwt@github:anmonteiro/httpaf:httpaf-lwt.opam#25149c6@d41d8cd9",
-        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#53042e5@d41d8cd9",
+        "@opam/httpaf-lwt-unix@github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e@d41d8cd9",
+        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9",
         "@opam/hpack@opam:0.2.0@b2aebcf5",
         "@opam/h2-lwt-unix@opam:0.3.0@f715be8b",
         "@opam/h2-lwt@opam:0.3.0@3129dc73", "@opam/h2@opam:0.3.0@bc97ac16",
@@ -1896,37 +1896,38 @@
         "@opam/astring@opam:0.8.3@4e5e17d5"
       ]
     },
-    "@opam/httpaf-lwt@github:anmonteiro/httpaf:httpaf-lwt.opam#25149c6@d41d8cd9": {
+    "@opam/httpaf-lwt-unix@github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e@d41d8cd9": {
       "id":
-        "@opam/httpaf-lwt@github:anmonteiro/httpaf:httpaf-lwt.opam#25149c6@d41d8cd9",
-      "name": "@opam/httpaf-lwt",
-      "version": "github:anmonteiro/httpaf:httpaf-lwt.opam#25149c6",
+        "@opam/httpaf-lwt-unix@github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e@d41d8cd9",
+      "name": "@opam/httpaf-lwt-unix",
+      "version": "github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e",
       "source": {
         "type": "install",
-        "source": [ "github:anmonteiro/httpaf:httpaf-lwt.opam#25149c6" ]
+        "source": [ "github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e" ]
       },
       "overrides": [],
       "dependencies": [
         "ocaml@4.6.10@d41d8cd9", "@opam/tls@opam:0.10.1@1a01bd34",
+        "@opam/ocamlfind@opam:1.8.0@f744a0c5",
         "@opam/lwt@opam:4.2.1@c1888ec9",
-        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#53042e5@d41d8cd9",
+        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9",
         "@opam/faraday-lwt-unix@opam:0.7.0@b0dea04f",
         "@opam/dune@opam:1.9.3@cccbbfe7", "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
         "ocaml@4.6.10@d41d8cd9", "@opam/lwt@opam:4.2.1@c1888ec9",
-        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#53042e5@d41d8cd9",
+        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9",
         "@opam/faraday-lwt-unix@opam:0.7.0@b0dea04f"
       ]
     },
-    "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#53042e5@d41d8cd9": {
+    "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9": {
       "id":
-        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#53042e5@d41d8cd9",
+        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9",
       "name": "@opam/httpaf",
-      "version": "github:anmonteiro/httpaf:httpaf.opam#53042e5",
+      "version": "github:anmonteiro/httpaf:httpaf.opam#6d2c80e",
       "source": {
         "type": "install",
-        "source": [ "github:anmonteiro/httpaf:httpaf.opam#53042e5" ]
+        "source": [ "github:anmonteiro/httpaf:httpaf.opam#6d2c80e" ]
       },
       "overrides": [],
       "dependencies": [
@@ -2076,7 +2077,7 @@
       "overrides": [],
       "dependencies": [
         "ocaml@4.6.10@d41d8cd9", "@opam/psq@opam:0.2.0@58d0fdbe",
-        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#53042e5@d41d8cd9",
+        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9",
         "@opam/hpack@opam:0.2.0@b2aebcf5",
         "@opam/faraday@opam:0.7.0@6026a81f",
         "@opam/dune@opam:1.9.3@cccbbfe7",
@@ -2086,7 +2087,7 @@
       ],
       "devDependencies": [
         "ocaml@4.6.10@d41d8cd9", "@opam/psq@opam:0.2.0@58d0fdbe",
-        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#53042e5@d41d8cd9",
+        "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9",
         "@opam/hpack@opam:0.2.0@b2aebcf5",
         "@opam/faraday@opam:0.7.0@6026a81f",
         "@opam/bigstringaf@opam:0.5.0@93c1ca28",
