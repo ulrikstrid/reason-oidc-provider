@@ -70,7 +70,7 @@
        if not auto then src, dst else
        let dst = match dst with
 -      | None -> Some (Filename.basename src)
-+      | None -> let () = print_endline Sys.os_type in
++      | None ->
 +        let src = if Sys.os_type <> "Win32" then src else src ^ ".exe" in
 +        Some (Filename.basename src)
        | Some _ as dst -> dst
