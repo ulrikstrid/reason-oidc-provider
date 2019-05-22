@@ -6,9 +6,9 @@ _release
 *.byte
 *.native
 *.install
+.vscode
 
 trash
 .env.development
 
-localhost.key
 localhost.crt

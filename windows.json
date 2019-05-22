@@ -1,14 +1,20 @@
 {
   "source": "./esy.json",
   "override": {
+    "build": "refmterr dune build --profile=windows",
+    "scripts": {
+      "test": "esy dune runtest --profile=windows",
+      "run": "esy x main.exe",
+      "format": "esy dune build @fmt -p #{self.name}",
+      "format:watch": "esy dune build --watch @fmt -p #{self.name}",
+      "watch": "esy dune build --watch -p #{self.name}"
+    },
     "resolutions": {
       "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#6d2c80e",
       "@opam/httpaf-lwt-unix": "ulrikstrid/httpaf:httpaf-lwt-unix.opam#f280025",
       "@opam/h2-lwt-unix": "ulrikstrid/ocaml-h2:h2-lwt-unix.opam#5daceaa",
       "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
-      "esy-gmp": "esy-packages/esy-gmp#a945c56",
-      "esy-zlib": "esy-packages/esy-zlib#404929f",
-      "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#e872d98"
+      "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#1ad5838"
     }
   }
 }

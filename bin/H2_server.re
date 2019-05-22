@@ -122,7 +122,7 @@ let startHttpsServer = (~port=9443, ~cert, ~priv_key, ~context, ()) => {
 };
 
 let start = (~http1_port=8080, ~context, ~cert, ~priv_key, ()) => {
-  Sys.(set_signal(sigpipe, Signal_ignore));
+  // Sys.(set_signal(sigpipe, Signal_handle(_ => ())));
   Lwt_main.run(
     Lwt.join([
       startHttpServer(~port=http1_port, ~context, ()),

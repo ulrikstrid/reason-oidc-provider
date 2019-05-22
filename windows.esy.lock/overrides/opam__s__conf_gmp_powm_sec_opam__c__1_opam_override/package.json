@@ -8,7 +8,6 @@
     ]
   ],
   "dependencies": {
-    "esy-gmp": "*",
     "@opam/conf-gmp": "*"
   }
 }
