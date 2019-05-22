@@ -15,7 +15,8 @@
     httpaf-lwt-unix
     irmin-mem
     x509
-    tls
+    lwt_ssl
+    alpn_lib
 
     yojson
     str

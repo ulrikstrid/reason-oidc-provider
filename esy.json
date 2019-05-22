@@ -33,7 +33,7 @@
     "@opam/uri": "*",
     "ocaml": "~4.6.0",
     "refmterr": "*",
-    "@opam/tls": "*",
+    "@opam/ssl": "*",
     "@opam/ppx_deriving": "*",
     "@opam/ppx_sexp_conv": "*",
     "@opam/x509": "0.6.1",
@@ -49,7 +49,15 @@
     "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#6d2c80e",
     "@opam/httpaf-lwt-unix": "anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e",
     "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
-    "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f"
+    "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
+    "@opam/ssl": {
+      "source": "anmonteiro/ocaml-ssl:ssl.opam#b965d15",
+      "override": {
+        "dependencies": {
+          "@opam/conf-openssl": "1"
+        }
+      }
+    }
   },
   "devDependencies": {
     "@opam/merlin": "*",
