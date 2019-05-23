@@ -49,6 +49,10 @@ let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
       let create_response = (~headers, status) =>
         Response.create(~headers, ~reason=?None, ~version=?None, status);
 
+      Logs.info(m =>
+        m("http: %s request to %s", Http.Method.to_string(meth), target)
+      );
+
       OidcRoutes.makeCallback(
         ~target,
         ~method=meth,

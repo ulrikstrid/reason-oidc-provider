@@ -15,8 +15,10 @@
     httpaf-lwt-unix
     irmin-mem
     x509
+    ssl
     lwt_ssl
-    alpn_lib
+    nocrypto
+    nocrypto.lwt
 
     yojson
     str

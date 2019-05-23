@@ -14,19 +14,23 @@ let makeRoute =
   open Http;
 
   let parameters = Uri.of_string(target) |> Oidc.Parameters.parseQuery;
-  let client = Oidc.Parameters.get_client(~clients, parameters);
+  let client =
+    Containers.Option.flat_map(
+      Oidc.Parameters.get_client(~clients),
+      parameters,
+    );
 
   Oidc.Parameters.(
     switch (parameters, client) {
     | (
-        {
+        Some({
           response_type: ["code"],
           client_id: _,
           redirect_uri: _,
           scope: ["openid", ...rest],
           state,
           nonce,
-        },
+        }),
         Some(client),
       ) =>
       let cookie_key =

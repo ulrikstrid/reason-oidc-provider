@@ -34,6 +34,7 @@
     "ocaml": "~4.6.0",
     "refmterr": "*",
     "@opam/ssl": "*",
+    "@opam/lwt_ssl": "*",
     "@opam/ppx_deriving": "*",
     "@opam/ppx_sexp_conv": "*",
     "@opam/x509": "0.6.1",
@@ -51,10 +52,20 @@
     "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
     "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
     "@opam/ssl": {
-      "source": "anmonteiro/ocaml-ssl:ssl.opam#b965d15",
+      "source": "link:../ocaml-ssl/ssl.opam",
       "override": {
         "dependencies": {
-          "@opam/conf-openssl": "1"
+          "esy-openssl": "esy-packages/esy-openssl#100f884"
+        },
+        "buildEnv": {
+          "CFLAGS": "-I#{esy-openssl.install / 'include'}",
+          "LDFLAGS": "-L#{esy-openssl.lib}"
+        },
+        "exportedEnv": {
+          "CAML_LD_LIBRARY_PATH": {
+            "val": "#{self.lib / 'ssl' : $CAML_LD_LIBRARY_PATH}",
+            "scope": "global"
+          }
         }
       }
     }
