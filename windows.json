@@ -3,11 +3,11 @@
   "override": {
     "build": "refmterr dune build --profile=windows",
     "scripts": {
-      "test": "esy dune runtest --profile=windows",
-      "run": "esy x main.exe",
-      "format": "esy dune build @fmt -p #{self.name}",
-      "format:watch": "esy dune build --watch @fmt -p #{self.name}",
-      "watch": "esy dune build --watch -p #{self.name}"
+      "test": "esy b dune runtest --profile=windows",
+      "run": "esy x --profile=windows main.exe",
+      "format": "esy b --profile=windows dune build @fmt -p #{self.name}",
+      "format:watch": "esy b --profile=windows dune build --watch @fmt -p #{self.name}",
+      "watch": "esy b --profile=windows dune build --watch -p #{self.name}"
     },
     "resolutions": {
       "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#6d2c80e",

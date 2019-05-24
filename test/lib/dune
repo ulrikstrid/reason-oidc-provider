@@ -30,3 +30,6 @@
   )
   (modules RunTests)
 )
+
+(env
+  (windows (flags (:standard -g -ccopt -lbcrypt))))
