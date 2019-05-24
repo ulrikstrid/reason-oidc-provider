@@ -4,11 +4,7 @@ let json_err =
   | Error(err) => Error(`String(err));
 
 let h2_handler =
-    (
-      ~request_handler=H2_handler.request_handler,
-      ~error_handler=H2_handler.error_handler,
-      ssl_server,
-    ) =>
+    (~error_handler=H2_handler.error_handler, ~request_handler, ssl_server) =>
   H2_lwt_unix.Server.SSL.create_connection_handler(
     ~certfile=?None,
     ~keyfile=?None,
@@ -19,11 +15,7 @@ let h2_handler =
   );
 
 let http1_handler =
-    (
-      ~request_handler=Http1_handler.request_handler,
-      ~error_handler=Http1_handler.error_handler,
-      ssl_server,
-    ) =>
+    (~error_handler=Http1_handler.error_handler, ~request_handler, ssl_server) =>
   Httpaf_lwt_unix.Server.SSL.create_connection_handler(
     ~certfile=?None,
     ~keyfile=?None,
