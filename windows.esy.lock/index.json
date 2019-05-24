@@ -1,5 +1,5 @@
 {
-  "checksum": "37b3d3f366d552907627342d19d2e154",
+  "checksum": "7ae49fc67a6338380b93c77d8968bb17",
   "root": "reason-oidc-provider@link-dev:./esy.json",
   "node": {
     "yarn-pkg-config@github:esy-ocaml/yarn-pkg-config#cca65f99674ed2d954d28788edeb8c57fada5ed0@d41d8cd9": {
@@ -57,10 +57,10 @@
         "@opam/lambda-term@opam:1.13@c12f6164",
         "@opam/jwt@github:AestheticIntegration/ocaml-jwt:jwt.opam#1517838@d41d8cd9",
         "@opam/irmin-mem@opam:1.3.0@5744e38e",
-        "@opam/httpaf-lwt-unix@github:ulrikstrid/httpaf:httpaf-lwt-unix.opam#f280025@d41d8cd9",
+        "@opam/httpaf-lwt-unix@github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e@d41d8cd9",
         "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9",
         "@opam/hpack@opam:0.2.0@b2aebcf5",
-        "@opam/h2-lwt-unix@github:ulrikstrid/ocaml-h2:h2-lwt-unix.opam#5daceaa@d41d8cd9",
+        "@opam/h2-lwt-unix@opam:0.3.0@f715be8b",
         "@opam/h2-lwt@opam:0.3.0@3129dc73", "@opam/h2@opam:0.3.0@bc97ac16",
         "@opam/fmt@opam:0.8.6@a06c130d", "@opam/dune@opam:1.9.3@cccbbfe7",
         "@opam/cstruct-lwt@opam:4.0.0@8d5b99ea",
@@ -1895,14 +1895,14 @@
         "@opam/astring@opam:0.8.3@4e5e17d5"
       ]
     },
-    "@opam/httpaf-lwt-unix@github:ulrikstrid/httpaf:httpaf-lwt-unix.opam#f280025@d41d8cd9": {
+    "@opam/httpaf-lwt-unix@github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e@d41d8cd9": {
       "id":
-        "@opam/httpaf-lwt-unix@github:ulrikstrid/httpaf:httpaf-lwt-unix.opam#f280025@d41d8cd9",
+        "@opam/httpaf-lwt-unix@github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e@d41d8cd9",
       "name": "@opam/httpaf-lwt-unix",
-      "version": "github:ulrikstrid/httpaf:httpaf-lwt-unix.opam#f280025",
+      "version": "github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e",
       "source": {
         "type": "install",
-        "source": [ "github:ulrikstrid/httpaf:httpaf-lwt-unix.opam#f280025" ]
+        "source": [ "github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e" ]
       },
       "overrides": [],
       "dependencies": [
@@ -1999,14 +1999,21 @@
         "@opam/bigarray-compat@opam:1.0.0@77cde57f"
       ]
     },
-    "@opam/h2-lwt-unix@github:ulrikstrid/ocaml-h2:h2-lwt-unix.opam#5daceaa@d41d8cd9": {
-      "id":
-        "@opam/h2-lwt-unix@github:ulrikstrid/ocaml-h2:h2-lwt-unix.opam#5daceaa@d41d8cd9",
+    "@opam/h2-lwt-unix@opam:0.3.0@f715be8b": {
+      "id": "@opam/h2-lwt-unix@opam:0.3.0@f715be8b",
       "name": "@opam/h2-lwt-unix",
-      "version": "github:ulrikstrid/ocaml-h2:h2-lwt-unix.opam#5daceaa",
+      "version": "opam:0.3.0",
       "source": {
         "type": "install",
-        "source": [ "github:ulrikstrid/ocaml-h2:h2-lwt-unix.opam#5daceaa" ]
+        "source": [
+          "archive:https://opam.ocaml.org/cache/sha256/ab/abe11e14b22c44dc8274adb88ba96e7b6907cd0e71318cffedac9cc6c82cf03e#sha256:abe11e14b22c44dc8274adb88ba96e7b6907cd0e71318cffedac9cc6c82cf03e",
+          "archive:https://github.com/anmonteiro/ocaml-h2/releases/download/0.3.0/h2-0.3.0.tbz#sha256:abe11e14b22c44dc8274adb88ba96e7b6907cd0e71318cffedac9cc6c82cf03e"
+        ],
+        "opam": {
+          "name": "h2-lwt-unix",
+          "version": "0.3.0",
+          "path": "windows.esy.lock/opam/h2-lwt-unix.0.3.0"
+        }
       },
       "overrides": [],
       "dependencies": [
