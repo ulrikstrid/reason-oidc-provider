@@ -1,5 +1,5 @@
 {
-  "checksum": "4d3d6fb8dc4a7c2dbd4da1c154b1c443",
+  "checksum": "7ae49fc67a6338380b93c77d8968bb17",
   "root": "reason-oidc-provider@link-dev:./esy.json",
   "node": {
     "yarn-pkg-config@github:esy-ocaml/yarn-pkg-config#cca65f99674ed2d954d28788edeb8c57fada5ed0@d41d8cd9": {
@@ -51,7 +51,7 @@
         "@opam/ssl@github:ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66@03468d4a",
         "@opam/ppx_sexp_conv@opam:v0.10.0@23fb87e2",
         "@opam/ppx_deriving@opam:4.2.1@7927b93a",
-        "@opam/nocrypto@github:mirleft/ocaml-nocrypto:opam#de1578f@d41d8cd9",
+        "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
         "@opam/lwt_ssl@opam:1.1.2@ac833920", "@opam/lwt@opam:4.2.1@c1888ec9",
         "@opam/logs@opam:0.6.3@80c08d15",
         "@opam/lambda-term@opam:1.13@40726c0a",
@@ -320,7 +320,7 @@
         "@opam/ppx_sexp_conv@opam:v0.10.0@23fb87e2",
         "@opam/ocamlfind@opam:1.8.0@f744a0c5",
         "@opam/ocamlbuild@opam:0.14.0@427a2331",
-        "@opam/nocrypto@github:mirleft/ocaml-nocrypto:opam#de1578f@d41d8cd9",
+        "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
         "@opam/cstruct@opam:3.1.1@e4abc030",
         "@opam/astring@opam:0.8.3@4e5e17d5",
         "@opam/asn1-combinators@opam:0.2.0@80d14b72",
@@ -330,7 +330,7 @@
         "ocaml@4.6.10@d41d8cd9", "@opam/sexplib@opam:v0.10.0@c0ef190c",
         "@opam/result@opam:1.3@bee8bf2e", "@opam/ptime@opam:0.8.5@0051d642",
         "@opam/ppx_sexp_conv@opam:v0.10.0@23fb87e2",
-        "@opam/nocrypto@github:mirleft/ocaml-nocrypto:opam#de1578f@d41d8cd9",
+        "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
         "@opam/cstruct@opam:3.1.1@e4abc030",
         "@opam/astring@opam:0.8.3@4e5e17d5",
         "@opam/asn1-combinators@opam:0.2.0@80d14b72"
@@ -1373,14 +1373,14 @@
       ],
       "devDependencies": [ "ocaml@4.6.10@d41d8cd9" ]
     },
-    "@opam/nocrypto@github:mirleft/ocaml-nocrypto:opam#de1578f@d41d8cd9": {
+    "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9": {
       "id":
-        "@opam/nocrypto@github:mirleft/ocaml-nocrypto:opam#de1578f@d41d8cd9",
+        "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
       "name": "@opam/nocrypto",
-      "version": "github:mirleft/ocaml-nocrypto:opam#de1578f",
+      "version": "github:ulrikstrid/ocaml-nocrypto:opam#1ad5838",
       "source": {
         "type": "install",
-        "source": [ "github:mirleft/ocaml-nocrypto:opam#de1578f" ]
+        "source": [ "github:ulrikstrid/ocaml-nocrypto:opam#1ad5838" ]
       },
       "overrides": [],
       "dependencies": [
@@ -1739,14 +1739,14 @@
       "overrides": [],
       "dependencies": [
         "@opam/yojson@opam:1.7.0@2d92307e", "@opam/re@opam:1.9.0@7f4a36a5",
-        "@opam/nocrypto@github:mirleft/ocaml-nocrypto:opam#de1578f@d41d8cd9",
+        "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
         "@opam/cryptokit@opam:1.13@2c543ac9",
         "@opam/base64@opam:2.3.0@691ae04a",
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
         "@opam/yojson@opam:1.7.0@2d92307e", "@opam/re@opam:1.9.0@7f4a36a5",
-        "@opam/nocrypto@github:mirleft/ocaml-nocrypto:opam#de1578f@d41d8cd9",
+        "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
         "@opam/cryptokit@opam:1.13@2c543ac9",
         "@opam/base64@opam:2.3.0@691ae04a"
       ]
