@@ -31,6 +31,7 @@ let error_handler = (_client_address, ~request as _=?, _error, start_response) =
 
 let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
   (context, _client_address, request_descriptor) => {
+    let start = Unix.gettimeofday();
     Lwt.async(() => {
       let {Request.target, meth, headers, version: _} =
         Reqd.request(request_descriptor);
@@ -49,10 +50,6 @@ let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
       let create_response = (~headers, status) =>
         Response.create(~headers, ~reason=?None, ~version=?None, status);
 
-      Logs.info(m =>
-        m("http: %s request to %s", Http.Method.to_string(meth), target)
-      );
-
       OidcRoutes.makeCallback(
         ~target,
         ~method=meth,
@@ -63,6 +60,17 @@ let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
         ~read_body,
         ~context,
         request_descriptor,
-      );
+      )
+      |> Lwt.map(() => {
+           let stop = Unix.gettimeofday();
+           Logs.info(m =>
+             m(
+               "http: %s request to %s, %fms",
+               Http.Method.to_string(meth),
+               target,
+               (stop -. start) *. 1000.,
+             )
+           );
+         });
     });
   };
