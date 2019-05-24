@@ -121,10 +121,11 @@ let makeCallback =
       reqd,
     )
   | _ =>
-    Http.Response.Ok.make(
+    Http.Response.NotFound.make(
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
+      ~message=req_path ++ " not found",
       reqd,
     )
     |> Lwt.return
