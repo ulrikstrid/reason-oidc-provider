@@ -1,5 +1,5 @@
 {
-  "checksum": "1ccb4aeda082abe8033688e12dc85088",
+  "checksum": "dd5d1ac3d34c7c2f3893f6d454aa7292",
   "root": "reason-oidc-provider@link-dev:./esy.json",
   "node": {
     "yarn-pkg-config@github:esy-ocaml/yarn-pkg-config#cca65f99674ed2d954d28788edeb8c57fada5ed0@d41d8cd9": {
@@ -48,7 +48,7 @@
         "@opam/zarith@opam:1.7@1709d54c", "@opam/yojson@opam:1.7.0@2d92307e",
         "@opam/x509@opam:0.6.1@365b3ccc", "@opam/uuidm@opam:0.9.7@bf725775",
         "@opam/uri@opam:2.2.0@dfca6d0f",
-        "@opam/ssl@link:../ocaml-ssl/ssl.opam",
+        "@opam/ssl@github:ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66@2bc1fabf",
         "@opam/ppx_sexp_conv@opam:v0.10.0@23fb87e2",
         "@opam/ppx_deriving@opam:4.2.1@7927b93a",
         "@opam/nocrypto@github:mirleft/ocaml-nocrypto:opam#de1578f@d41d8cd9",
@@ -574,14 +574,13 @@
         "@opam/base@opam:v0.10.0@444e7f90"
       ]
     },
-    "@opam/ssl@link:../ocaml-ssl/ssl.opam": {
-      "id": "@opam/ssl@link:../ocaml-ssl/ssl.opam",
+    "@opam/ssl@github:ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66@2bc1fabf": {
+      "id": "@opam/ssl@github:ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66@2bc1fabf",
       "name": "@opam/ssl",
-      "version": "link:../ocaml-ssl/ssl.opam",
+      "version": "github:ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66",
       "source": {
-        "type": "link",
-        "path": "../ocaml-ssl",
-        "manifest": "ssl.opam"
+        "type": "install",
+        "source": [ "github:ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66" ]
       },
       "overrides": [
         {
@@ -1570,14 +1569,16 @@
       },
       "overrides": [],
       "dependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ssl@link:../ocaml-ssl/ssl.opam",
+        "ocaml@4.6.10@d41d8cd9",
+        "@opam/ssl@github:ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66@2bc1fabf",
         "@opam/lwt@opam:4.2.1@c1888ec9",
         "@opam/jbuilder@opam:transition@58bdfe0a",
         "@opam/base-unix@opam:base@87d0b2eb",
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
-        "ocaml@4.6.10@d41d8cd9", "@opam/ssl@link:../ocaml-ssl/ssl.opam",
+        "ocaml@4.6.10@d41d8cd9",
+        "@opam/ssl@github:ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66@2bc1fabf",
         "@opam/lwt@opam:4.2.1@c1888ec9", "@opam/base-unix@opam:base@87d0b2eb"
       ]
     },

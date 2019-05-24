@@ -52,7 +52,7 @@
     "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
     "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#de1578f",
     "@opam/ssl": {
-      "source": "link:../ocaml-ssl/ssl.opam",
+      "source": "ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66",
       "override": {
         "dependencies": {
           "esy-openssl": "esy-packages/esy-openssl#100f884"
