@@ -12,7 +12,7 @@
     "resolutions": {
       "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#6d2c80e",
       "@opam/httpaf-lwt-unix": "anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e",
-      "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
+      "@opam/jwt": "ulrikstrid/ocaml-jwt:jwt.opam#8dc84a2",
       "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#1ad5838",
       "@opam/ssl": {
         "source": "ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66",

@@ -38,25 +38,26 @@
     "@opam/ppx_deriving": "*",
     "@opam/ppx_sexp_conv": "*",
     "@opam/x509": "0.6.1",
-    "@opam/base64": "< 3.0.0",
     "@opam/cstruct-lwt": "*",
     "@opam/irmin-mem": "*",
     "@opam/uuidm": "*",
     "@opam/nocrypto": "*",
     "@opam/zarith": "*",
-    "@reason-native/rely": "*"
+    "@reason-native/rely": "*",
+    "@esy-packages/esy-openssl": "*"
   },
   "resolutions": {
     "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#6d2c80e",
     "@opam/httpaf-lwt-unix": "anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e",
-    "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
+    "@opam/jwt": "ulrikstrid/ocaml-jwt:jwt.opam#8dc84a2",
     "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#1ad5838",
+    "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c",
     "@opam/ssl": {
       "source": "ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66",
       "override": {
         "dependencies": {
           "@opam/conf-openssl": "*",
-          "esy-openssl": "esy-packages/esy-openssl#f731e9c"
+          "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c"
         },
         "buildEnv": {
           "CFLAGS": "-I$OPENSSL_INCLUDE_PATH",
@@ -70,7 +71,7 @@
         "build": ["pkg-config openssl"],
         "dependencies": {
           "@opam/conf-pkg-config": "1.1",
-          "esy-openssl": "esy-packages/esy-openssl#f731e9c"
+          "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c"
         },
         "buildEnv": {
           "CFLAGS": "-I$OPENSSL_INCLUDE_PATH $CFLAGS",

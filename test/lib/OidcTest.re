@@ -7,7 +7,7 @@ describe("Jwk", u => {
 
   // TODO: Make a smaller test
   u.test("Jwk.make", ({expect}) => {
-    let jwk = pub_key |> Oidc.Jwk.make;
+    let jwk = pub_key |> Oidc.Jwk.make |> CCResult.get_exn;
     let jwt_header: Jwt.header = Oidc.Jwk.make_jwt_header(priv_key, jwk);
 
     let int_string_of_float = f => f |> int_of_float |> string_of_int;

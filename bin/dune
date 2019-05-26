@@ -34,4 +34,4 @@
 (env
   (dev (flags (:standard -g)))
   (windows (flags (:standard -g -ccopt -lbcrypt)))
-  (docker (flags (:standard -ccopt -static))))
+  (docker (flags (:standard -ccopt -static -verbose))))
