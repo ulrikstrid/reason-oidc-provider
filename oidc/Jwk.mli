@@ -8,6 +8,8 @@ type t = {
   x5t: string;
 }
 
+val empty : t
+
 val make : Nocrypto.Rsa.pub -> (t, [ `Msg of string]) result   
 
 val to_json : t -> Yojson.Basic.t
