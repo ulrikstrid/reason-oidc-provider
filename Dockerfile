@@ -19,6 +19,19 @@ RUN apk add --no-cache glibc-2.28-r0.apk
 
 RUN npm install -g esy@next --unsafe-perm
 
+RUN echo ' \
+  {\
+  "name": "package-base", \
+  "dependencies": { \
+  "ocaml": "~4.6.0", \
+  "@opam/dune": "*", \
+  "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c" \
+  } \
+  } \
+  ' > esy.json
+
+RUN esy
+
 COPY esy.json /reason-oidc-provider/esy.json
 COPY esy.lock /reason-oidc-provider/esy.lock
 
