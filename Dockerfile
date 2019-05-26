@@ -11,7 +11,7 @@ RUN apk add --no-cache \
   bash curl perl-utils \
   git patch gcc g++ \
   make m4 util-linux zlib-dev \
-  linux-headers
+  linux-headers musl-dev
 
 RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
 RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.28-r0/glibc-2.28-r0.apk
