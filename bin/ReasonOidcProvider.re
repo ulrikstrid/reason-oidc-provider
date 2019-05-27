@@ -5,17 +5,11 @@ Logs.set_reporter(Logs_fmt.reporter());
 
 Nocrypto_entropy_unix.initialize();
 
-let main = () => {
-  let clients =
-    Oidc.Client.[
-      {
-        id: "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175",
-        redirect_uri: "https://op.certification.openid.net:60907/authz_cb" //"http://localhost:5500/auth/cb",
-      },
-    ];
+let main = (settings: Settings.t) => {
+  let clients = settings.clients;
   let rsa_priv = Nocrypto.Rsa.generate(4048);
   let context =
-    Context.make(~host="http://localhost:8080", ~rsa_priv, ~clients, ());
+    Context.make(~host=settings.provider.host, ~rsa_priv, ~clients, ());
 
   H2_server.start(
     ~cert="./localhost.pem",
@@ -25,4 +19,7 @@ let main = () => {
   );
 };
 
-main();
+Settings.get_from_env()
+|> fun 
+| Ok(settings) => main(settings)
+| Error(`Msg(msg)) => print_endline(msg);
