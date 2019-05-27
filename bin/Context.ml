@@ -10,7 +10,7 @@ type t = {
 let make ~host ~rsa_priv ~clients () = {
   host;
   session_store = (SessionStorage.make ());
-  jwk = rsa_priv |> Nocrypto.Rsa.pub_of_priv |> Oidc.Jwk.make;
+  jwk = rsa_priv |> Nocrypto.Rsa.pub_of_priv |> Oidc.Jwk.make |> CCResult.get_exn;
   rsa_priv;
   clients;
 }

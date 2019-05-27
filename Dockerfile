@@ -10,13 +10,27 @@ RUN apk add --no-cache \
   ca-certificates wget \
   bash curl perl-utils \
   git patch gcc g++ \
-  make m4 util-linux zlib-dev
+  make m4 util-linux zlib-dev \
+  linux-headers musl-dev
 
 RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
 RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.28-r0/glibc-2.28-r0.apk
 RUN apk add --no-cache glibc-2.28-r0.apk
 
 RUN npm install -g esy@next --unsafe-perm
+
+RUN echo ' \
+  {\
+  "name": "package-base", \
+  "dependencies": { \
+  "ocaml": "~4.6.0", \
+  "@opam/dune": "*", \
+  "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c" \
+  } \
+  } \
+  ' > esy.json
+
+RUN esy
 
 COPY esy.json /reason-oidc-provider/esy.json
 COPY esy.lock /reason-oidc-provider/esy.lock

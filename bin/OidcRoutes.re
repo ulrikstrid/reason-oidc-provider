@@ -12,10 +12,6 @@ let makeCallback =
     ) => {
   open Lwt.Infix;
 
-  Logs.info(m =>
-    m("%s request to %s", Http.Method.to_string(method), target)
-  );
-
   let req_uri = target |> Uri.of_string;
   let req_path = Uri.path(req_uri);
   let path_parts = Str.(split(regexp("/"), req_path));
@@ -63,15 +59,27 @@ let makeCallback =
               session_string |> Uri.of_string |> Oidc.Parameters.parseQuery
           )
           >>= (
-            (parameters: Oidc.Parameters.t) => {
-              Routes.ValidateAuth.makeRoute(
-                ~parameters,
-                ~respond_with_string,
-                ~create_response,
-                ~headers_of_list,
-                ~read_body,
-                reqd,
-              );
+            (p: option(Oidc.Parameters.t)) => {
+              switch (p) {
+              | Some(parameters) =>
+                Routes.ValidateAuth.makeRoute(
+                  ~parameters,
+                  ~respond_with_string,
+                  ~create_response,
+                  ~headers_of_list,
+                  ~read_body,
+                  reqd,
+                )
+              | None =>
+                Http.Response.Unauthorized.make(
+                  ~respond_with_string,
+                  ~create_response,
+                  ~headers_of_list,
+                  reqd,
+                  "invalid query",
+                )
+                |> Lwt.return
+              };
             }
           )
       );
@@ -113,12 +121,13 @@ let makeCallback =
       reqd,
     )
   | _ =>
-    Http.Response.Ok.make(
+    Http.Response.NotFound.make(
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
+      ~message=req_path ++ " not found",
       reqd,
-    );
-    Lwt.return_unit;
+    )
+    |> Lwt.return
   };
 };

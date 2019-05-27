@@ -3,18 +3,45 @@
   "override": {
     "build": "refmterr dune build --profile=windows",
     "scripts": {
-      "test": "esy dune runtest --profile=windows",
-      "run": "esy x main.exe",
-      "format": "esy dune build @fmt -p #{self.name}",
-      "format:watch": "esy dune build --watch @fmt -p #{self.name}",
-      "watch": "esy dune build --watch -p #{self.name}"
+      "test": "esy b dune runtest --profile=windows",
+      "run": "esy x --profile=windows main.exe",
+      "format": "esy b --profile=windows dune build @fmt -p #{self.name}",
+      "format:watch": "esy b --profile=windows dune build --watch @fmt -p #{self.name}",
+      "watch": "esy b --profile=windows dune build --watch -p #{self.name}"
     },
     "resolutions": {
       "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#6d2c80e",
-      "@opam/httpaf-lwt-unix": "ulrikstrid/httpaf:httpaf-lwt-unix.opam#f280025",
-      "@opam/h2-lwt-unix": "ulrikstrid/ocaml-h2:h2-lwt-unix.opam#5daceaa",
-      "@opam/jwt": "AestheticIntegration/ocaml-jwt:jwt.opam#1517838",
-      "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#1ad5838"
+      "@opam/httpaf-lwt-unix": "anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e",
+      "@opam/jwt": "ulrikstrid/ocaml-jwt:jwt.opam#8dc84a2",
+      "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#1ad5838",
+      "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c",
+      "@opam/ssl": {
+        "source": "ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66",
+        "override": {
+          "dependencies": {
+            "@opam/conf-openssl": "*",
+            "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c"
+          },
+          "buildEnv": {
+            "CFLAGS": "-I$OPENSSL_INCLUDE_PATH",
+            "LDFLAGS": "-L$OPENSSL_LIB_PATH"
+          }
+        }
+      },
+      "@opam/conf-openssl": {
+        "source": "no-source:",
+        "override": {
+          "build": ["pkg-config openssl"],
+          "dependencies": {
+            "@opam/conf-pkg-config": "1.1",
+            "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c"
+          },
+          "buildEnv": {
+            "CFLAGS": "-I$OPENSSL_INCLUDE_PATH $CFLAGS",
+            "LDFLAGS": "-L$OPENSSL_LIB_PATH $LDFLAGS"
+          }
+        }
+      }
     }
   }
 }

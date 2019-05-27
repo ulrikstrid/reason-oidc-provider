@@ -15,7 +15,10 @@
     httpaf-lwt-unix
     irmin-mem
     x509
-    tls
+    ssl
+    lwt_ssl
+    nocrypto
+    nocrypto.lwt
 
     yojson
     str
@@ -31,4 +34,4 @@
 (env
   (dev (flags (:standard -g)))
   (windows (flags (:standard -g -ccopt -lbcrypt)))
-  (docker (flags (:standard -ccopt -static))))
+  (docker (flags (:standard -ccopt -static -verbose))))

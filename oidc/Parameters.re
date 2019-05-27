@@ -27,9 +27,9 @@ let parseQuery = uri => {
   };
 
   if (parameters.response_type == ["code"]) {
-    parameters;
+    Some(parameters);
   } else {
-    raise(Not_found);
+    None;
   };
 };
 
