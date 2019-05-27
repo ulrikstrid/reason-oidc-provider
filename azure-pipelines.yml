@@ -72,4 +72,4 @@ stages:
                   WebAppName: 'reason-oidc-provider'
                   DockerNamespace: 'ulrikaugustsson'
                   DockerRepository: 'reason-oidc-provider'
-                  DockerImageTag: '$(Build.Id}'
+                  DockerImageTag: '$(Build.BuildId)'
