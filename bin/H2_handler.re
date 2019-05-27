@@ -41,7 +41,7 @@ let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
            let stop = Unix.gettimeofday();
            Logs.info(m =>
              m(
-               "H2: %s request to %s, %fms",
+               "H2: %s request to %s finished in %fms",
                Http.Method.to_string(meth),
                target,
                (stop -. start) *. 1000.,
