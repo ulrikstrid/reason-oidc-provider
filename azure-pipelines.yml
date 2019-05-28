@@ -4,7 +4,7 @@ trigger:
   - master
 
 stages:
-  - stage: Build
+  - stage: Build_platforms
     jobs:
       - template: ./.ci/build-platform.yml
         parameters:
@@ -36,6 +36,9 @@ stages:
           ESY__CACHE_INSTALL_PATH: /C/Users/VssAdministrator/.esy/3_/i
           ESY__CACHE_SOURCE_TARBALL_PATH: /C/Users/VssAdministrator/.esy/source/i
 
+  - stage: Build_docker
+    dependsOn: []
+    jobs:
       - job: Docker
         variables:
           dockerId: ulrikaugustsson
@@ -53,12 +56,13 @@ stages:
           - script: docker push $(dockerId)/$(imageName)
             displayName: "Push to dockerhub"
 
-  - stage: Deply
+  - stage: Deploy_docker
+    dependsOn: [Build_docker]
     jobs:
       - deployment: DeployProvider
         pool:
           vmImage: 'Ubuntu-16.04'
-        dependsOn: Docker
+        
         environment: oidc-provider-dev
         strategy:
           runOnce:
