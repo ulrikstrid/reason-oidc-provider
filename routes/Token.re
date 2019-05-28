@@ -40,10 +40,13 @@ let make =
             Printf.sprintf(
               {|{
                 "id_token": "%s",
+                "access_token": "%s",
                 "expires_in": 3600,
                 "token_type": "Bearer"
               }|},
               id_token,
+              "access_token"
+              |> Base64.encode_exn(~alphabet=Base64.uri_safe_alphabet),
             ),
           reqd,
         )
