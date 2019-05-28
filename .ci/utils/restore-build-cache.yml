@@ -47,7 +47,9 @@ steps:
   - bash: 'mkdir -p $(ESY__CACHE_INSTALL_PATH)'
     displayName: '[Cache][Restore] Create esy cache directory'
 
-  - bash: 'cd $(ESY__CACHE_INSTALL_PATH) && tar -xf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/esy-cache.tar -C .'
+  - bash: |
+      cd $(ESY__CACHE_INSTALL_PATH) && tar -chf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/esy-cache.tar -C .
+      cd $(ESY__CACHE_INSTALL_PATH) && tar -xf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/esy-cache.tar -C .
     continueOnError: true
     displayName: '[Cache][Restore] Untar esy cache directory'
 
