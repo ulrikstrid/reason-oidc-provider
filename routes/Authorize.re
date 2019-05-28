@@ -14,7 +14,7 @@ let makeRoute =
   open Http;
 
   let parameters = Uri.of_string(target) |> Oidc.Parameters.parseQuery;
-  let client =
+  let client: option(Oidc.Client.t) =
     Containers.Option.flat_map(
       Oidc.Parameters.get_client(~clients),
       parameters,
@@ -51,6 +51,15 @@ let makeRoute =
             reqd,
           )
       );
+    | (_, Some(client)) =>
+      Http.Response.Redirect.make(
+        ~respond_with_string,
+        ~create_response,
+        ~headers_of_list,
+        ~targetPath=client.redirect_uri ++ "?error=bad_parameters",
+        reqd,
+      )
+      |> Lwt.return
     | _ =>
       Http.Response.Unauthorized.make(
         ~respond_with_string,
