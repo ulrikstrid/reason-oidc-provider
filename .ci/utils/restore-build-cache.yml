@@ -2,7 +2,7 @@
 
 steps:
   - bash: 'mkdir -p $(STAGING_DIRECTORY_UNIX)'
-    displayName: '[Cache][Publish] Create cache directory'
+    displayName: '[Cache][Restore] Create cache directory'
 
   - task: Bash@3
     displayName: '[Cache][Restore] Restoring build cache using REST API'
@@ -47,9 +47,9 @@ steps:
   - bash: 'mkdir -p $(ESY__CACHE_INSTALL_PATH)'
     displayName: '[Cache][Restore] Create esy cache directory'
 
-  - bash: |
-      cd $(ESY__CACHE_INSTALL_PATH) && tar -chf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/esy-cache.tar -C .
-      cd $(ESY__CACHE_INSTALL_PATH) && tar -xf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/esy-cache.tar -C .
+  # We add a exit to not get warnings when there is no cache
+  - bash: cd $(ESY__CACHE_INSTALL_PATH) && tar -xzf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/esy-cache.tar -C . && exit
+    failOnStderr: false
     continueOnError: true
     displayName: '[Cache][Restore] Untar esy cache directory'
 
