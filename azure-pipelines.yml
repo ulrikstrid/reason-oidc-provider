@@ -58,7 +58,7 @@ stages:
       - deployment: DeployProvider
         pool:
           vmImage: 'Ubuntu-16.04'
-
+        dependsOn: Docker
         environment: oidc-provider-dev
         strategy:
           runOnce:
