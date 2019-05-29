@@ -53,6 +53,15 @@ let makeRoute =
         reqd,
       )
       |> Lwt.return
+    | Error([`Msg(msg), `Msg(msg2), `RedirectUri(redirect_uri)]) =>
+      Http.Response.Redirect.make(
+        ~respond_with_string,
+        ~create_response,
+        ~headers_of_list,
+        ~targetPath=redirect_uri ++ "?error=" ++ msg ++ msg2,
+        reqd,
+      )
+      |> Lwt.return
     | Error([`Msg(msg), ..._]) =>
       Http.Response.Unauthorized.make(
         ~respond_with_string,

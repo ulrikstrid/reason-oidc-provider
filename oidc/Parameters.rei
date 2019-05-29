@@ -9,4 +9,7 @@ type t = {
 
 let parse_query:
   (~clients: list(Client.t), Uri.t) =>
-  result(t, list([ | `Msg(string) | `Client(Client.t)]));
+  result(
+    t,
+    list([ | `Msg(string) | `Client(Client.t) | `RedirectUri(string)]),
+  );
