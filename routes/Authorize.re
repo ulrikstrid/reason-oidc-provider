@@ -13,8 +13,9 @@ let makeRoute =
   open Lwt.Infix;
   open Http;
 
-  let parameters =
-    Uri.of_string(target) |> Oidc.Parameters.parse_query(~clients);
+  let uri = Uri.of_string(target);
+
+  let parameters = Oidc.Parameters.parse_query(~clients, uri);
 
   let error_message = msgs =>
     CCList.map(
@@ -24,6 +25,10 @@ let makeRoute =
       msgs,
     )
     |> CCString.concat(" ");
+
+  let state_query_string =
+    Uri.get_query_param(uri, "state")
+    |> CCOpt.map_or(~default="", state => "&state=" ++ state);
 
   Oidc.Parameters.(
     switch (parameters) {
@@ -58,7 +63,9 @@ let makeRoute =
           ~create_response,
           ~headers_of_list,
           ~targetPath=
-            parameters.client.redirect_uri ++ "?error=invalid_request_uri",
+            parameters.client.redirect_uri
+            ++ "?error=invalid_request_uri"
+            ++ state_query_string,
           reqd,
         )
         |> Lwt.return
@@ -70,7 +77,10 @@ let makeRoute =
         ~respond_with_string,
         ~create_response,
         ~headers_of_list,
-        ~targetPath=client.redirect_uri ++ "?error=invalid_request_uri",
+        ~targetPath=
+          client.redirect_uri
+          ++ "?error=invalid_request_uri"
+          ++ state_query_string,
         reqd,
       )
       |> Lwt.return;
@@ -103,7 +113,10 @@ let makeRoute =
             ~respond_with_string,
             ~create_response,
             ~headers_of_list,
-            ~targetPath=redirect_uri ++ "?error=invalid_request_uri",
+            ~targetPath=
+              redirect_uri
+              ++ "?error=invalid_request_uri"
+              ++ state_query_string,
             reqd,
           )
         | None =>
