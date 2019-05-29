@@ -57,14 +57,38 @@ let makeRoute =
               reqd,
             )
         )
-      | _ =>
+      | (false, true) =>
         Http.Response.Redirect.make(
           ~respond_with_string,
           ~create_response,
           ~headers_of_list,
           ~targetPath=
             parameters.client.redirect_uri
-            ++ "?error=invalid_request_uri"
+            ++ "?error=unauthorized_client"
+            ++ state_query_string,
+          reqd,
+        )
+        |> Lwt.return
+      | (true, false) =>
+        Http.Response.Redirect.make(
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          ~targetPath=
+            parameters.client.redirect_uri
+            ++ "?error=invalid_scope"
+            ++ state_query_string,
+          reqd,
+        )
+        |> Lwt.return
+      | (false, false) =>
+        Http.Response.Redirect.make(
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          ~targetPath=
+            parameters.client.redirect_uri
+            ++ "?error=invalid_request"
             ++ state_query_string,
           reqd,
         )
@@ -78,9 +102,7 @@ let makeRoute =
         ~create_response,
         ~headers_of_list,
         ~targetPath=
-          client.redirect_uri
-          ++ "?error=invalid_request_uri"
-          ++ state_query_string,
+          client.redirect_uri ++ "?error=invalid_request" ++ state_query_string,
         reqd,
       )
       |> Lwt.return;
@@ -114,9 +136,7 @@ let makeRoute =
             ~create_response,
             ~headers_of_list,
             ~targetPath=
-              redirect_uri
-              ++ "?error=invalid_request_uri"
-              ++ state_query_string,
+              redirect_uri ++ "?error=invalid_request" ++ state_query_string,
             reqd,
           )
         | None =>
