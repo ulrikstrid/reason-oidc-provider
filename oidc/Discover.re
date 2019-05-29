@@ -15,37 +15,3 @@ let parseDiscover = json =>
   };
 
 let fromResponse = body => Yojson.Basic.from_string(body) |> parseDiscover;
-
-/*
-let makeRequest = discover_uri => {
-  open Lwt_result.Infix;
-
-  Logs.app(m => m("Starting discover request"));
-
-  Logs.app(m => m("Requesting: %s", discover_uri));
-
-  let req =
-    Httpkit.Client.Request.create(
-      ~headers=[("User-Agent", "reason-oidc-provider")],
-      `GET,
-      discover_uri |> Uri.of_string,
-    );
-
-  Httpkit_lwt.Client.(Https.send(req) >>= Response.body)
-  |> Lwt.map(res =>
-       switch (res) {
-       | Ok(body) =>
-         // Logs.app(m => m("Response: %s", body));
-         fromResponse(body)
-       | Error(_) =>
-         // Logs.err(m => m("Something went wrong!!!"));
-         {
-           authorization_endpoint: "string",
-           token_endpoint: "string",
-           jwks_uri: "string",
-           userinfo_endpoint: "string",
-         }
-       }
-     );
-};
-*/

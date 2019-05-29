@@ -9,13 +9,19 @@ let make =
   "userinfo_endpoint": "%s/userinfo",
   "jwks_uri": "%s/.well-known/jwks.json",
   "scopes_supported": [
-    "user"
+    "openid", "email"
   ],
   "response_types_supported": [
     "code"
   ],
+  "id_token_signing_alg_values_supported": [
+    "RS256"
+  ],
   "token_endpoint_auth_methods_supported": [
     "client_secret_basic"
+  ],
+  "claims_supported": [
+    "email"
   ]
 }|},
       host,
