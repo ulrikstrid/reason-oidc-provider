@@ -70,6 +70,7 @@ let makeCallback =
                   ~create_response,
                   ~headers_of_list,
                   ~read_body,
+                  ~hash_key=context.rsa_priv,
                   reqd,
                 )
               | Error(_) =>
