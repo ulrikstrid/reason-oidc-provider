@@ -23,7 +23,7 @@ let makeRoute =
       | _ => "",
       msgs,
     )
-    |> CCString.concat("");
+    |> CCString.concat(" ");
 
   Oidc.Parameters.(
     switch (parameters) {
@@ -58,21 +58,22 @@ let makeRoute =
           ~create_response,
           ~headers_of_list,
           ~targetPath=
-            parameters.client.redirect_uri
-            ++ "?error=only code response_type supported and scope must include openid",
+            parameters.client.redirect_uri ++ "?error=invalid_request_uri",
           reqd,
         )
         |> Lwt.return
       };
     | Error([`Client(client), ...msgs]) =>
+      Logs.warn(m => m("%s", error_message(msgs)));
+
       Http.Response.Redirect.make(
         ~respond_with_string,
         ~create_response,
         ~headers_of_list,
-        ~targetPath=client.redirect_uri ++ "?error=" ++ error_message(msgs),
+        ~targetPath=client.redirect_uri ++ "?error=invalid_request_uri",
         reqd,
       )
-      |> Lwt.return
+      |> Lwt.return;
     | Error(msgs) =>
       let error_string =
         CCList.filter(
@@ -82,6 +83,8 @@ let makeRoute =
           msgs,
         )
         |> error_message;
+
+      Logs.warn(m => m("%s", error_string));
 
       let redirect_uri_opt =
         CCList.map(
@@ -100,7 +103,7 @@ let makeRoute =
             ~respond_with_string,
             ~create_response,
             ~headers_of_list,
-            ~targetPath=redirect_uri ++ "?error=" ++ error_string,
+            ~targetPath=redirect_uri ++ "?error=invalid_request_uri",
             reqd,
           )
         | None =>

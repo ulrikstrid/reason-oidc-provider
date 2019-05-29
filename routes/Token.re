@@ -21,6 +21,7 @@ let make =
       |> add_claim(aud, "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175")
       |> add_claim(iat, Unix.time() |> int_string_of_float)
       |> add_claim(exp, Unix.time() +. 3600. |> int_string_of_float)
+      |> add_claim(nonce, "godmorgon")
       |> t_of_header_and_payload(jwt_header)
     );
 
