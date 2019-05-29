@@ -16,6 +16,8 @@ let makeRoute =
          |> Nocrypto.Rsa.encrypt(~key=hash_key |> Nocrypto.Rsa.pub_of_priv)
          |> Cstruct.to_string;
 
+       Logs.info(m => m("Code: %s", code));
+
        // Validate credentials
        // switch on OK credentials
        Http.Response.Redirect.make(
