@@ -13,26 +13,19 @@ let makeRoute =
   open Lwt.Infix;
   open Http;
 
-  let parameters = Uri.of_string(target) |> Oidc.Parameters.parseQuery;
-  let client: option(Oidc.Client.t) =
-    Containers.Option.flat_map(
-      Oidc.Parameters.get_client(~clients),
-      parameters,
-    );
+  let parameters =
+    Uri.of_string(target) |> Oidc.Parameters.parse_query(~clients);
 
   Oidc.Parameters.(
-    switch (parameters, client) {
-    | (
-        Some({
-          response_type: ["code"],
-          client_id: _,
-          redirect_uri: _,
-          scope: ["openid", ...rest],
-          state,
-          nonce,
-        }),
-        Some(client),
-      ) =>
+    switch (parameters) {
+    | Ok({
+        response_type: ["code"],
+        client,
+        redirect_uri: _,
+        scope: ["openid", ...rest],
+        state,
+        nonce,
+      }) =>
       let cookie_key =
         Uuidm.v4_gen(Random.State.make_self_init(), ()) |> Uuidm.to_string;
       let cookie_name = "session";
@@ -51,7 +44,7 @@ let makeRoute =
             reqd,
           )
       );
-    | (_, Some(client)) =>
+    | Error([`Client(client), ..._]) =>
       Http.Response.Redirect.make(
         ~respond_with_string,
         ~create_response,
@@ -60,16 +53,24 @@ let makeRoute =
         reqd,
       )
       |> Lwt.return
+    | Error([`Msg(msg), ..._]) =>
+      Http.Response.Unauthorized.make(
+        ~respond_with_string,
+        ~create_response,
+        ~headers_of_list,
+        reqd,
+        msg,
+      )
+      |> Lwt.return
     | _ =>
       Http.Response.Unauthorized.make(
         ~respond_with_string,
         ~create_response,
         ~headers_of_list,
         reqd,
-        "Bad request",
-      );
-
-      Lwt.return_unit;
+        "Invalid parameters",
+      )
+      |> Lwt.return
     }
   );
 };

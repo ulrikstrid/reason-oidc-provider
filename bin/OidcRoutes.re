@@ -56,12 +56,14 @@ let makeCallback =
           session_store.get(~kind="session", cookie_value)
           >|= (
             session_string =>
-              session_string |> Uri.of_string |> Oidc.Parameters.parseQuery
+              session_string
+              |> Uri.of_string
+              |> Oidc.Parameters.parse_query(~clients=context.clients)
           )
           >>= (
-            (p: option(Oidc.Parameters.t)) => {
+            p => {
               switch (p) {
-              | Some(parameters) =>
+              | Ok(parameters) =>
                 Routes.ValidateAuth.makeRoute(
                   ~parameters,
                   ~respond_with_string,
@@ -70,7 +72,7 @@ let makeCallback =
                   ~read_body,
                   reqd,
                 )
-              | None =>
+              | Error(_) =>
                 Http.Response.Unauthorized.make(
                   ~respond_with_string,
                   ~create_response,
