@@ -7,7 +7,7 @@
     "build": "refmterr dune build"
   },
   "scripts": {
-    "test": "esy dune runtest",
+    "test": "esy dune runtest --force",
     "run": "esy x main.exe",
     "format": "esy dune build @fmt -p #{self.name}",
     "format:watch": "esy dune build --watch @fmt -p #{self.name}",
