@@ -1,3 +1,12 @@
+let trim_leading_null = s =>
+  Astring.String.trim(
+    ~drop=
+      fun
+      | '\000' => true
+      | _ => false,
+    s,
+  );
+
 let make =
     (
       ~read_body,
@@ -31,18 +40,39 @@ let make =
         Logs.info(m => m("Body for token is %s", body));
 
         let id_token =
-          Uri.get_query_param(Uri.of_string(body), "code")
+          Http.UrlencodedForm.parse(body)
+          |> Http.UrlencodedForm.get_param("code")
           |> (
             fun
-            | Some(code) =>
-              Cstruct.of_string(code)
-              |> Nocrypto.Rsa.decrypt(~key=priv_key)
-              |> Cstruct.to_string
-              |> Yojson.Basic.from_string
-              |> Yojson.Basic.Util.member("nonce")
-              |> Yojson.Basic.Util.to_string
-              |> (nonce => Jwt.add_claim(Jwt.nonce, nonce, jwt))
-            | None => jwt
+            | Some(code) => {
+                let decoded_code =
+                  Base64.decode(
+                    ~pad=false,
+                    ~alphabet=Base64.uri_safe_alphabet,
+                    code,
+                  )
+                  |> CCResult.map(Cstruct.of_string)
+                  |> CCResult.map(Nocrypto.Rsa.decrypt(~key=priv_key))
+                  |> CCResult.map(Cstruct.to_string)
+                  |> CCResult.map(trim_leading_null);
+
+                switch (decoded_code) {
+                | Ok(c) =>
+                  Logs.info(m => m("Decoded code: %s", c));
+                  c
+                  |> Yojson.Basic.from_string
+                  |> Yojson.Basic.Util.member("nonce")
+                  |> Yojson.Basic.Util.to_string
+                  |> (nonce => Jwt.add_claim(Jwt.nonce, nonce, jwt));
+                | Error(`Msg(message)) =>
+                  Logs.warn(m => m("%s", message));
+                  jwt;
+                };
+              }
+            | None => {
+                Logs.info(m => m("No code in body"));
+                jwt;
+              }
           )
           |> Jwt.t_of_header_and_payload(jwt_header)
           |> Jwt.token_of_t;

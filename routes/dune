@@ -12,6 +12,7 @@
     nocrypto
     jwt
     uuidm
+    base64
 
     http
     oidc
