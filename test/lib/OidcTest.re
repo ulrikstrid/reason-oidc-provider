@@ -5,6 +5,18 @@ describe("Jwk", u => {
   let priv_key = Nocrypto.Rsa.generate(~g=Nocrypto.Rng.generator^, 4048);
   let pub_key = priv_key |> Nocrypto.Rsa.pub_of_priv;
 
+  u.test("to_json", ({expect}) => {
+    let jwk = pub_key |> Oidc.Jwk.make |> CCResult.get_exn;
+
+    expect.fn(() => Oidc.Jwk.to_json(jwk)).not.toThrow();
+  });
+
+  u.test("make_jwt_header", ({expect}) => {
+    let jwk = pub_key |> Oidc.Jwk.make |> CCResult.get_exn;
+
+    expect.fn(() => Oidc.Jwk.make_jwt_header(priv_key, jwk)).not.toThrow();
+  });
+
   // TODO: Make a smaller test
   u.test("Jwk.make", ({expect}) => {
     let jwk = pub_key |> Oidc.Jwk.make |> CCResult.get_exn;
@@ -23,12 +35,9 @@ describe("Jwk", u => {
         |> t_of_header_and_payload(jwt_header)
       );
 
-    expect.bool(
-      Jwt.verify(~alg="RS256", ~jwks=`List([Oidc.Jwk.to_json(jwk)]), jwt),
-    ).
-      toBe(
-      true,
-    );
+    let jwks = `List([Oidc.Jwk.to_json(jwk)]);
+
+    expect.bool(Jwt.verify(~alg="RS256", ~jwks, jwt)).toBe(true);
   });
 });
 
