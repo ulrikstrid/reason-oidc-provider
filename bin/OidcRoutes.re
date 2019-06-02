@@ -22,7 +22,7 @@ let makeCallback =
     >>= (
       (session_store: SessionStorage.t) =>
         Routes.Authorize.makeRoute(
-          ~set_session=session_store.set,
+          ~set_session=session_store.set(~kind="session"),
           ~respond_with_string,
           ~create_response,
           ~headers_of_list,
@@ -41,61 +41,22 @@ let makeCallback =
       reqd,
     )
   | (`POST, ["interaction"]) =>
-    let session_id =
-      get_header("Cookie")
-      |> CCOpt.get_or(~default="")
-      |> Http.Cookie.get_cookie(~key="session");
-
-    switch (session_id) {
-    | Some(session) =>
-      Console.log(session);
-      let cookie_value = session.value;
-      context.session_store
-      >>= (
-        (session_store: SessionStorage.t) =>
-          session_store.get(~kind="session", cookie_value)
-          >|= (
-            session_string =>
-              session_string
-              |> Uri.of_string
-              |> Oidc.Parameters.parse_query(~clients=context.clients)
-          )
-          >>= (
-            p => {
-              switch (p) {
-              | Ok(parameters) =>
-                Routes.ValidateAuth.makeRoute(
-                  ~parameters,
-                  ~respond_with_string,
-                  ~create_response,
-                  ~headers_of_list,
-                  ~read_body,
-                  ~hash_key=context.rsa_priv,
-                  reqd,
-                )
-              | Error(_) =>
-                Http.Response.Unauthorized.make(
-                  ~respond_with_string,
-                  ~create_response,
-                  ~headers_of_list,
-                  reqd,
-                  "invalid query",
-                )
-                |> Lwt.return
-              };
-            }
-          )
-      );
-    | None =>
-      Http.Response.Unauthorized.make(
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
-        reqd,
-        "No session found",
-      )
-      |> Lwt.return
-    };
+    Lwt.both(context.session_store, context.code_store)
+    >>= (
+      ((session_store, code_store)) =>
+        Routes.ValidateAuth.makeRoute(
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          ~get_header,
+          ~read_body,
+          ~hash_key=context.rsa_priv,
+          ~get_session=session_store.get(~kind="session"),
+          ~set_code=code_store.set(~kind="code"),
+          ~clients=context.clients,
+          reqd,
+        )
+    )
   | (`GET, [".well-known", "jwks.json"]) =>
     Routes.Jwks.make(
       ~respond_with_string,

@@ -35,9 +35,8 @@ let makeRoute =
     | Ok(parameters) =>
       let cookie_key =
         Uuidm.v4_gen(Random.State.make_self_init(), ()) |> Uuidm.to_string;
-      let cookie_name = "session";
       let cookie_value =
-        String.concat("", [cookie_name, "=", cookie_key, " ;Max-Age=300"]);
+        String.concat("", ["session=", cookie_key, " ;Max-Age=300"]);
 
       let has_code_return_type =
         CCList.exists(rt => rt == "code", parameters.response_type);
@@ -45,7 +44,7 @@ let makeRoute =
         CCList.exists(s => s == "openid", parameters.scope);
       switch (has_code_return_type, has_openid_scope) {
       | (true, true) =>
-        set_session(~kind=cookie_name, ~key=cookie_key, target)
+        set_session(~key=cookie_key, target)
         >|= (
           () =>
             Http.Response.Redirect.make(

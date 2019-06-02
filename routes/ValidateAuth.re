@@ -4,39 +4,88 @@ let makeRoute =
       ~create_response,
       ~headers_of_list,
       ~read_body,
-      ~parameters: Oidc.Parameters.t,
+      ~get_header,
+      ~get_session,
+      ~set_code,
       ~hash_key,
+      ~clients,
       reqd,
     ) => {
-  read_body(reqd)
-  |> Lwt.map(_body => {
-       let code =
-         Printf.sprintf({|{"nonce": "%s"}|}, parameters.nonce)
-         |> Cstruct.of_string
-         |> Nocrypto.Rsa.encrypt(~key=hash_key |> Nocrypto.Rsa.pub_of_priv)
-         |> Cstruct.to_string
-         |> Base64.encode_exn(~pad=false, ~alphabet=Base64.uri_safe_alphabet);
+  open Lwt.Infix;
 
-       Logs.info(m => m("Code: %s", code));
+  let session_id =
+    get_header("Cookie")
+    |> CCOpt.get_or(~default="")
+    |> Http.Cookie.get_cookie(~key="session");
 
-       // Validate credentials
-       // switch on OK credentials
-       Http.Response.Redirect.make(
-         ~respond_with_string,
-         ~create_response,
-         ~headers_of_list,
-         ~targetPath=
-           Printf.sprintf(
-             "%s?code=%s%s",
-             parameters.redirect_uri,
-             code,
-             CCOpt.map_or(
-               ~default="",
-               state => "&state=" ++ state,
-               parameters.state,
-             ),
-           ),
-         reqd,
-       );
-     });
+  switch (session_id) {
+  | None =>
+    Http.Response.Unauthorized.make(
+      ~respond_with_string,
+      ~create_response,
+      ~headers_of_list,
+      reqd,
+      "No session found",
+    ) |> Lwt.return
+  | Some(session) =>
+    let cookie_value = session.value;
+
+    get_session(cookie_value)
+    >|= (
+      session_string =>
+        session_string
+        |> Uri.of_string
+        |> Oidc.Parameters.parse_query(~clients)
+    )
+    >>= (
+      fun
+      | Ok(parameters) =>
+        read_body(reqd)
+        >|= (
+          _by => {
+            let code =
+              Printf.sprintf({|{"nonce": "%s"}|}, parameters.nonce)
+              |> Cstruct.of_string
+              |> Nocrypto.Rsa.encrypt(
+                   ~key=hash_key |> Nocrypto.Rsa.pub_of_priv,
+                 )
+              |> Cstruct.to_string
+              |> Base64.encode_exn(
+                   ~pad=false,
+                   ~alphabet=Base64.uri_safe_alphabet,
+                 );
+
+            Logs.info(m => m("Code: %s", code));
+
+            // Validate credentials
+            // switch on OK credentials
+            Http.Response.Redirect.make(
+              ~respond_with_string,
+              ~create_response,
+              ~headers_of_list,
+              ~targetPath=
+                Printf.sprintf(
+                  "%s?code=%s%s",
+                  parameters.redirect_uri,
+                  code,
+                  CCOpt.map_or(
+                    ~default="",
+                    state => "&state=" ++ state,
+                    parameters.state,
+                  ),
+                ),
+              reqd,
+            );
+          }
+        )
+      | Error(_) =>
+        Http.Response.Unauthorized.make(
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          reqd,
+          "Invalid session found",
+        ) |> Lwt.return
+    );
+  };
 };
