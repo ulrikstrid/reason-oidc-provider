@@ -74,24 +74,28 @@ let makeCallback =
       reqd,
     )
   | (`POST, ["token"]) =>
-    Routes.Token.make(
-      ~read_body,
-      ~respond_with_string,
-      ~create_response,
-      ~headers_of_list,
-      ~priv_key=context.rsa_priv,
-      ~host=context.host,
-      ~jwk=context.jwk,
-      reqd,
+    context.code_store
+    >>= (
+      code_store =>
+        Routes.Token.make(
+          ~read_body,
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          ~priv_key=context.rsa_priv,
+          ~host=context.host,
+          ~get_code=code_store.find(~kind="code"),
+          ~jwk=context.jwk,
+          reqd,
+        )
     )
   | _ =>
-    Http.Response.NotFound.make(
+    Routes.FourOhFour.make(
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
-      ~message=req_path ++ " not found",
+      ~req_path,
       reqd,
     )
-    |> Lwt.return
   };
 };

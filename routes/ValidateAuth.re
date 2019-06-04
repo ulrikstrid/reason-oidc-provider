@@ -26,7 +26,8 @@ let makeRoute =
       ~headers_of_list,
       reqd,
       "No session found",
-    ) |> Lwt.return
+    )
+    |> Lwt.return
   | Some(session) =>
     let cookie_value = session.value;
 
@@ -41,10 +42,19 @@ let makeRoute =
       fun
       | Ok(parameters) =>
         read_body(reqd)
-        >|= (
-          _by => {
+        >>= (
+          body => {
+            // Validate credentials
+            // switch on OK credentials
+            let bodyValue =
+              Printf.sprintf(
+                {|{"nonce": "%s", "body": %s}|},
+                parameters.nonce,
+                body,
+              );
+
             let code =
-              Printf.sprintf({|{"nonce": "%s"}|}, parameters.nonce)
+              bodyValue
               |> Cstruct.of_string
               |> Nocrypto.Rsa.encrypt(
                    ~key=hash_key |> Nocrypto.Rsa.pub_of_priv,
@@ -55,10 +65,11 @@ let makeRoute =
                    ~alphabet=Base64.uri_safe_alphabet,
                  );
 
-            Logs.info(m => m("Code: %s", code));
-
-            // Validate credentials
-            // switch on OK credentials
+            set_code(~key=code, bodyValue) >|= (() => code);
+          }
+        )
+        >|= (
+          code => {
             Http.Response.Redirect.make(
               ~respond_with_string,
               ~create_response,
@@ -85,7 +96,8 @@ let makeRoute =
           ~headers_of_list,
           reqd,
           "Invalid session found",
-        ) |> Lwt.return
+        )
+        |> Lwt.return
     );
   };
 };

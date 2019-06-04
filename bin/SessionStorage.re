@@ -3,6 +3,7 @@ module Storage = Irmin_mem.KV(Irmin.Contents.String);
 type t = {
   set: (~kind: string, ~key: string, string) => Lwt.t(unit),
   get: (~kind: string, string) => Lwt.t(string),
+  find: (~kind: string, string) => Lwt.t(option(string)),
 };
 
 let make: unit => Lwt.t(t) =
@@ -18,6 +19,9 @@ let make: unit => Lwt.t(t) =
             },
             get: (~kind, key) => {
               Storage.get(t, [kind, key]);
+            },
+            find: (~kind, key) => {
+              Storage.find(t, [kind, key]);
             },
           };
         }
