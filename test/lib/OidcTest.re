@@ -50,7 +50,7 @@ describe("Parameters", u => {
 
   let validQuery = "http://localhost:3000/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb&scope=openid%20profile&state=af0ifjsldkj&nonce=n-0S6_WzA2Mj";
   switch (Oidc.Parameters.parse_query(~clients, Uri.of_string(validQuery))) {
-  | Ok(validParameters) =>
+  | Valid(validParameters) =>
     u.test("parseQuery", ({expect}) => {
       expect.string(validParameters.client.id).toEqual("s6BhdRkqt3");
       expect.string(validParameters.redirect_uri).toEqual(
@@ -58,6 +58,6 @@ describe("Parameters", u => {
       );
       expect.string(validParameters.nonce).toEqual("n-0S6_WzA2Mj");
     })
-  | Error(_) => ()
+  | _ => ()
   };
 });

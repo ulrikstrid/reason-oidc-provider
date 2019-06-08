@@ -7,6 +7,14 @@ type t = {
   nonce: string,
 };
 
+type parse_state =
+  | Invalid(string)
+  | UnauthorizedClient(Client.t)
+  | InvalidScope(Client.t)
+  | InvalidWithClient(Client.t)
+  | InvalidWithRedirectUri(string)
+  | Valid(t);
+
 let get_client = (~clients, ~client_id, ()) => {
   switch (client_id) {
   | Some(client_id) =>
@@ -14,9 +22,9 @@ let get_client = (~clients, ~client_id, ()) => {
     |> (
       fun
       | Some(client) => Ok(client)
-      | None => Error(`Msg("No client found"))
+      | None => Error("No client found")
     )
-  | None => Error(`Msg("No client_id provided"))
+  | None => Error("No client_id provided")
   };
 };
 
@@ -27,49 +35,56 @@ let parse_query = (~clients, uri) => {
     getQueryParam("response_type")
     |> CCOpt.map(String.split_on_char(' '))
     |> CCOpt.map(response_type => Ok(response_type))
-    |> CCOpt.get_or(~default=Error(`Msg("No response_type")));
+    |> CCOpt.get_or(~default=Error("No response_type"))
+    |> CCResult.catch(
+         ~ok=
+           response_type =>
+             if (CCList.exists(rt => rt == "code", response_type)) {
+               Ok(response_type);
+             } else {
+               Error("response_type doesn't include code");
+             },
+         ~err=err => Error(err),
+       );
 
   let redirect_uri =
     getQueryParam("redirect_uri")
     |> CCOpt.map(redirect_uri => Ok(redirect_uri))
-    |> CCOpt.get_or(~default=Error(`Msg("No redirect_uri")));
+    |> CCOpt.get_or(~default=Error("No redirect_uri"));
 
   let client =
     get_client(~clients, ~client_id=getQueryParam("client_id"), ());
 
-  switch (client, response_type, redirect_uri) {
-  | (Ok(client), Ok(response_type), Ok(redirect_uri))
+  let scope =
+    getQueryParam("scope") |> CCOpt.map(String.split_on_char(' '));
+
+  switch (client, response_type, redirect_uri, scope) {
+  | (Ok(client), Ok(response_type), Ok(redirect_uri), Some(scope))
       when client.redirect_uri == redirect_uri =>
-    Ok({
+    Valid({
       response_type,
       client,
       redirect_uri,
-      scope:
-        getQueryParam("scope")
-        |> CCOpt.get_or(~default="")
-        |> String.split_on_char(' '),
+      scope,
       state: getQueryParam("state"),
       nonce: getQueryParam("nonce") |> CCOpt.get_or(~default="12345"),
     })
-  | (Ok(client), Ok(_), Ok(_)) =>
-    Error([`Client(client), `Msg("redirect_uri does not match")])
+  | (Ok(client), _, _, Some(_)) => UnauthorizedClient(client)
+  | (Ok(client), _, _, None) => InvalidScope(client)
+  | (_, _, Ok(redirect_uri), _) => InvalidWithRedirectUri(redirect_uri)
+  | (Error(client_id_msg), Ok(_), Error(redirect_uri_msg), _) =>
+    Invalid(String.concat(", ", [client_id_msg, redirect_uri_msg]))
   | (
       Error(client_id_msg),
       Error(response_type_msg),
       Error(redirect_uri_msg),
+      _,
     ) =>
-    Error([client_id_msg, response_type_msg, redirect_uri_msg])
-  | (Ok(client), Error(response_type_msg), Error(redirect_uri_msg)) =>
-    Error([`Client(client), response_type_msg, redirect_uri_msg])
-  | (Ok(client), Ok(_), Error(redirect_uri_msg)) =>
-    Error([`Client(client), redirect_uri_msg])
-  | (Ok(client), Error(response_type_msg), Ok(redirect_uri)) =>
-    Error([`Client(client), response_type_msg, `RedirectUri(redirect_uri)])
-  | (Error(client_id_msg), Ok(_), Error(redirect_uri_msg)) =>
-    Error([client_id_msg, redirect_uri_msg])
-  | (Error(client_id_msg), Ok(_), Ok(redirect_uri)) =>
-    Error([client_id_msg, `RedirectUri(redirect_uri)])
-  | (Error(client_id_msg), Error(response_type_msg), Ok(redirect_uri)) =>
-    Error([client_id_msg, response_type_msg, `RedirectUri(redirect_uri)])
+    Invalid(
+      String.concat(
+        ", ",
+        [client_id_msg, response_type_msg, redirect_uri_msg],
+      ),
+    )
   };
 };

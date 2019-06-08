@@ -7,9 +7,12 @@ type t = {
   nonce: string,
 };
 
-let parse_query:
-  (~clients: list(Client.t), Uri.t) =>
-  result(
-    t,
-    list([ | `Msg(string) | `Client(Client.t) | `RedirectUri(string)]),
-  );
+type parse_state =
+  | Invalid(string)
+  | UnauthorizedClient(Client.t)
+  | InvalidScope(Client.t)
+  | InvalidWithClient(Client.t)
+  | InvalidWithRedirectUri(string)
+  | Valid(t);
+
+let parse_query: (~clients: list(Client.t), Uri.t) => parse_state;

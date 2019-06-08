@@ -40,7 +40,7 @@ let makeRoute =
     )
     >>= (
       fun
-      | Ok(parameters) =>
+      | Valid(parameters) =>
         read_body(reqd)
         >>= (
           body => {
@@ -89,7 +89,7 @@ let makeRoute =
             );
           }
         )
-      | Error(_) =>
+      | _ =>
         Http.Response.Unauthorized.make(
           ~respond_with_string,
           ~create_response,
