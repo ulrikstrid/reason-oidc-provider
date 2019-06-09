@@ -42,6 +42,7 @@ let makeRoute =
           )
       );
     | UnauthorizedClient(client) =>
+      Logs.warn(m => m("%s", "unauthorized_client"));
       Http.Response.Redirect.make(
         ~respond_with_string,
         ~create_response,
@@ -52,8 +53,9 @@ let makeRoute =
           ++ state_query_string,
         reqd,
       )
-      |> Lwt.return
+      |> Lwt.return;
     | InvalidScope(client) =>
+      Logs.warn(m => m("%s", "invalid_scope"));
       Http.Response.Redirect.make(
         ~respond_with_string,
         ~create_response,
@@ -62,8 +64,9 @@ let makeRoute =
           client.redirect_uri ++ "?error=invalid_scope" ++ state_query_string,
         reqd,
       )
-      |> Lwt.return
+      |> Lwt.return;
     | InvalidWithClient(client) =>
+      Logs.warn(m => m("%s", "invalid_request"));
       Http.Response.Redirect.make(
         ~respond_with_string,
         ~create_response,
@@ -72,8 +75,9 @@ let makeRoute =
           client.redirect_uri ++ "?error=invalid_request" ++ state_query_string,
         reqd,
       )
-      |> Lwt.return
+      |> Lwt.return;
     | InvalidWithRedirectUri(redirect_uri) =>
+      Logs.warn(m => m("%s", "invalid_request"));
       Http.Response.Redirect.make(
         ~respond_with_string,
         ~create_response,
@@ -82,8 +86,9 @@ let makeRoute =
           redirect_uri ++ "?error=invalid_request" ++ state_query_string,
         reqd,
       )
-      |> Lwt.return
+      |> Lwt.return;
     | Invalid(error_string) =>
+      Logs.warn(m => m("%s", "Invalid request, showing error to end-user"));
       Http.Response.Unauthorized.make(
         ~respond_with_string,
         ~create_response,
@@ -91,7 +96,7 @@ let makeRoute =
         reqd,
         error_string,
       )
-      |> Lwt.return
+      |> Lwt.return;
     }
   );
 };

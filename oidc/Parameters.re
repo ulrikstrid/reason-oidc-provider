@@ -69,7 +69,8 @@ let parse_query = (~clients, uri) => {
       state: getQueryParam("state"),
       nonce: getQueryParam("nonce") |> CCOpt.get_or(~default="12345"),
     })
-  | (Ok(client), _, _, Some(_)) => UnauthorizedClient(client)
+  | (Ok(client), Ok(_), _, Some(_)) => UnauthorizedClient(client)
+  | (Ok(client), Error(e), _, _) => InvalidWithClient(client)
   | (Ok(client), _, _, None) => InvalidScope(client)
   | (_, _, Ok(redirect_uri), _) => InvalidWithRedirectUri(redirect_uri)
   | (Error(client_id_msg), Ok(_), Error(redirect_uri_msg), _) =>
