@@ -16,3 +16,4 @@ localhost.crt
 
 cypress/examples
 cypress/screenshots
+cypress/videos
