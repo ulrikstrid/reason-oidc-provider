@@ -4,6 +4,7 @@ type t = {
   set: (~kind: string, ~key: string, string) => Lwt.t(unit),
   get: (~kind: string, string) => Lwt.t(string),
   find: (~kind: string, string) => Lwt.t(option(string)),
+  remove: (~kind: string, string) => Lwt.t(unit),
 };
 
 let make: unit => Lwt.t(t) =
@@ -22,6 +23,9 @@ let make: unit => Lwt.t(t) =
             },
             find: (~kind, key) => {
               Storage.find(t, [kind, key]);
+            },
+            remove: (~kind, key) => {
+              Storage.remove(t, ~info=Irmin.Info.none, [kind, key]);
             },
           };
         }

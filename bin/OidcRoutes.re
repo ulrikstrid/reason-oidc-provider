@@ -16,8 +16,9 @@ let makeCallback =
   let req_path = Uri.path(req_uri);
   let path_parts = Str.(split(regexp("/"), req_path));
 
-  context.session_store 
-  >>= session_store =>
+  context.session_store
+  >>= (
+    session_store =>
       switch (method, path_parts) {
       | (`GET, ["authorize"]) =>
         Routes.Authorize.makeRoute(
@@ -76,6 +77,7 @@ let makeCallback =
           ~priv_key=context.rsa_priv,
           ~host=context.host,
           ~get_code=session_store.find(~kind="code"),
+          ~remove_code=session_store.remove(~kind="code"),
           ~jwk=context.jwk,
           reqd,
         )
@@ -87,5 +89,6 @@ let makeCallback =
           ~req_path,
           reqd,
         )
-      };
-  };
+      }
+  );
+};

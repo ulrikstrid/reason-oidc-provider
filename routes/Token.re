@@ -11,16 +11,21 @@ let trim_leading_null = s =>
 
 let int_string_of_float = f => f |> int_of_float |> string_of_int;
 
-let code_of_body:
-  (string => Lwt.t(option(string)), string) => Lwt.t(option(string)) =
-  (get_code, body) => {
-    Logs.info(m => m("Body for token is %s", body));
+let code_of_body = (~get_code, ~remove_code, body) => {
+  Logs.info(m => m("Body for token is %s", body));
 
+  let key: string =
     Http.UrlencodedForm.parse(body)
     |> Http.UrlencodedForm.get_param("code")
-    |> CCOpt.get_or(~default="")
-    |> get_code;
-  };
+    |> CCOpt.get_or(~default="");
+
+  get_code(key)
+  >>= (
+    code => {
+      remove_code(key) >|= (() => code);
+    }
+  );
+};
 
 let make =
     (
@@ -31,11 +36,12 @@ let make =
       ~priv_key,
       ~host,
       ~get_code,
+      ~remove_code,
       ~jwk: Oidc.Jwk.t,
       reqd,
     ) =>
   read_body(reqd)
-  >>= code_of_body(get_code)
+  >>= code_of_body(~get_code, ~remove_code)
   >|= CCOpt.map(code => {
         open Jwt;
 
@@ -79,6 +85,13 @@ let make =
             ),
           reqd,
         )
-      | None => raise(Not_found)
+      | None =>
+        Http.Response.Unauthorized.make(
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          reqd,
+          {|{"error": "invalid_grant"}|},
+        )
       }
   );
