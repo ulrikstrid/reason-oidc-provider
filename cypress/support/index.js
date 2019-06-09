@@ -18,6 +18,3 @@ import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-
-globalThis.BASE_URL =
-  process.env.BASE_URL || "https://op.certification.openid.net:61740/";
