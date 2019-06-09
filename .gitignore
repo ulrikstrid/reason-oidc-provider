@@ -13,3 +13,6 @@ trash
 .env
 
 localhost.crt
+
+cypress/examples
+cypress/screenshots

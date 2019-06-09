@@ -1,0 +1,6 @@
+steps:
+  - template: ./utils/use-node.yml
+  - script: "npm install -g cypress"
+    displayName: "install cypress"
+  - script: "cypress run --record --key $(CYPRESS_RECORD_KEY)"
+    displayName: "run cypress"

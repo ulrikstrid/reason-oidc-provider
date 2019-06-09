@@ -77,3 +77,14 @@ stages:
                   DockerNamespace: 'ulrikaugustsson'
                   DockerRepository: 'reason-oidc-provider'
                   DockerImageTag: '$(Build.BuildId)'
+
+  - stage: Integration_tests
+    dependsOn: [Deploy_docker]
+    jobs:
+      - job: Cypress
+        pool:
+          vmImage: vs2017-win2016
+
+        steps:
+          - template: ./.ci/cypress.yml
+
