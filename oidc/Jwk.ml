@@ -24,19 +24,19 @@ let trim_leading_null s =
 let make (rsa_pub: Nocrypto.Rsa.pub): (t, [ `Msg of string]) result  =
   let n = (CCString.rev (Z.to_bits rsa_pub.n))
     |> trim_leading_null
-    |> Base64.encode ~alphabet:Base64.uri_safe_alphabet in
+    |> Base64.encode ~pad:false ~alphabet:Base64.uri_safe_alphabet in
   let e = (CCString.rev (Z.to_bits rsa_pub.e))
     |> trim_leading_null
-    |> Base64.encode ~alphabet:Base64.uri_safe_alphabet in
+    |> Base64.encode ~pad:false ~alphabet:Base64.uri_safe_alphabet in
   let public_key: X509.public_key = `RSA rsa_pub in
   let kid = public_key
     |> X509.key_id
     |> Cstruct.to_string
-    |> Base64.encode ~alphabet:Base64.uri_safe_alphabet in
+    |> Base64.encode ~pad:false ~alphabet:Base64.uri_safe_alphabet in
   let x5t = public_key
     |> X509.key_fingerprint
     |> Cstruct.to_string
-    |> Base64.encode ~alphabet:Base64.uri_safe_alphabet in
+    |> Base64.encode ~pad:false ~alphabet:Base64.uri_safe_alphabet in
     match (n, e, kid, x5t) with
     | (Ok n, Ok e, Ok kid, Ok x5t) ->
       Ok {

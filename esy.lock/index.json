@@ -1,5 +1,5 @@
 {
-  "checksum": "ad468cfb4653461f2dac86de99bd2503",
+  "checksum": "5ed479b18da27f28c09cd7fad422eb49",
   "root": "reason-oidc-provider@link-dev:./esy.json",
   "node": {
     "yarn-pkg-config@github:esy-ocaml/yarn-pkg-config#cca65f99674ed2d954d28788edeb8c57fada5ed0@d41d8cd9": {
@@ -55,7 +55,7 @@
         "@opam/lwt_ssl@opam:1.1.2@ac833920", "@opam/lwt@opam:4.2.1@c1888ec9",
         "@opam/logs@opam:0.6.3@80c08d15",
         "@opam/lambda-term@opam:2.0@c11940cc",
-        "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#8dc84a2@d41d8cd9",
+        "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944@d41d8cd9",
         "@opam/irmin-mem@opam:1.3.0@5744e38e",
         "@opam/httpaf-lwt-unix@github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e@d41d8cd9",
         "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9",
@@ -1689,25 +1689,25 @@
         "@opam/camomile@opam:1.0.1@ab4729e2"
       ]
     },
-    "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#8dc84a2@d41d8cd9": {
-      "id": "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#8dc84a2@d41d8cd9",
+    "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944@d41d8cd9": {
+      "id": "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944@d41d8cd9",
       "name": "@opam/jwt",
-      "version": "github:ulrikstrid/ocaml-jwt:jwt.opam#8dc84a2",
+      "version": "github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944",
       "source": {
         "type": "install",
-        "source": [ "github:ulrikstrid/ocaml-jwt:jwt.opam#8dc84a2" ]
+        "source": [ "github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944" ]
       },
       "overrides": [],
       "dependencies": [
         "@opam/yojson@opam:1.7.0@2d92307e", "@opam/re@opam:1.9.0@7f4a36a5",
         "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
-        "@opam/base64@opam:3.0.0@a23fa8d8",
+        "@opam/base64@opam:3.2.0@e1bac209",
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
         "@opam/yojson@opam:1.7.0@2d92307e", "@opam/re@opam:1.9.0@7f4a36a5",
         "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
-        "@opam/base64@opam:3.0.0@a23fa8d8"
+        "@opam/base64@opam:3.2.0@e1bac209"
       ]
     },
     "@opam/junit@opam:2.0.1@c25e35a7": {
@@ -2635,20 +2635,20 @@
       ],
       "devDependencies": [ "ocaml@4.6.10@d41d8cd9" ]
     },
-    "@opam/base64@opam:3.0.0@a23fa8d8": {
-      "id": "@opam/base64@opam:3.0.0@a23fa8d8",
+    "@opam/base64@opam:3.2.0@e1bac209": {
+      "id": "@opam/base64@opam:3.2.0@e1bac209",
       "name": "@opam/base64",
-      "version": "opam:3.0.0",
+      "version": "opam:3.2.0",
       "source": {
         "type": "install",
         "source": [
-          "archive:https://opam.ocaml.org/cache/md5/f9/f94f8e73b7325bf02436293b1321e35b#md5:f94f8e73b7325bf02436293b1321e35b",
-          "archive:https://github.com/mirage/ocaml-base64/releases/download/v3.0.0/base64-v3.0.0.tbz#md5:f94f8e73b7325bf02436293b1321e35b"
+          "archive:https://opam.ocaml.org/cache/md5/8a/8ac1d6145277cee57d36611d1c420f05#md5:8ac1d6145277cee57d36611d1c420f05",
+          "archive:https://github.com/mirage/ocaml-base64/releases/download/v3.2.0/base64-v3.2.0.tbz#md5:8ac1d6145277cee57d36611d1c420f05"
         ],
         "opam": {
           "name": "base64",
-          "version": "3.0.0",
-          "path": "esy.lock/opam/base64.3.0.0"
+          "version": "3.2.0",
+          "path": "esy.lock/opam/base64.3.2.0"
         }
       },
       "overrides": [],
