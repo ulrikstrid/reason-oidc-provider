@@ -61,3 +61,22 @@ describe("Parameters", u => {
   | _ => ()
   };
 });
+
+describe("User", u => {
+  open Oidc.User;
+
+  let user = {
+    email: "ulrik.strid@outlook.com",
+    name: "Ulrik Strid",
+    password: "strid",
+  };
+
+  let users = [user];
+
+  u.test("get_user", ({expect}) => {
+    let get_user = email =>
+      CCList.find_opt((user: Oidc.User.t) => user.email == email, users);
+
+    expect.option(get_user("ulrik.strid@outlook.com")).toBe(Some(user));
+  });
+});

@@ -46,6 +46,7 @@ let makeCallback =
           ~headers_of_list,
           ~get_header,
           ~read_body,
+          ~find_user=context.find_user,
           ~hash_key=context.rsa_priv,
           ~get_session=session_store.get(~kind="session"),
           ~set_code=session_store.set(~kind="code"),

@@ -1,37 +1,19 @@
 (executable
-  (name ReasonOidcProvider)
-  (public_name main.exe)
-  (package reason-oidc-provider)
-  (ocamlopt_flags -O3)
-  (libraries
-    logs.fmt
-    fmt.tty
-    lwt
-    logs
-
-    h2
-    h2-lwt-unix
-    httpaf
-    httpaf-lwt-unix
-    irmin-mem
-    x509
-    ssl
-    lwt_ssl
-    nocrypto
-    nocrypto.lwt
-
-    yojson
-    str
-    containers
-    jwt
-    uri
-
-    oidc
-    http
-    routes
-  ))
+ (name ReasonOidcProvider)
+ (public_name main.exe)
+ (package reason-oidc-provider)
+ (ocamlopt_flags -O3)
+ (libraries logs.fmt fmt.tty lwt logs h2 h2-lwt-unix httpaf httpaf-lwt-unix
+   irmin-mem x509 ssl lwt_ssl nocrypto nocrypto.lwt yojson str containers jwt
+   uri oidc http routes))
 
 (env
-  (dev (flags (:standard -g)))
-  (windows (flags (:standard -g -ccopt -lbcrypt)))
-  (docker (flags (:standard -ccopt -static -verbose))))
+ (dev
+  (flags
+   (:standard -g)))
+ (windows
+  (flags
+   (:standard -g -ccopt -lbcrypt)))
+ (docker
+  (flags
+   (:standard -ccopt -static -verbose))))

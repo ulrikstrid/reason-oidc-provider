@@ -5,11 +5,26 @@ Logs.set_reporter(Logs_fmt.reporter());
 
 Nocrypto_entropy_unix.initialize();
 
+let users =
+  Oidc.User.[
+    {
+      email: "ulrik.strid@outlook.com",
+      name: "Ulrik Strid",
+      password: "strid",
+    },
+  ];
+
 let main = (settings: Settings.t) => {
   let clients = settings.clients;
   let rsa_priv = Nocrypto.Rsa.generate(4048);
   let context =
-    Context.make(~host=settings.provider.host, ~rsa_priv, ~clients, ());
+    Context.make(
+      ~host=settings.provider.host,
+      ~rsa_priv,
+      ~clients,
+      ~users,
+      (),
+    );
 
   H2_server.start(
     ~cert="./localhost.pem",
@@ -20,6 +35,8 @@ let main = (settings: Settings.t) => {
 };
 
 Settings.get_from_env()
-|> fun 
-| Ok(settings) => main(settings)
-| Error(`Msg(msg)) => print_endline(msg);
+|> (
+  fun
+  | Ok(settings) => main(settings)
+  | Error(`Msg(msg)) => print_endline(msg)
+);

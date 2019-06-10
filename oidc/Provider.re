@@ -1,3 +1,1 @@
-type t = {
-    host: string
-};
+type t = {host: string};

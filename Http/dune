@@ -1,24 +1,15 @@
 (library
-  (name http)
-  (public_name http)
-  (flags (-w -40 -w +26))
-  (libraries
-    lwt
-    logs
-
-    uri
-    yojson
-    str
-    containers
-
-    h2
-    h2-lwt-unix
-    httpaf
-    httpaf-lwt-unix
-
-    console.lib
-  ))
+ (name http)
+ (public_name http)
+ (flags
+  (-w -40 -w +26))
+ (libraries lwt logs uri yojson str containers h2 h2-lwt-unix httpaf
+   httpaf-lwt-unix))
 
 (env
-  (dev (flags (:standard -g)))
-  (docker (flags (:standard -ccopt -static))))
+ (dev
+  (flags
+   (:standard -g)))
+ (docker
+  (flags
+   (:standard -ccopt -static))))

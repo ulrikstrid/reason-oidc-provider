@@ -47,9 +47,10 @@ let make =
 
         let jwt_header = Oidc.Jwk.make_jwt_header(priv_key, jwk);
 
+        let auth_json = code |> Yojson.Basic.from_string;
+
         let nonce_string =
-          code
-          |> Yojson.Basic.from_string
+          auth_json
           |> Yojson.Basic.Util.member("nonce")
           |> Yojson.Basic.Util.to_string;
 
