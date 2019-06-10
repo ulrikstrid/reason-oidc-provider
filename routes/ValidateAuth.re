@@ -25,8 +25,8 @@ let makeRoute =
       ~respond_with_string,
       ~create_response,
       ~headers_of_list,
-      reqd,
       "No session found",
+      reqd,
     )
     |> Lwt.return
   | Some(session) =>
@@ -111,8 +111,8 @@ let makeRoute =
                 ~respond_with_string,
                 ~create_response,
                 ~headers_of_list,
-                reqd,
                 "Wrong username or password",
+                reqd,
               )
               |> Lwt.return
             };
@@ -123,8 +123,8 @@ let makeRoute =
           ~respond_with_string,
           ~create_response,
           ~headers_of_list,
-          reqd,
           "Invalid session found",
+          reqd,
         )
         |> Lwt.return
     );

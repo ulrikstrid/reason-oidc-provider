@@ -105,8 +105,8 @@ module Unauthorized = {
         ~respond_with_string,
         ~create_response,
         ~headers_of_list,
-        reqd,
         message,
+        reqd,
       ) => {
     respond_with_string(
       reqd,
