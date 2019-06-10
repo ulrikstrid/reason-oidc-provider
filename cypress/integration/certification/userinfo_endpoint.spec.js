@@ -1,4 +1,4 @@
-describe.skip("Userinfo Endpoint", function() {
+describe("Userinfo Endpoint", function() {
   const baseUrl =
     process.env.BASE_URL || "https://op.certification.openid.net:61740/";
   it("UserInfo Endpoint access with POST and bearer body", function() {

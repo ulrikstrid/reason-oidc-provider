@@ -26,17 +26,17 @@ describe("OAuth behaviors", function() {
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.wait(5 * 1000);
-
     cy.buttonByRow(51).should("have.class", "btn-success");
   });
 
-  it.skip("Trying to use authorization code twice should result in revoking previously issued access tokens", function() {
+  it("Trying to use authorization code twice should result in revoking previously issued access tokens", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);
 
     cy.buttonByRow(52).click();
+
+    cy.get(".container > :nth-child(3) > a").click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 

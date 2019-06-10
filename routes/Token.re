@@ -11,18 +11,29 @@ let trim_leading_null = s =>
 
 let int_string_of_float = f => f |> int_of_float |> string_of_int;
 
-let code_of_body = (~get_code, ~remove_code, body) => {
-  Logs.info(m => m("Body for token is %s", body));
+let code_of_body = (~find_code, ~remove_code, ~remove_access_token, body) => {
+  Logs.app(m => m("Body for token is %s", body));
 
   let key: string =
     Http.UrlencodedForm.parse(body)
     |> Http.UrlencodedForm.get_param("code")
     |> CCOpt.get_or(~default="");
 
-  get_code(key)
+  find_code(key)
   >>= (
-    code => {
-      remove_code(key) >|= (() => code);
+    code_data => {
+      remove_code(key)
+      >>= (
+        () =>
+          switch (code_data) {
+          | Some(value) => Lwt.return(Some((key, value)))
+          | None =>
+            remove_access_token(
+              Base64.encode_exn(~alphabet=Base64.uri_safe_alphabet, key),
+            )
+            >|= (() => None)
+          }
+      );
     }
   );
 };
@@ -35,64 +46,88 @@ let make =
       ~headers_of_list,
       ~priv_key,
       ~host,
-      ~get_code,
+      ~find_code,
       ~remove_code,
+      ~set_access_token,
+      ~remove_access_token,
       ~jwk: Oidc.Jwk.t,
       reqd,
-    ) =>
+    ) => {
+  let unauthorized_response = reqd => {
+    Http.Response.Unauthorized.make(
+      ~respond_with_string,
+      ~create_response,
+      ~headers_of_list,
+      {|{"error": "invalid_grant"}|},
+      reqd,
+    );
+  };
+
   read_body(reqd)
-  >>= code_of_body(~get_code, ~remove_code)
-  >|= CCOpt.map(code => {
-        open Jwt;
+  >>= code_of_body(~find_code, ~remove_code, ~remove_access_token)
+  >>= CCOpt.map_or(
+        ~default=Lwt.return(unauthorized_response),
+        ((code, code_data)) => {
+          open Jwt;
 
-        let jwt_header = Oidc.Jwk.make_jwt_header(priv_key, jwk);
+          let jwt_header = Oidc.Jwk.make_jwt_header(priv_key, jwk);
 
-        let auth_json = code |> Yojson.Basic.from_string;
+          let auth_json = Yojson.Basic.from_string(code_data);
 
-        let nonce_string =
-          auth_json
-          |> Yojson.Basic.Util.member("nonce")
-          |> Yojson.Basic.Util.to_string;
+          let nonce_string =
+            auth_json
+            |> Yojson.Basic.Util.member("nonce")
+            |> Yojson.Basic.Util.to_string;
 
-        empty_payload
-        |> add_claim(iss, host)
-        |> add_claim(sub, "u@s.dev")
-        |> add_claim(aud, "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175")
-        |> add_claim(nonce, nonce_string)
-        |> add_claim(iat, Unix.time() |> int_string_of_float)
-        |> add_claim(exp, Unix.time() +. 3600. |> int_string_of_float)
-        |> t_of_header_and_payload(jwt_header)
-        |> token_of_t;
-      })
-  >|= (
-    jwt =>
-      switch (jwt) {
-      | Some(id_token) =>
-        Http.Response.Json.make(
-          ~respond_with_string,
-          ~create_response,
-          ~headers_of_list,
-          ~json=
-            Printf.sprintf(
-              {|{
+          let user =
+            auth_json
+            |> Yojson.Basic.Util.member("user")
+            |> Oidc.User.from_json;
+
+          let scopes =
+            auth_json
+            |> Yojson.Basic.Util.member("scope")
+            |> Yojson.Basic.Util.to_list
+            |> CCList.map(Yojson.Basic.Util.to_string)
+            |> CCString.concat(", ");
+
+          Logs.app(m => m("scopes: %s", scopes));
+
+          let id_token =
+            empty_payload
+            |> add_claim(iss, host)
+            |> add_claim(sub, user.email)
+            |> add_claim(aud, "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175")
+            |> add_claim(nonce, nonce_string)
+            |> add_claim(iat, Unix.time() |> int_string_of_float)
+            |> add_claim(exp, Unix.time() +. 3600. |> int_string_of_float)
+            |> t_of_header_and_payload(jwt_header)
+            |> token_of_t;
+
+          let access_token =
+            code |> Base64.encode_exn(~alphabet=Base64.uri_safe_alphabet);
+
+          set_access_token(~key=access_token, Oidc.User.to_string(user))
+          >|= (
+            () =>
+              Http.Response.Json.make(
+                ~respond_with_string,
+                ~create_response,
+                ~headers_of_list,
+                ~json=
+                  Printf.sprintf(
+                    {|{
                 "id_token": "%s",
                 "access_token": "%s",
                 "expires_in": 3600,
                 "token_type": "Bearer"
               }|},
-              id_token,
-              "access_token"
-              |> Base64.encode_exn(~alphabet=Base64.uri_safe_alphabet),
-            ),
-          reqd,
-        )
-      | None =>
-        Http.Response.Unauthorized.make(
-          ~respond_with_string,
-          ~create_response,
-          ~headers_of_list,
-          reqd,
-          {|{"error": "invalid_grant"}|},
-        )
-      }
-  );
+                    id_token,
+                    access_token,
+                  ),
+              )
+          );
+        },
+      )
+  >|= (response => response(reqd));
+};

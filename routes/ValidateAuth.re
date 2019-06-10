@@ -45,7 +45,7 @@ let makeRoute =
         read_body(reqd)
         >|= (
           body => {
-            Logs.info(m => m("body: %s", body));
+            Logs.app(m => m("body: %s", body));
 
             let parsed_body = Http.UrlencodedForm.parse(body);
 
@@ -72,6 +72,10 @@ let makeRoute =
                  let bodyValue =
                    `Assoc([
                      ("nonce", `String(parameters.nonce)),
+                     (
+                       "scope",
+                       `List(CCList.map(s => `String(s), parameters.scope)),
+                     ),
                      ("user", Oidc.User.to_json(user)),
                    ])
                    |> Yojson.to_string;

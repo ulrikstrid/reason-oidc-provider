@@ -77,9 +77,22 @@ let makeCallback =
           ~headers_of_list,
           ~priv_key=context.rsa_priv,
           ~host=context.host,
-          ~get_code=session_store.find(~kind="code"),
+          ~find_code=session_store.find(~kind="code"),
           ~remove_code=session_store.remove(~kind="code"),
+          ~set_access_token=session_store.set(~kind="access_token"),
+          ~remove_access_token=session_store.remove(~kind="access_token"),
           ~jwk=context.jwk,
+          reqd,
+        )
+      | (meth, ["userinfo"]) =>
+        Routes.UserInfo.make(
+          ~meth,
+          ~read_body,
+          ~respond_with_string,
+          ~create_response,
+          ~headers_of_list,
+          ~get_header,
+          ~find_access_token=session_store.find(~kind="access_token"),
           reqd,
         )
       | _ =>
