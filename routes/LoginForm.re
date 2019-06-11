@@ -9,15 +9,8 @@ let markup = {|<html>
 </body>
 </html>|};
 
-let makeRoute =
-    (~respond_with_string, ~create_response, ~headers_of_list, reqd) => {
-  Http.Response.Html.make(
-    ~respond_with_string,
-    ~create_response,
-    ~headers_of_list,
-    ~markup,
-    reqd,
-  );
+let makeRoute = (~httpImpl, reqd) => {
+  Http.Response.Html.make(~httpImpl, ~markup, reqd);
 
   Lwt.return_unit;
 };

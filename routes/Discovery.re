@@ -1,5 +1,4 @@
-let make =
-    (~respond_with_string, ~create_response, ~headers_of_list, ~host, reqd) => {
+let make = (~httpImpl, ~host, reqd) => {
   let json =
     Printf.sprintf(
       {|{
@@ -31,12 +30,6 @@ let make =
       host,
     );
 
-  Http.Response.Json.make(
-    ~respond_with_string,
-    ~create_response,
-    ~headers_of_list,
-    ~json,
-    reqd,
-  );
+  Http.Response.Json.make(~httpImpl, ~json, reqd);
   Lwt.return_unit;
 };

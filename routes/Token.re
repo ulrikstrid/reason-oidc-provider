@@ -40,10 +40,7 @@ let code_of_body = (~find_code, ~remove_code, ~remove_access_token, body) => {
 
 let make =
     (
-      ~read_body,
-      ~respond_with_string,
-      ~create_response,
-      ~headers_of_list,
+      ~httpImpl,
       ~priv_key,
       ~host,
       ~find_code,
@@ -55,15 +52,13 @@ let make =
     ) => {
   let unauthorized_response = reqd => {
     Http.Response.Unauthorized.make(
-      ~respond_with_string,
-      ~create_response,
-      ~headers_of_list,
+      ~httpImpl,
       {|{"error": "invalid_grant"}|},
       reqd,
     );
   };
 
-  read_body(reqd)
+  httpImpl.read_body(reqd)
   >>= code_of_body(~find_code, ~remove_code, ~remove_access_token)
   >>= CCOpt.map_or(
         ~default=Lwt.return(unauthorized_response),
@@ -111,9 +106,7 @@ let make =
           >|= (
             () =>
               Http.Response.Json.make(
-                ~respond_with_string,
-                ~create_response,
-                ~headers_of_list,
+                ~httpImpl,
                 ~json=
                   Printf.sprintf(
                     {|{

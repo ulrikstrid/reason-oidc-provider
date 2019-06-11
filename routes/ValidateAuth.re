@@ -1,10 +1,6 @@
 let makeRoute =
     (
-      ~respond_with_string,
-      ~create_response,
-      ~headers_of_list,
-      ~read_body,
-      ~get_header,
+      ~httpImpl,
       ~find_user,
       ~get_session,
       ~set_code,
@@ -13,21 +9,16 @@ let makeRoute =
       reqd,
     ) => {
   open Lwt.Infix;
+  open Http.HttpImpl;
 
   let session_id =
-    get_header("Cookie")
+    httpImpl.get_header("Cookie")
     |> CCOpt.get_or(~default="")
     |> Http.Cookie.get_cookie(~key="session");
 
   switch (session_id) {
   | None =>
-    Http.Response.Unauthorized.make(
-      ~respond_with_string,
-      ~create_response,
-      ~headers_of_list,
-      "No session found",
-      reqd,
-    )
+    Http.Response.Unauthorized.make(~httpImpl, "No session found", reqd)
     |> Lwt.return
   | Some(session) =>
     let cookie_value = session.value;
@@ -42,7 +33,7 @@ let makeRoute =
     >>= (
       fun
       | Valid(parameters) =>
-        read_body(reqd)
+        httpImpl.read_body(reqd)
         >|= (
           body => {
             Logs.app(m => m("body: %s", body));
@@ -93,9 +84,7 @@ let makeRoute =
               >|= (
                 () =>
                   Http.Response.Redirect.make(
-                    ~respond_with_string,
-                    ~create_response,
-                    ~headers_of_list,
+                    ~httpImpl,
                     ~targetPath=
                       Printf.sprintf(
                         "%s?code=%s%s",
@@ -112,9 +101,7 @@ let makeRoute =
               )
             | None =>
               Http.Response.Unauthorized.make(
-                ~respond_with_string,
-                ~create_response,
-                ~headers_of_list,
+                ~httpImpl,
                 "Wrong username or password",
                 reqd,
               )
@@ -124,9 +111,7 @@ let makeRoute =
         )
       | _ =>
         Http.Response.Unauthorized.make(
-          ~respond_with_string,
-          ~create_response,
-          ~headers_of_list,
+          ~httpImpl,
           "Invalid session found",
           reqd,
         )

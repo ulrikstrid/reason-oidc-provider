@@ -26,17 +26,18 @@ let route_handler: (Context.t, Unix.sockaddr, Reqd.t) => unit =
       let create_response = (~headers, status) =>
         Response.create(~headers, status);
 
-      OidcRoutes.makeCallback(
-        ~target,
-        ~method=meth,
-        ~get_header=Headers.get(headers),
-        ~create_response,
-        ~respond_with_string=Reqd.respond_with_string,
-        ~headers_of_list=Headers.of_list,
-        ~read_body,
-        ~context,
-        request_descriptor,
-      )
+      let httpImpl =
+        Http.HttpImpl.{
+          target,
+          meth,
+          get_header: Headers.get(headers),
+          create_response,
+          respond_with_string: Reqd.respond_with_string,
+          headers_of_list: Headers.of_list,
+          read_body,
+        };
+
+      OidcRoutes.makeCallback(~httpImpl, ~context, request_descriptor)
       |> Lwt.map(() => {
            let stop = Unix.gettimeofday();
            Logs.info(m =>

@@ -1,19 +1,8 @@
-let makeRoute =
-    (
-      ~set_session,
-      ~respond_with_string,
-      ~create_response,
-      ~headers_of_list,
-      ~get_header,
-      ~redirectPath,
-      ~clients,
-      target,
-      reqd,
-    ) => {
+let makeRoute = (~httpImpl, ~set_session, ~redirectPath, ~clients, reqd) => {
   open Lwt.Infix;
-  open Http;
+  open Http.HttpImpl;
 
-  let uri = Uri.of_string(target);
+  let uri = Uri.of_string(httpImpl.target);
 
   let parameters = Oidc.Parameters.parse_query(~clients, uri);
 
@@ -29,13 +18,11 @@ let makeRoute =
       let cookie_value =
         String.concat("", ["session=", cookie_key, " ;Max-Age=300"]);
 
-      set_session(~key=cookie_key, target)
+      set_session(~key=cookie_key, httpImpl.target)
       >|= (
         () =>
           Http.Response.Redirect.make(
-            ~respond_with_string,
-            ~create_response,
-            ~headers_of_list,
+            ~httpImpl,
             ~extra_headers=[("set-cookie", cookie_value)],
             ~targetPath=redirectPath,
             reqd,
@@ -44,9 +31,7 @@ let makeRoute =
     | UnauthorizedClient(client) =>
       Logs.warn(m => m("%s", "unauthorized_client"));
       Http.Response.Redirect.make(
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
+        ~httpImpl,
         ~targetPath=
           client.redirect_uri
           ++ "?error=unauthorized_client"
@@ -57,9 +42,7 @@ let makeRoute =
     | InvalidScope(client) =>
       Logs.warn(m => m("%s", "invalid_scope"));
       Http.Response.Redirect.make(
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
+        ~httpImpl,
         ~targetPath=
           client.redirect_uri ++ "?error=invalid_scope" ++ state_query_string,
         reqd,
@@ -68,9 +51,7 @@ let makeRoute =
     | InvalidWithClient(client) =>
       Logs.warn(m => m("%s", "invalid_request"));
       Http.Response.Redirect.make(
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
+        ~httpImpl,
         ~targetPath=
           client.redirect_uri ++ "?error=invalid_request" ++ state_query_string,
         reqd,
@@ -79,9 +60,7 @@ let makeRoute =
     | InvalidWithRedirectUri(redirect_uri) =>
       Logs.warn(m => m("%s", "invalid_request"));
       Http.Response.Redirect.make(
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
+        ~httpImpl,
         ~targetPath=
           redirect_uri ++ "?error=invalid_request" ++ state_query_string,
         reqd,
@@ -89,13 +68,7 @@ let makeRoute =
       |> Lwt.return;
     | Invalid(error_string) =>
       Logs.warn(m => m("%s", "Invalid request, showing error to end-user"));
-      Http.Response.Unauthorized.make(
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
-        error_string,
-        reqd,
-      )
+      Http.Response.Unauthorized.make(~httpImpl, error_string, reqd)
       |> Lwt.return;
     }
   );

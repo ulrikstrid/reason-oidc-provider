@@ -1,17 +1,4 @@
-let make =
-    (
-      ~respond_with_string,
-      ~create_response,
-      ~headers_of_list,
-      ~req_path,
-      ~message=req_path ++ " not found",
-      reqd,
-    ) =>
-  Http.Response.NotFound.make(
-    ~respond_with_string,
-    ~create_response,
-    ~headers_of_list,
-    ~message,
-    reqd,
-  )
-  |> Lwt.return;
+open Http.HttpImpl;
+
+let make = (~httpImpl, ~message=httpImpl.target ++ " not found", reqd) =>
+  Http.Response.NotFound.make(~httpImpl, ~message, reqd) |> Lwt.return;

@@ -1,12 +1,7 @@
+open HttpImpl;
+
 module Ok = {
-  let make =
-      (
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
-        ~extra_headers=?,
-        reqd,
-      ) => {
+  let make = (~httpImpl, ~extra_headers=?, reqd) => {
     let headers =
       (
         switch (extra_headers) {
@@ -14,21 +9,24 @@ module Ok = {
         | None => [("content-length", "2")]
         }
       )
-      |> headers_of_list;
-    respond_with_string(reqd, create_response(~headers, `OK), "ok");
+      |> httpImpl.headers_of_list;
+    httpImpl.respond_with_string(
+      reqd,
+      httpImpl.create_response(~headers, `OK),
+      "ok",
+    );
     ();
   };
 };
 
 module Json = {
-  let make =
-      (~respond_with_string, ~create_response, ~headers_of_list, ~json, reqd) => {
+  let make = (~httpImpl, ~json, reqd) => {
     let content_length = json |> String.length |> string_of_int;
-    respond_with_string(
+    httpImpl.respond_with_string(
       reqd,
-      create_response(
+      httpImpl.create_response(
         ~headers=
-          headers_of_list([
+          httpImpl.headers_of_list([
             ("content-type", "application/json"),
             ("content-length", content_length),
           ]),
@@ -40,20 +38,13 @@ module Json = {
 };
 
 module Html = {
-  let make =
-      (
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
-        ~markup,
-        reqd,
-      ) => {
+  let make = (~httpImpl, ~markup, reqd) => {
     let content_length = markup |> String.length |> string_of_int;
-    respond_with_string(
+    httpImpl.respond_with_string(
       reqd,
-      create_response(
+      httpImpl.create_response(
         ~headers=
-          headers_of_list([
+          httpImpl.headers_of_list([
             ("content-type", "text/html"),
             ("content-length", content_length),
           ]),
@@ -65,16 +56,7 @@ module Html = {
 };
 
 module Redirect = {
-  let make =
-      (
-        ~respond_with_string: ('a, 'b, string) => unit,
-        ~create_response,
-        ~headers_of_list,
-        ~extra_headers=?,
-        ~code=303,
-        ~targetPath,
-        reqd,
-      ) => {
+  let make = (~httpImpl, ~extra_headers=?, ~code=303, ~targetPath, reqd) => {
     let content_length = targetPath |> String.length |> string_of_int;
 
     let constantHeaders = [
@@ -89,30 +71,23 @@ module Redirect = {
         | None => constantHeaders
         }
       )
-      |> headers_of_list;
+      |> httpImpl.headers_of_list;
 
-    respond_with_string(
+    httpImpl.respond_with_string(
       reqd,
-      create_response(~headers, `Code(code)),
+      httpImpl.create_response(~headers, `Code(code)),
       targetPath,
     );
   };
 };
 
 module Unauthorized = {
-  let make =
-      (
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
-        message,
-        reqd,
-      ) => {
-    respond_with_string(
+  let make = (~httpImpl, message, reqd) => {
+    httpImpl.respond_with_string(
       reqd,
-      create_response(
+      httpImpl.create_response(
         ~headers=
-          headers_of_list([
+          httpImpl.headers_of_list([
             ("content-length", String.length(message) |> string_of_int),
           ]),
         `Code(401),
@@ -124,19 +99,12 @@ module Unauthorized = {
 };
 
 module NotFound = {
-  let make =
-      (
-        ~respond_with_string,
-        ~create_response,
-        ~headers_of_list,
-        ~message="Not found",
-        reqd,
-      ) => {
-    respond_with_string(
+  let make = (~httpImpl, ~message="Not found", reqd) => {
+    httpImpl.respond_with_string(
       reqd,
-      create_response(
+      httpImpl.create_response(
         ~headers=
-          headers_of_list([
+          httpImpl.headers_of_list([
             ("content-length", String.length(message) |> string_of_int),
           ]),
         `Code(404),
