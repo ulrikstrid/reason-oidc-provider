@@ -80,3 +80,32 @@ describe("User", u => {
     expect.option(get_user("ulrik.strid@outlook.com")).toBe(Some(user));
   });
 });
+
+describe("Claims", u =>
+  Oidc.Claims.(
+    u.test("from_string", ({expect}) => {
+      let claims_string = {|{
+      "id_token" : {
+          "email"          : null,
+          "email_verified" : { "essential" : true }
+      },
+      "userinfo": {
+          "email"          : null,
+          "email_verified" : { "essential" : true },
+          "name"           : null
+      }
+   }|};
+
+      let claims = from_string(claims_string);
+
+      expect.list(claims.id_token).toContainEqual(NonEssential("email"));
+      expect.list(claims.id_token).toContainEqual(
+        Essential("email_verified"),
+      );
+      expect.list(claims.userinfo).toContainEqual(NonEssential("email"));
+      expect.list(claims.userinfo).toContainEqual(
+        Essential("email_verified"),
+      );
+    })
+  )
+);
