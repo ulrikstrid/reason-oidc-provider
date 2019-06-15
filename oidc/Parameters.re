@@ -5,6 +5,7 @@ type t = {
   scope: list(string), // Must include at least the openid scope
   state: option(string),
   nonce: string,
+  claims: option(Yojson.Basic.t),
 };
 
 type parse_state =
@@ -30,6 +31,16 @@ let get_client = (~clients, ~client_id, ()) => {
 
 let parse_query = (~clients, uri) => {
   let getQueryParam = Uri.get_query_param(uri);
+
+  Logs.app(m =>
+    m(
+      "claims: %s",
+      getQueryParam("claims") |> CCOpt.get_or(~default="no_claims"),
+    )
+  );
+
+  let claims =
+    getQueryParam("claims") |> CCOpt.map(Yojson.Basic.from_string);
 
   let response_type =
     getQueryParam("response_type")
@@ -68,6 +79,7 @@ let parse_query = (~clients, uri) => {
       scope,
       state: getQueryParam("state"),
       nonce: getQueryParam("nonce") |> CCOpt.get_or(~default="12345"),
+      claims,
     })
   | (Ok(client), Ok(_), _, Some(_)) => UnauthorizedClient(client)
   | (Ok(client), Error(e), _, _) => InvalidWithClient(client)

@@ -68,8 +68,12 @@ let makeRoute =
                        `List(CCList.map(s => `String(s), parameters.scope)),
                      ),
                      ("user", Oidc.User.to_json(user)),
+                     (
+                       "claims",
+                       parameters.claims |> CCOpt.get_or(~default=`Null),
+                     ),
                    ])
-                   |> Yojson.to_string;
+                   |> Yojson.Basic.to_string;
 
                  let code = Uuidm.create(`V4) |> Uuidm.to_string;
                  (code, bodyValue);

@@ -20,7 +20,8 @@ let make = (~httpImpl, ~host, reqd) => {
     "client_secret_basic"
   ],
   "claims_supported": [
-    "email"
+    "email",
+    "name"
   ]
 }|},
       host,

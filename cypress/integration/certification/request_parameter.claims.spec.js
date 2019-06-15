@@ -1,7 +1,7 @@
 describe("Request Parameter - claims", function() {
   const baseUrl =
     process.env.BASE_URL || "https://op.certification.openid.net:61740/";
-  it.skip("Claims request with essential name claim", function() {
+  it("Claims request with essential name claim", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);

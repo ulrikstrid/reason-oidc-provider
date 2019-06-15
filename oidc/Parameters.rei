@@ -5,6 +5,7 @@ type t = {
   scope: list(string),
   state: option(string),
   nonce: string,
+  claims: option(Yojson.Basic.t),
 };
 
 type parse_state =

@@ -24,3 +24,12 @@ let from_string = s => Yojson.Basic.from_string(s) |> from_json;
 
 let find_user = (~users, email) =>
   CCList.find_opt(t => t.email == email, users);
+
+let get_value_by_key = (user, key) => {
+  switch (key) {
+  | "name" => Some(user.name)
+  | "email" => Some(user.email)
+  | "password" => Some(user.password)
+  | _ => None
+  };
+};

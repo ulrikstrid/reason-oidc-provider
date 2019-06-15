@@ -88,8 +88,30 @@ let make =
 
           Logs.app(m => m("scopes: %s", scopes));
 
+          let claims =
+            Oidc.Claims.(
+              auth_json
+              |> Yojson.Basic.Util.member("claims")
+              |> Oidc.Claims.from_json
+              |> (
+                claims =>
+                  claims.id_token
+                  |> CCList.map(claim =>
+                       switch (claim) {
+                       | Essential(c) => c
+                       | NonEssential(c) => c
+                       }
+                     )
+              )
+              |> CCList.map(key =>
+                   Oidc.User.get_value_by_key(user, key)
+                   |> CCOpt.map(value => (key, `String(value)))
+                 )
+              |> CCList.keep_some
+            );
+
           let id_token =
-            empty_payload
+            payload_of_json(`Assoc(claims))
             |> add_claim(iss, host)
             |> add_claim(sub, user.email)
             |> add_claim(aud, "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175")
