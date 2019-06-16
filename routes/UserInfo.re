@@ -31,22 +31,21 @@ let make = (~httpImpl, ~find_access_token, reqd) => {
               access_token_data
               |> Yojson.Basic.from_string
               |> Yojson.Basic.Util.member("claims")
-              |> Oidc.Claims.from_json
-              |> (
-                claims =>
-                  claims.userinfo
-                  |> CCList.map(claim =>
-                       switch (claim) {
-                       | Essential(c) => c
-                       | NonEssential(c) => c
-                       }
-                     )
-              )
-              |> CCList.map(key =>
-                   Oidc.User.get_value_by_key(user, key)
-                   |> CCOpt.map(value => (key, `String(value)))
+              |> Yojson.Basic.Util.to_option(Oidc.Claims.from_json)
+              |> CCOpt.map_or(~default=[], claims =>
+                   claims.userinfo
+                   |> CCList.map(claim =>
+                        switch (claim) {
+                        | Essential(c) => c
+                        | NonEssential(c) => c
+                        }
+                      )
+                   |> CCList.map(key =>
+                        Oidc.User.get_value_by_key(user, key)
+                        |> CCOpt.map(value => (key, `String(value)))
+                      )
+                   |> CCList.keep_some
                  )
-              |> CCList.keep_some
             )
             |> CCList.append([("sub", `String(user.email))]);
 

@@ -93,21 +93,16 @@ let make =
           let claims =
             Oidc.Claims.(
               auth_json
-              |> Yojson.Basic.Util.to_option(json =>
-                   Yojson.Basic.Util.member("claims", json)
-                 )
-              |> CCOpt.map_or(~default=[], claims_json =>
-                   Oidc.Claims.from_json(claims_json)
-                   |> (
-                     claims =>
-                       claims.id_token
-                       |> CCList.map(claim =>
-                            switch (claim) {
-                            | Essential(c) => c
-                            | NonEssential(c) => c
-                            }
-                          )
-                   )
+              |> Yojson.Basic.Util.member("claims")
+              |> Yojson.Basic.Util.to_option(Oidc.Claims.from_json)
+              |> CCOpt.map_or(~default=[], claims =>
+                   claims.id_token
+                   |> CCList.map(claim =>
+                        switch (claim) {
+                        | Essential(c) => c
+                        | NonEssential(c) => c
+                        }
+                      )
                    |> CCList.map(key =>
                         Oidc.User.get_value_by_key(user, key)
                         |> CCOpt.map(value => (key, `String(value)))
