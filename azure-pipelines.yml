@@ -47,13 +47,34 @@ stages:
           vmImage: ubuntu-16.04
 
         steps:
-          - script: docker build -t $(dockerId)/$(imageName):$(Build.BuildId) .
-            displayName: "Build docker image"
-
           - script: docker login -u $(dockerId) -p $(dockerPassword)
             displayName: "Login to docker"
 
-          - script: docker push $(dockerId)/$(imageName)
+          # Pull the latest version of the image, in order to populate the build cache:
+          - script: |
+              docker pull $(dockerId)/$(imageName)-builder:latest || true
+              docker pull $(dockerId)/$(imageName):latest         || true
+            displayName: "Pull latest images"
+          
+          # Build the builder stage:
+          - script: |
+              docker build --target builder \
+                    --cache-from=$(dockerId)/$(imageName)-builder:latest \
+                    --tag $(dockerId)/$(imageName)-builder:latest .
+            displayName: "Build builder stage"
+
+          # Build the runtime stage, using cached compile stage:
+          - script: |
+              docker build \
+                    --cache-from=$(dockerId)/$(imageName)-builder:latest \
+                    --cache-from=$(dockerId)/$(imageName):latest \
+                    --tag $(dockerId)/$(imageName):$(Build.BuildId) .
+            displayName: "Build runtime stage"
+
+          # Push the new versions:
+          - script: |
+              docker push $(dockerId)/$(imageName)-builder:latest
+              docker push $(dockerId)/$(imageName):$(Build.BuildId)
             displayName: "Push to dockerhub"
 
   - stage: Deploy_docker

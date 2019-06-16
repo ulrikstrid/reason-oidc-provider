@@ -1,4 +1,4 @@
-FROM node:lts-alpine as base
+FROM node:lts-alpine as builder
 
 ENV TERM=dumb \
   LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib
@@ -21,7 +21,7 @@ RUN npm install -g esy@next --unsafe-perm
 
 RUN echo ' \
   {\
-  "name": "package-base", \
+  "name": "reason-oidc-provider", \
   "dependencies": { \
   "ocaml": "~4.6.0", \
   "@opam/dune": "*", \
@@ -51,8 +51,8 @@ FROM scratch
 
 WORKDIR /reason-oidc-provider
 
-COPY --from=base /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=base /reason-oidc-provider/main.exe main.exe
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /reason-oidc-provider/main.exe main.exe
 
 EXPOSE 8080 9443
 
