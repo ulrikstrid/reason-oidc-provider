@@ -72,6 +72,7 @@ let makeRoute =
                        "claims",
                        parameters.claims |> CCOpt.get_or(~default=`Null),
                      ),
+                     ("auth_time", `Float(Unix.time())),
                    ])
                    |> Yojson.Basic.to_string;
 

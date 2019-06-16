@@ -6,6 +6,7 @@ type t = {
   state: option(string),
   nonce: string,
   claims: option(Yojson.Basic.t),
+  max_age: option(int),
 };
 
 type parse_state =
@@ -69,6 +70,8 @@ let parse_query = (~clients, uri) => {
   let scope =
     getQueryParam("scope") |> CCOpt.map(String.split_on_char(' '));
 
+  let max_age = getQueryParam("max_age") |> CCOpt.flat_map(CCInt.of_string);
+
   switch (client, response_type, redirect_uri, scope) {
   | (Ok(client), Ok(response_type), Ok(redirect_uri), Some(scope))
       when client.redirect_uri == redirect_uri =>
@@ -80,6 +83,7 @@ let parse_query = (~clients, uri) => {
       state: getQueryParam("state"),
       nonce: getQueryParam("nonce") |> CCOpt.get_or(~default="12345"),
       claims,
+      max_age,
     })
   | (Ok(client), Ok(_), _, Some(_)) => UnauthorizedClient(client)
   | (Ok(client), Error(e), _, _) => InvalidWithClient(client)

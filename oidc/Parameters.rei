@@ -6,6 +6,7 @@ type t = {
   state: option(string),
   nonce: string,
   claims: option(Yojson.Basic.t),
+  max_age: option(int),
 };
 
 type parse_state =

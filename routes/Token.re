@@ -90,6 +90,13 @@ let make =
 
           Logs.app(m => m("scopes: %s", scopes));
 
+          let auth_time =
+            auth_json
+            |> Yojson.Basic.Util.member("auth_time")
+            |> Yojson.Basic.Util.to_float
+            |> int_of_float
+            |> string_of_int;
+
           let claims =
             Oidc.Claims.(
               auth_json
@@ -113,6 +120,7 @@ let make =
 
           let id_token =
             payload_of_json(`Assoc(claims))
+            |> add_claim(claim("auth_time"), auth_time)
             |> add_claim(iss, host)
             |> add_claim(sub, user.email)
             |> add_claim(aud, "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175")
