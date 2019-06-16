@@ -20,22 +20,28 @@ let from_json = json => {
     id_token:
       json
       |> Util.member("id_token")
-      |> Util.to_assoc
-      |> CCList.map(((key, value)) =>
-           switch (get_essential(value)) {
-           | Some(true) => Essential(key)
-           | _ => NonEssential(key)
-           }
+      |> Util.to_option(Util.to_assoc)
+      |> CCOpt.map_or(
+           ~default=[],
+           CCList.map(((key, value)) =>
+             switch (get_essential(value)) {
+             | Some(true) => Essential(key)
+             | _ => NonEssential(key)
+             }
+           ),
          ),
     userinfo:
       json
       |> Util.member("userinfo")
-      |> Util.to_assoc
-      |> CCList.map(((key, value)) =>
-           switch (get_essential(value)) {
-           | Some(true) => Essential(key)
-           | _ => NonEssential(key)
-           }
+      |> Util.to_option(Util.to_assoc)
+      |> CCOpt.map_or(
+           ~default=[],
+           CCList.map(((key, value)) =>
+             switch (get_essential(value)) {
+             | Some(true) => Essential(key)
+             | _ => NonEssential(key)
+             }
+           ),
          ),
   };
 };

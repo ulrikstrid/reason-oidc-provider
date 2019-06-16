@@ -18,13 +18,41 @@ let make = (~httpImpl, ~find_access_token, reqd) => {
     >|= (
       data =>
         switch (data) {
-        | Some(user_string) =>
-          let user = Oidc.User.from_string(user_string);
-          Http.Response.Json.make(
-            ~httpImpl,
-            ~json=Printf.sprintf({|{"sub": "%s"}|}, user.email),
-            reqd,
-          );
+        | Some(access_token_data) =>
+          let user =
+            Yojson.Basic.from_string(access_token_data)
+            |> Yojson.Basic.Util.member("user")
+            |> Oidc.User.from_json;
+
+          Logs.info(m => m("access_token_data: %s", access_token_data));
+
+          let claims =
+            Oidc.Claims.(
+              access_token_data
+              |> Yojson.Basic.from_string
+              |> Yojson.Basic.Util.member("claims")
+              |> Oidc.Claims.from_json
+              |> (
+                claims =>
+                  claims.userinfo
+                  |> CCList.map(claim =>
+                       switch (claim) {
+                       | Essential(c) => c
+                       | NonEssential(c) => c
+                       }
+                     )
+              )
+              |> CCList.map(key =>
+                   Oidc.User.get_value_by_key(user, key)
+                   |> CCOpt.map(value => (key, `String(value)))
+                 )
+              |> CCList.keep_some
+            )
+            |> CCList.append([("sub", `String(user.email))]);
+
+          let json = `Assoc(claims) |> Yojson.Basic.to_string;
+
+          Http.Response.Json.make(~httpImpl, ~json, reqd);
         | None =>
           Http.Response.Unauthorized.make(
             ~httpImpl,

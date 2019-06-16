@@ -67,6 +67,8 @@ let make =
 
           let jwt_header = Oidc.Jwk.make_jwt_header(priv_key, jwk);
 
+          Logs.app(m => m("code_data: %s", code_data));
+
           let auth_json = Yojson.Basic.from_string(code_data);
 
           let nonce_string =
@@ -91,23 +93,27 @@ let make =
           let claims =
             Oidc.Claims.(
               auth_json
-              |> Yojson.Basic.Util.member("claims")
-              |> Oidc.Claims.from_json
-              |> (
-                claims =>
-                  claims.id_token
-                  |> CCList.map(claim =>
-                       switch (claim) {
-                       | Essential(c) => c
-                       | NonEssential(c) => c
-                       }
-                     )
-              )
-              |> CCList.map(key =>
-                   Oidc.User.get_value_by_key(user, key)
-                   |> CCOpt.map(value => (key, `String(value)))
+              |> Yojson.Basic.Util.to_option(json =>
+                   Yojson.Basic.Util.member("claims", json)
                  )
-              |> CCList.keep_some
+              |> CCOpt.map_or(~default=[], claims_json =>
+                   Oidc.Claims.from_json(claims_json)
+                   |> (
+                     claims =>
+                       claims.id_token
+                       |> CCList.map(claim =>
+                            switch (claim) {
+                            | Essential(c) => c
+                            | NonEssential(c) => c
+                            }
+                          )
+                   )
+                   |> CCList.map(key =>
+                        Oidc.User.get_value_by_key(user, key)
+                        |> CCOpt.map(value => (key, `String(value)))
+                      )
+                   |> CCList.keep_some
+                 )
             );
 
           let id_token =
@@ -124,7 +130,14 @@ let make =
           let access_token =
             code |> Base64.encode_exn(~alphabet=Base64.uri_safe_alphabet);
 
-          set_access_token(~key=access_token, Oidc.User.to_string(user))
+          let access_token_data =
+            `Assoc([
+              ("user", Oidc.User.to_json(user)),
+              ("claims", auth_json |> Yojson.Basic.Util.member("claims")),
+            ])
+            |> Yojson.Basic.to_string;
+
+          set_access_token(~key=access_token, access_token_data)
           >|= (
             () =>
               Http.Response.Json.make(
