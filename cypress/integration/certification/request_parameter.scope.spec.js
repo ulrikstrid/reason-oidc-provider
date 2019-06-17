@@ -1,8 +1,8 @@
-describe.skip("Request Parameter - scope", function() {
+describe("Request Parameter - scope", function() {
   const baseUrl =
     process.env.BASE_URL || "https://op.certification.openid.net:61740/";
 
-  it("Scope requesting all claims", function() {
+  it.skip("Scope requesting all claims", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);
@@ -14,7 +14,7 @@ describe.skip("Request Parameter - scope", function() {
     cy.buttonByRow(52).should("have.class", "btn-success");
   });
 
-  it("Scope requesting address claims", function() {
+  it.skip("Scope requesting address claims", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);
@@ -38,7 +38,7 @@ describe.skip("Request Parameter - scope", function() {
     cy.buttonByRow(54).should("have.class", "btn-success");
   });
 
-  it("Scope requesting phone claims", function() {
+  it.skip("Scope requesting phone claims", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);
@@ -50,7 +50,7 @@ describe.skip("Request Parameter - scope", function() {
     cy.buttonByRow(55).should("have.class", "btn-success");
   });
 
-  it("Scope requesting profile claims", function() {
+  it.skip("Scope requesting profile claims", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);

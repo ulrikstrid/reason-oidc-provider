@@ -19,6 +19,8 @@ let make = (~httpImpl, ~find_access_token, reqd) => {
       data =>
         switch (data) {
         | Some(access_token_data) =>
+          open Oidc.Claims;
+
           let user =
             Yojson.Basic.from_string(access_token_data)
             |> Yojson.Basic.Util.member("user")
@@ -26,30 +28,41 @@ let make = (~httpImpl, ~find_access_token, reqd) => {
 
           Logs.info(m => m("access_token_data: %s", access_token_data));
 
+          let scopes =
+            Yojson.Basic.from_string(access_token_data)
+            |> Yojson.Basic.Util.member("scope")
+            |> Yojson.Basic.Util.to_list
+            |> CCList.map(Yojson.Basic.Util.to_string)
+            |> CCList.filter(s => s != "openid");
+
+          let claims_list =
+            access_token_data
+            |> Yojson.Basic.from_string
+            |> Yojson.Basic.Util.member("claims")
+            |> Yojson.Basic.Util.to_option(Oidc.Claims.from_json)
+            |> CCOpt.map(claims => claims.userinfo)
+            |> CCOpt.get_or(~default=[]);
+
           let claims =
-            Oidc.Claims.(
-              access_token_data
-              |> Yojson.Basic.from_string
-              |> Yojson.Basic.Util.member("claims")
-              |> Yojson.Basic.Util.to_option(Oidc.Claims.from_json)
-              |> CCOpt.map_or(~default=[], claims =>
-                   claims.userinfo
-                   |> CCList.map(claim =>
-                        switch (claim) {
-                        | Essential(c) => c
-                        | NonEssential(c) => c
-                        }
-                      )
-                   |> CCList.map(key =>
-                        Oidc.User.get_value_by_key(user, key)
-                        |> CCOpt.map(value => (key, `String(value)))
-                      )
-                   |> CCList.keep_some
-                 )
-            )
+            claims_list
+            |> CCList.append(
+                 scopes
+                 |> CCList.map(Oidc.Scopes.string_to_scope)
+                 |> CCList.flat_map(Oidc.Scopes.scope_to_claims),
+               )
+            |> CCList.map(claim =>
+                 switch (claim) {
+                 | Essential(c) => c
+                 | NonEssential(c) => c
+                 }
+               )
+            |> CCList.map(Oidc.User.get_value_by_claim(user))
+            |> CCList.keep_some
             |> CCList.append([("sub", `String(user.email))]);
 
           let json = `Assoc(claims) |> Yojson.Basic.to_string;
+
+          Logs.info(m => m("json: %s", json));
 
           Http.Response.Json.make(~httpImpl, ~json, reqd);
         | None =>

@@ -50,7 +50,7 @@
     "@opam/reason": "let-def/reason:reason.opam#879d587",
     "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#6d2c80e",
     "@opam/httpaf-lwt-unix": "anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e",
-    "@opam/jwt": "ulrikstrid/ocaml-jwt:jwt.opam#bf8c944",
+    "@opam/jwt": "ulrikstrid/ocaml-jwt:jwt.opam#f13fa28",
     "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#1ad5838",
     "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c",
     "@opam/ssl": {

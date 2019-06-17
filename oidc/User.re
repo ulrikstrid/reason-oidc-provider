@@ -29,7 +29,17 @@ let get_value_by_key = (user, key) => {
   switch (key) {
   | "name" => Some(user.name)
   | "email" => Some(user.email)
+  | "email_verified" => Some(user.email)
   | "password" => Some(user.password)
+  | _ => None
+  };
+};
+
+let get_value_by_claim = (user, claim) => {
+  switch (claim) {
+  | "name" => Some(("name", `String(user.name)))
+  | "email" => Some(("email", `String(user.email)))
+  | "email_verified" => Some(("email_verified", `Bool(true)))
   | _ => None
   };
 };

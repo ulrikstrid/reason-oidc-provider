@@ -1,5 +1,5 @@
 {
-  "checksum": "061bad88030e2d4582cc8985ff70b1e5",
+  "checksum": "f77c85685da439adda154fa5c11420f8",
   "root": "reason-oidc-provider@link-dev:./esy.json",
   "node": {
     "yarn-pkg-config@github:esy-ocaml/yarn-pkg-config#cca65f99674ed2d954d28788edeb8c57fada5ed0@d41d8cd9": {
@@ -55,8 +55,8 @@
         "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
         "@opam/lwt_ssl@opam:1.1.2@ac833920", "@opam/lwt@opam:4.2.1@c1888ec9",
         "@opam/logs@opam:0.6.3@80c08d15",
-        "@opam/lambda-term@opam:2.0@c11940cc",
-        "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944@d41d8cd9",
+        "@opam/lambda-term@opam:2.0.1@dc5acac8",
+        "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#f13fa28@d41d8cd9",
         "@opam/irmin-mem@opam:1.3.0@5744e38e",
         "@opam/httpaf-lwt-unix@github:anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e@d41d8cd9",
         "@opam/httpaf@github:anmonteiro/httpaf:httpaf.opam#6d2c80e@d41d8cd9",
@@ -293,7 +293,7 @@
         "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
         "@opam/cstruct@opam:3.1.1@e4abc030",
         "@opam/astring@opam:0.8.3@4e5e17d5",
-        "@opam/asn1-combinators@opam:0.2.0@80d14b72",
+        "@opam/asn1-combinators@opam:0.2.0@8d14b60d",
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
@@ -303,7 +303,7 @@
         "@opam/nocrypto@github:ulrikstrid/ocaml-nocrypto:opam#1ad5838@d41d8cd9",
         "@opam/cstruct@opam:3.1.1@e4abc030",
         "@opam/astring@opam:0.8.3@4e5e17d5",
-        "@opam/asn1-combinators@opam:0.2.0@80d14b72"
+        "@opam/asn1-combinators@opam:0.2.0@8d14b60d"
       ]
     },
     "@opam/uutf@opam:1.0.2@4440868f": {
@@ -1703,20 +1703,20 @@
       ],
       "devDependencies": [ "ocaml@4.6.10@d41d8cd9" ]
     },
-    "@opam/lambda-term@opam:2.0@c11940cc": {
-      "id": "@opam/lambda-term@opam:2.0@c11940cc",
+    "@opam/lambda-term@opam:2.0.1@dc5acac8": {
+      "id": "@opam/lambda-term@opam:2.0.1@dc5acac8",
       "name": "@opam/lambda-term",
-      "version": "opam:2.0",
+      "version": "opam:2.0.1",
       "source": {
         "type": "install",
         "source": [
-          "archive:https://opam.ocaml.org/cache/md5/92/9284c51c2ef18ebf6c17281879f2ff13#md5:9284c51c2ef18ebf6c17281879f2ff13",
-          "archive:https://github.com/ocaml-community/lambda-term/releases/download/2.0/lambda-term-2.0.tbz#md5:9284c51c2ef18ebf6c17281879f2ff13"
+          "archive:https://opam.ocaml.org/cache/md5/4b/4b4b8480fe1280e1ed2a34ed93d16675#md5:4b4b8480fe1280e1ed2a34ed93d16675",
+          "archive:https://github.com/ocaml-community/lambda-term/releases/download/2.0.1/lambda-term-2.0.1.tbz#md5:4b4b8480fe1280e1ed2a34ed93d16675"
         ],
         "opam": {
           "name": "lambda-term",
-          "version": "2.0",
-          "path": "esy.lock/opam/lambda-term.2.0"
+          "version": "2.0.1",
+          "path": "esy.lock/opam/lambda-term.2.0.1"
         }
       },
       "overrides": [],
@@ -1737,13 +1737,13 @@
         "@opam/camomile@opam:1.0.1@ab4729e2"
       ]
     },
-    "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944@d41d8cd9": {
-      "id": "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944@d41d8cd9",
+    "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#f13fa28@d41d8cd9": {
+      "id": "@opam/jwt@github:ulrikstrid/ocaml-jwt:jwt.opam#f13fa28@d41d8cd9",
       "name": "@opam/jwt",
-      "version": "github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944",
+      "version": "github:ulrikstrid/ocaml-jwt:jwt.opam#f13fa28",
       "source": {
         "type": "install",
-        "source": [ "github:ulrikstrid/ocaml-jwt:jwt.opam#bf8c944" ]
+        "source": [ "github:ulrikstrid/ocaml-jwt:jwt.opam#f13fa28" ]
       },
       "overrides": [],
       "dependencies": [
@@ -2835,8 +2835,8 @@
         "ocaml@4.6.10@d41d8cd9", "@opam/base-bytes@opam:base@19d0c2ff"
       ]
     },
-    "@opam/asn1-combinators@opam:0.2.0@80d14b72": {
-      "id": "@opam/asn1-combinators@opam:0.2.0@80d14b72",
+    "@opam/asn1-combinators@opam:0.2.0@8d14b60d": {
+      "id": "@opam/asn1-combinators@opam:0.2.0@8d14b60d",
       "name": "@opam/asn1-combinators",
       "version": "opam:0.2.0",
       "source": {

@@ -86,9 +86,9 @@ let make =
             |> Yojson.Basic.Util.member("scope")
             |> Yojson.Basic.Util.to_list
             |> CCList.map(Yojson.Basic.Util.to_string)
-            |> CCString.concat(", ");
+            |> CCList.filter(s => s != "openid");
 
-          Logs.app(m => m("scopes: %s", scopes));
+          Logs.app(m => m("scopes: %s", scopes |> CCString.concat(", ")));
 
           let auth_time =
             auth_json
@@ -102,21 +102,26 @@ let make =
               auth_json
               |> Yojson.Basic.Util.member("claims")
               |> Yojson.Basic.Util.to_option(Oidc.Claims.from_json)
-              |> CCOpt.map_or(~default=[], claims =>
-                   claims.id_token
-                   |> CCList.map(claim =>
-                        switch (claim) {
-                        | Essential(c) => c
-                        | NonEssential(c) => c
-                        }
-                      )
-                   |> CCList.map(key =>
-                        Oidc.User.get_value_by_key(user, key)
-                        |> CCOpt.map(value => (key, `String(value)))
-                      )
-                   |> CCList.keep_some
+              |> CCOpt.map(claims => claims.id_token)
+              |> CCOpt.get_or(~default=[])
+              |> CCList.append(
+                   scopes
+                   |> CCList.map(Oidc.Scopes.string_to_scope)
+                   |> CCList.flat_map(Oidc.Scopes.scope_to_claims),
                  )
+              |> CCList.map(claim =>
+                   switch (claim) {
+                   | Essential(c) => c
+                   | NonEssential(c) => c
+                   }
+                 )
+              |> CCList.map(Oidc.User.get_value_by_claim(user))
+              |> CCList.keep_some
             );
+
+          Logs.info(m =>
+            m("id_token_claims: %s", Yojson.Basic.to_string(`Assoc(claims)))
+          );
 
           let id_token =
             payload_of_json(`Assoc(claims))
@@ -137,6 +142,7 @@ let make =
             `Assoc([
               ("user", Oidc.User.to_json(user)),
               ("claims", auth_json |> Yojson.Basic.Util.member("claims")),
+              ("scope", auth_json |> Yojson.Basic.Util.member("scope")),
             ])
             |> Yojson.Basic.to_string;
 
