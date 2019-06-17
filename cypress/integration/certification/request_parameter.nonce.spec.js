@@ -6,11 +6,11 @@ describe("Request Parameter - nonce", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(26).click();
+    cy.buttonByRow(40).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(26).should("have.class", "btn-success");
+    cy.buttonByRow(40).should("have.class", "btn-success");
   });
 
   it("ID Token has nonce when requested for code flow", function() {
@@ -18,10 +18,10 @@ describe("Request Parameter - nonce", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(27).click();
+    cy.buttonByRow(41).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(27).should("have.class", "btn-success");
+    cy.buttonByRow(41).should("have.class", "btn-success");
   });
 });

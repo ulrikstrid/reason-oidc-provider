@@ -1,63 +1,64 @@
-describe.skip("Request Parameter - prompt", function() {
+describe.skip("Request Parameter - scope", function() {
   const baseUrl =
     process.env.BASE_URL || "https://op.certification.openid.net:61740/";
-  it("Login no nonce, code flow [Basic]", function() {
+
+  it("Scope requesting all claims", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(35).click();
+    cy.buttonByRow(52).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(35).should("have.class", "btn-success");
+    cy.buttonByRow(52).should("have.class", "btn-success");
   });
 
-  it("Request with prompt=none when logged in [Basic, Implicit, Hybrid]", function() {
+  it("Scope requesting address claims", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(36).click();
+    cy.buttonByRow(53).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(36).should("have.class", "btn-success");
+    cy.buttonByRow(53).should("have.class", "btn-success");
   });
 
-  it("Request with prompt=none when not logged in", function() {
+  it("Scope requesting email claims", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(37).click();
+    cy.buttonByRow(54).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(37).should("have.class", "btn-success");
+    cy.buttonByRow(54).should("have.class", "btn-success");
   });
 
-  it("Request with prompt=none when logged in [Basic, Implicit, Hybrid]", function() {
+  it("Scope requesting phone claims", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(38).click();
+    cy.buttonByRow(55).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(38).should("have.class", "btn-success");
+    cy.buttonByRow(55).should("have.class", "btn-success");
   });
 
-  it("Request with prompt=none when not logged in", function() {
+  it("Scope requesting profile claims", function() {
     cy.clearCookies();
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(39).click();
+    cy.buttonByRow(56).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(39).should("have.class", "btn-success");
+    cy.buttonByRow(56).should("have.class", "btn-success");
   });
 });

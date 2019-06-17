@@ -6,11 +6,11 @@ describe.skip("Request Parameter - prompt", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(29).click();
+    cy.buttonByRow(43).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(29).should("have.class", "btn-success");
+    cy.buttonByRow(43).should("have.class", "btn-success");
   });
 
   it("Request with prompt=none when logged in [Basic, Implicit, Hybrid]", function() {
@@ -18,11 +18,11 @@ describe.skip("Request Parameter - prompt", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(30).click();
+    cy.buttonByRow(44).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(30).should("have.class", "btn-success");
+    cy.buttonByRow(44).should("have.class", "btn-success");
   });
 
   it("Request with prompt=none when not logged in", function() {
@@ -30,10 +30,10 @@ describe.skip("Request Parameter - prompt", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(31).click();
+    cy.buttonByRow(45).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(31).should("have.class", "btn-success");
+    cy.buttonByRow(45).should("have.class", "btn-success");
   });
 });

@@ -6,13 +6,13 @@ describe("OAuth behaviors", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(50).click();
+    cy.buttonByRow(67).click();
 
     cy.get(".container > :nth-child(3) > a").click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(50).should("have.class", "btn-success");
+    cy.buttonByRow(67).should("have.class", "btn-success");
   });
 
   it("Trying to use authorization code twice with 30 seconds in between uses must result in an error", function() {
@@ -20,13 +20,13 @@ describe("OAuth behaviors", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(51).click();
+    cy.buttonByRow(68).click();
 
     cy.get(".container > :nth-child(3) > a").click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(51).should("have.class", "btn-success");
+    cy.buttonByRow(68).should("have.class", "btn-success");
   });
 
   it("Trying to use authorization code twice should result in revoking previously issued access tokens", function() {
@@ -34,12 +34,12 @@ describe("OAuth behaviors", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(52).click();
+    cy.buttonByRow(69).click();
 
     cy.get(".container > :nth-child(3) > a").click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(52).should("have.class", "btn-success");
+    cy.buttonByRow(69).should("have.class", "btn-success");
   });
 });

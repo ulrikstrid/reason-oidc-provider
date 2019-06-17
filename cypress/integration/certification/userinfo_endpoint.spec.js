@@ -6,21 +6,21 @@ describe("Userinfo Endpoint", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(17).click();
+    cy.buttonByRow(21).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(17).should("have.class", "btn-success");
+    cy.buttonByRow(21).should("have.class", "btn-success");
   });
 
   it("UserInfo Endpoint access with GET and bearer header", function() {
     cy.visit(baseUrl);
 
-    cy.buttonByRow(18).click();
+    cy.buttonByRow(22).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(18).should("have.class", "btn-success");
+    cy.buttonByRow(22).should("have.class", "btn-success");
 
     cy.clearCookies();
   });
@@ -28,11 +28,11 @@ describe("Userinfo Endpoint", function() {
   it("UserInfo Endpoint access with POST and bearer header", function() {
     cy.visit(baseUrl);
 
-    cy.buttonByRow(19).click();
+    cy.buttonByRow(23).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(19).should("have.class", "btn-success");
+    cy.buttonByRow(23).should("have.class", "btn-success");
 
     cy.clearCookies();
   });

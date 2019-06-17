@@ -6,11 +6,11 @@ describe.skip("Request Parameter - display", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(23).click();
+    cy.buttonByRow(37).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(23).should("have.class", "btn-success");
+    cy.buttonByRow(37).should("have.class", "btn-success");
   });
 
   it("Request with display=popup", function() {
@@ -18,10 +18,10 @@ describe.skip("Request Parameter - display", function() {
 
     cy.visit(baseUrl);
 
-    cy.buttonByRow(24).click();
+    cy.buttonByRow(38).click();
 
     cy.login("ulrik.strid@outlook.com", "strid");
 
-    cy.buttonByRow(24).should("have.class", "btn-success");
+    cy.buttonByRow(38).should("have.class", "btn-success");
   });
 });
