@@ -1,3 +1,31 @@
+type display =
+  | Page
+  | Popup
+  | Touch
+  | Wap;
+
+let string_to_display_opt =
+  fun
+  | "page" => Some(Page)
+  | "popup" => Some(Popup)
+  | "touch" => Some(Touch)
+  | "wap" => Some(Wap)
+  | _ => None;
+
+type prompt =
+  | None
+  | Login
+  | Consent
+  | Select_account;
+
+let string_to_prompt_opt =
+  fun
+  | "none" => Some(None)
+  | "login" => Some(Login)
+  | "consent" => Some(Consent)
+  | "select_account" => Some(Select_account)
+  | _ => None;
+
 type t = {
   response_type: list(string),
   client: Client.t,
@@ -7,6 +35,8 @@ type t = {
   nonce: string,
   claims: option(Yojson.Basic.t),
   max_age: option(int),
+  display: option(display),
+  prompt: option(prompt),
 };
 
 type parse_state =
@@ -84,6 +114,10 @@ let parse_query = (~clients, uri) => {
       nonce: getQueryParam("nonce") |> CCOpt.get_or(~default="12345"),
       claims,
       max_age,
+      display:
+        getQueryParam("display") |> CCOpt.flat_map(string_to_display_opt),
+      prompt:
+        getQueryParam("prompt") |> CCOpt.flat_map(string_to_prompt_opt),
     })
   | (Ok(client), Ok(_), _, Some(_)) => UnauthorizedClient(client)
   | (Ok(client), Error(e), _, _) => InvalidWithClient(client)

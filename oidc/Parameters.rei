@@ -1,3 +1,15 @@
+type display =
+  | Page
+  | Popup
+  | Touch
+  | Wap;
+
+type prompt =
+  | None
+  | Login
+  | Consent
+  | Select_account;
+
 type t = {
   response_type: list(string),
   client: Client.t,
@@ -7,6 +19,8 @@ type t = {
   nonce: string,
   claims: option(Yojson.Basic.t),
   max_age: option(int),
+  display: option(display),
+  prompt: option(prompt),
 };
 
 type parse_state =
