@@ -21,6 +21,7 @@ let make = (~httpImpl, ~host, reqd) => {
   ],
   "claims_supported": [
     "email",
+    "email_verified",
     "name"
   ]
 }|},
