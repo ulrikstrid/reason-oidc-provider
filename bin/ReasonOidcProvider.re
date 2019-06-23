@@ -16,7 +16,7 @@ let users =
 
 let main = (settings: Settings.t) => {
   let clients = settings.clients;
-  let rsa_priv = Nocrypto.Rsa.generate(4048);
+  let rsa_priv = Nocrypto.Rsa.generate(2048);
   let context =
     Context.make(
       ~host=settings.provider.host,

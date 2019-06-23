@@ -9,8 +9,6 @@ let trim_leading_null = s =>
     s,
   );
 
-let int_string_of_float = f => f |> int_of_float |> string_of_int;
-
 let code_of_body = (~find_code, ~remove_code, ~remove_access_token, body) => {
   Logs.app(m => m("Body for token is %s", body));
 
@@ -47,7 +45,7 @@ let make =
       ~remove_code,
       ~set_access_token,
       ~remove_access_token,
-      ~jwk: Oidc.Jwk.t,
+      ~jwk: Jose.Jwk.t,
       reqd,
     ) => {
   let unauthorized_response = reqd => {
@@ -63,9 +61,9 @@ let make =
   >>= CCOpt.map_or(
         ~default=Lwt.return(unauthorized_response),
         ((code, code_data)) => {
-          open Jwt;
+          open Jose.Jwt;
 
-          let jwt_header = Oidc.Jwk.make_jwt_header(priv_key, jwk);
+          let jwt_header = Jose.Jwt.make_header(jwk);
 
           Logs.app(m => m("code_data: %s", code_data));
 
@@ -94,8 +92,7 @@ let make =
             auth_json
             |> Yojson.Basic.Util.member("auth_time")
             |> Yojson.Basic.Util.to_float
-            |> int_of_float
-            |> string_of_int;
+            |> int_of_float;
 
           let claims =
             Oidc.Claims.(
@@ -124,16 +121,16 @@ let make =
           );
 
           let id_token =
-            payload_of_json(`Assoc(claims))
-            |> add_claim(claim("auth_time"), auth_time)
-            |> add_claim(iss, host)
-            |> add_claim(sub, user.email)
-            |> add_claim(aud, "3c9fe13f-0e1f-4e0f-9be8-534ea8a32175")
-            |> add_claim(nonce, nonce_string)
-            |> add_claim(iat, Unix.time() |> int_string_of_float)
-            |> add_claim(exp, Unix.time() +. 3600. |> int_string_of_float)
-            |> t_of_header_and_payload(jwt_header)
-            |> token_of_t;
+          `Assoc(claims)
+            |> add_claim("auth_time", `Int(auth_time))
+            |> add_claim("iss", `String(host))
+            |> add_claim("sub", `String(user.email))
+            |> add_claim("aud", `String("3c9fe13f-0e1f-4e0f-9be8-534ea8a32175"))
+            |> add_claim("nonce", `String(nonce_string))
+            |> add_claim("iat", `Int(Unix.time() |> int_of_float))
+            |> add_claim("exp", `Int(Unix.time() +. 3600. |> int_of_float))
+            |> sign(jwt_header, priv_key)
+            |> to_string;
 
           let access_token =
             code |> Base64.encode_exn(~alphabet=Base64.uri_safe_alphabet);

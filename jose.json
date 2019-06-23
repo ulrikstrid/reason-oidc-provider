@@ -1,0 +1,29 @@
+{
+  "name": "reason-jose",
+  "version": "0.1.0",
+  "description": "JOSE implementation in native ReasonML",
+  "license": "MIT",
+  "esy": {
+    "build": "refmterr dune build -p jose"
+  },
+  "dependencies": {
+    "@opam/reason": "*",
+    "@opam/containers": "*",
+    "@opam/dune": "*",
+    "ocaml": "~4.6.0",
+    "refmterr": "*",
+    "@opam/x509": "0.6.1",
+    "@opam/nocrypto": "*",
+    "@opam/num": "1.1",
+    "@opam/yojson": "*",
+    "@opam/base64": "*",
+    "@opam/hex": "*"
+  },
+  "resolutions": {
+    "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#1ad5838"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*",
+    "ocaml": "~4.6.0"
+  }
+}

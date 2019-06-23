@@ -2,8 +2,8 @@
  (name routes)
  (flags
   (-w -40 -w +26))
- (libraries lwt logs uri yojson str containers nocrypto jwt uuidm base64 http
-   oidc))
+ (libraries lwt logs uri yojson str containers nocrypto uuidm base64 http
+   oidc jose))
 
 (env
  (dev

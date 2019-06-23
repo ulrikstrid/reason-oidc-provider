@@ -1,0 +1,14 @@
+(library
+ (name jose)
+ (public_name jose)
+ (flags
+  (-w -40 -w +26))
+ (libraries containers yojson str nocrypto x509 base64 zarith hex))
+
+(env
+ (dev
+  (flags
+   (:standard -g)))
+ (docker
+  (flags
+   (:standard -ccopt -static))))

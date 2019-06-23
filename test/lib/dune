@@ -8,7 +8,7 @@
  (ocamlopt_flags -linkall -g)
  ; you will want to depend on the library you are testing as well, however for
  ; the purposes of this example we are only depending on the test runner itself
- (libraries rely.lib nocrypto nocrypto.unix jwt containers oidc http)
+ (libraries rely.lib nocrypto nocrypto.unix jose containers oidc http)
  (modules
   (:standard \ RunTests)))
 

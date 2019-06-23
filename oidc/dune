@@ -3,8 +3,8 @@
  (public_name oidc)
  (flags
   (-w -40 -w +26))
- (libraries lwt logs uri yojson str containers nocrypto x509 jwt base64
-   zarith))
+ (libraries lwt logs uri yojson str containers nocrypto x509 base64 jose
+   zarith hex))
 
 (env
  (dev

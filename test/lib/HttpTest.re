@@ -1,7 +1,7 @@
 open TestFramework;
 open Http;
 
-describe("Cookie", u => {
+describe("HTTP - Cookie", u => {
   let cookie_header = "connect.sid=abc; session=def";
 
   u.test("Jwk.make", ({expect}) => {
@@ -12,7 +12,7 @@ describe("Cookie", u => {
   });
 });
 
-describe("url-encoded", u => {
+describe("HTTP - url-encoded", u => {
   u.test("Uri.get_query_param", ({expect}) => {
     let form_post_data = "grant_type=authorization_code&redirect_uri=https%3A%2F%2Fop-test%3A60004%2Fauthz_cb&code=A3wZWT2UZppKo2WGqqt";
     let form_data = UrlencodedForm.parse(form_post_data);
