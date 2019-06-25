@@ -38,6 +38,6 @@ describe("JOSE - Jwk", u => {
 
     let jwks = [jwk];
 
-    expect.result(Jose.Jwt.verify(~jwks, jwt)).toBeOk();
+    expect.result(CCResult.map(Jose.Jwt.verify(~jwks), jwt)).toBeOk();
   });
 });

@@ -28,11 +28,11 @@
     "@opam/lwt": "*",
     "@opam/yojson": "*",
     "@opam/uri": "*",
-    "ocaml": "~4.6.0",
+    "ocaml": "~4.7.0",
     "refmterr": "*",
     "@opam/ssl": "*",
     "@opam/lwt_ssl": "*",
-    "@opam/x509": "0.6.1",
+    "@opam/x509": "0.6.3",
     "@opam/cstruct-lwt": "*",
     "@opam/irmin-mem": "*",
     "@opam/uuidm": "*",
@@ -44,11 +44,12 @@
     "@opam/base64": "*"
   },
   "resolutions": {
-    "@opam/num": "1.1",
+    "@opam/cstruct": "3.3.0",
+    "@opam/asn1-combinators": "mirleft/ocaml-asn1-combinators:asn1-combinators.opam#704f332",
     "@opam/reason": "let-def/reason:reason.opam#879d587",
     "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#6d2c80e",
     "@opam/httpaf-lwt-unix": "anmonteiro/httpaf:httpaf-lwt-unix.opam#6d2c80e",
-    "@opam/nocrypto": "ulrikstrid/ocaml-nocrypto:opam#1ad5838",
+    "@opam/nocrypto": "mirleft/ocaml-nocrypto:opam#ed7bb8d",
     "@esy-packages/esy-openssl": "esy-packages/esy-openssl#f731e9c",
     "@opam/ssl": {
       "source": "ulrikstrid/ocaml-ssl:ssl.opam#2ec4c66",
@@ -80,6 +81,6 @@
   },
   "devDependencies": {
     "@opam/merlin": "*",
-    "ocaml": "~4.6.0"
+    "ocaml": "~4.7.0"
   }
 }
