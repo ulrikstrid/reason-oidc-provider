@@ -10,18 +10,21 @@ stages:
         parameters:
           platform: Linux
           vmImage: ubuntu-16.04
+          ESY__PREFIX_PATH: $(Pipeline.Workspace)/.esy
           ESY__CACHE_INSTALL_PATH: $(Pipeline.Workspace)/.esy/3_____________________________________________________________________/i
 
       - template: ./.ci/build-platform.yml
         parameters:
           platform: macOS
           vmImage: macOS-latest
+          ESY__PREFIX_PATH: $(Pipeline.Workspace)/.esy
           ESY__CACHE_INSTALL_PATH: $(Pipeline.Workspace)/.esy/3____________________________________________________________________/i
 
       - template: ./.ci/build-windows.yml
         parameters:
           platform: Windows
           vmImage: vs2017-win2016
+          ESY__PREFIX_PATH: $(Pipeline.Workspace)/.esy
           ESY__CACHE_INSTALL_PATH: $(Pipeline.Workspace)/.esy/3_/i
 
   - stage: Build_docker

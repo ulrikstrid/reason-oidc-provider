@@ -1,6 +1,7 @@
 parameters:
   platform: "macOS"
   vmImage: "macOS-latest"
+  ESY__PREFIX_PATH: $(Pipeline.Workspace)/.esy
   ESY__CACHE_INSTALL_PATH: $(Pipeline.Workspace)/.esy/3____________________________________________________________________/i
 
 jobs:
@@ -10,19 +11,26 @@ jobs:
       demands: node.js
     timeoutInMinutes: 120 # This is mostly for Windows
     continueOnError: True
+    variables:
+      ESY__PREFIX: ${{ parameters.ESY__PREFIX_PATH }}
 
     steps:
-      - template: ./utils/use-node.yml
       - template: ./utils/use-esy.yml
       - task: CacheBeta@0
         inputs:
           key: |
             esy
             $(Agent.OS)
+            ${{ parameters.ESY__CACHE_INSTALL_PATH }}
             $(Build.SourcesDirectory)/esy.lock/index.json
           path: ${{ parameters.ESY__CACHE_INSTALL_PATH }}
       - script: "esy install"
         displayName: "esy install"
+      - script: |
+          ls $(Pipeline.Workspace)
+          ls $ESY__PREFIX
+          ls ${{ parameters.ESY__PREFIX_PATH }}
+          ls ${{ parameters.ESY__CACHE_INSTALL_PATH }}
       - script: "esy build"
         displayName: "esy build"
       - script: "esy test"
