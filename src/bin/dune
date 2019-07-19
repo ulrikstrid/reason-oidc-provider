@@ -4,8 +4,8 @@
  (package reason-oidc-provider)
  (ocamlopt_flags -O3)
  (libraries logs.fmt fmt.tty lwt logs h2 h2-lwt-unix httpaf httpaf-lwt-unix
-   irmin-mem x509 ssl lwt_ssl nocrypto nocrypto.lwt yojson str containers
-   uri oidc http routes))
+   irmin-mem x509 ssl lwt_ssl nocrypto nocrypto.lwt yojson str containers uri
+   oidc http routes))
 
 (env
  (dev

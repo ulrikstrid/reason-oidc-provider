@@ -121,11 +121,14 @@ let make =
           );
 
           let id_token =
-          `Assoc(claims)
+            `Assoc(claims)
             |> add_claim("auth_time", `Int(auth_time))
             |> add_claim("iss", `String(host))
             |> add_claim("sub", `String(user.email))
-            |> add_claim("aud", `String("3c9fe13f-0e1f-4e0f-9be8-534ea8a32175"))
+            |> add_claim(
+                 "aud",
+                 `String("3c9fe13f-0e1f-4e0f-9be8-534ea8a32175"),
+               )
             |> add_claim("nonce", `String(nonce_string))
             |> add_claim("iat", `Int(Unix.time() |> int_of_float))
             |> add_claim("exp", `Int(Unix.time() +. 3600. |> int_of_float))

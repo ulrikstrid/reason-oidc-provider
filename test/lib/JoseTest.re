@@ -27,10 +27,7 @@ describe("JOSE - Jwk", u => {
         empty_payload
         |> add_claim("iss", `String("http://localhost:8080"))
         |> add_claim("sub", `String("u@s.dev"))
-        |> add_claim(
-             "aud",
-             `String("3c9fe13f-0e1f-4e0f-9be8-534ea8a32175"),
-           )
+        |> add_claim("aud", `String("3c9fe13f-0e1f-4e0f-9be8-534ea8a32175"))
         |> add_claim("iat", `Int(Unix.time() |> int_of_float))
         |> add_claim("exp", `Int(Unix.time() +. 3600. |> int_of_float))
         |> sign(jwt_header, priv_key)
@@ -41,3 +38,26 @@ describe("JOSE - Jwk", u => {
     expect.result(CCResult.map(Jose.Jwt.verify(~jwks), jwt)).toBeOk();
   });
 });
+
+/*
+describe("JOSE - JWT", ({test, _}) => {
+  test("Decode plaintext", ({expect}) => {
+    let token = "eyJhbGciOiJub25lIn0.eyJoZWxsbyI6ICJ3b3JsZCJ9.";
+
+    let t = Jose.Jwt.from_string(token);
+
+    expect.result(t).toBeOk();
+  });
+
+  test("Encode plaintext", ({expect}) => {
+    let token = "eyJhbGciOiJub25lIn0.eyJoZWxsbyI6ICJ3b3JsZCJ9.";
+
+    `Assoc([("hello", `String("world"))])
+    |> Jose.Jwt.
+
+    let t = Jose.Jwt.from_string(token);
+
+    expect.result(t).toBeOk();
+  });
+});
+*/
